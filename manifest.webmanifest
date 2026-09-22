@@ -1,7 +1,7 @@
 {
-  "name": "FloodGuard HCMC · Minimal Clean",
+  "name": "FloodGuard HCMC · Smart Location",
   "short_name": "FloodGuard",
-  "description": "FloodGuard HCMC minimal clean responsive flood risk, EV routing and emergency rescue web app.",
+  "description": "FloodGuard HCMC responsive flood risk, EV rescue and smart address-to-map location web app.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

@@ -1,10 +1,8 @@
-# FloodGuard Minimal & Clean Production 1.3
+# FloodGuard Smart Location Production 1.4
 
-Giao diện responsive mới cho desktop và mobile.
-
-Style: pastel, bo góc mềm, shadow nhẹ, typography elegant, minimal & clean.
-
-## Deploy
-Upload/replace toàn bộ file trong thư mục này vào repo `floodguard-user`. Render Static Site sẽ tự deploy nếu Auto-Deploy đang bật.
-
-Backend giữ nguyên: `https://floodguard-rescue-backend.onrender.com`.
+- Backend fixed: https://floodguard-rescue-backend.onrender.com
+- Address alone is sufficient: automatic address -> coordinates geocoding before SOS.
+- Device GPS remains optional/preferred when available.
+- Each SOS sends `address`, `location`, and `location_source`.
+- Rescue Control can geocode address-only cases as a fallback.
+- Upload all files to the root of the `floodguard-user` GitHub repo; Render Static Site auto-deploys.
