@@ -1,7 +1,7 @@
 {
   "name": "FloodGuard HCMC",
   "short_name": "FloodGuard",
-  "description": "Flood risk, EV routing and emergency rescue support in Ho Chi Minh City.",
+  "description": "FloodGuard HCMC adaptive desktop/mobile flood risk, EV routing and emergency rescue web app.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

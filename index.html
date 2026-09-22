@@ -8,7 +8,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 
-<title>FloodGuard HCMC | Flood Risk & Emergency EV Rescue</title>
+<title>FloodGuard Mobile Production 1.0 | FloodGuard HCMC | Flood Risk & Emergency EV Rescue</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css'"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/MarkerCluster.css'"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css'"/>
@@ -3411,4 +3411,175 @@ body.fg12-dark .fg16-panel{background:rgba(15,31,46,.985);color:#e6f0f8;border-c
 <script>
 if('serviceWorker' in navigator && location.protocol !== 'file:'){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
 </script>
+
+<style id="fg-mobile-production-1-style">
+/* ===== FloodGuard Mobile Production 1.0 ===== */
+:root{--fgm-safe-top:env(safe-area-inset-top,0px);--fgm-safe-bottom:env(safe-area-inset-bottom,0px);--fgm-nav-h:66px}
+@media (max-width:700px){
+  html,body{width:100%;height:100%;height:100dvh;overflow:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%;background:#eaf1f7}
+  body{overscroll-behavior:none;touch-action:manipulation}
+  #map{inset:0 0 calc(var(--fgm-nav-h) + var(--fgm-safe-bottom)) 0!important}
+  .fg3{inset:0!important}
+  .fg3-header{left:8px!important;right:8px!important;top:calc(7px + var(--fgm-safe-top))!important;height:54px!important;padding:0 10px!important;border-radius:17px!important;z-index:1745!important;box-shadow:0 10px 28px rgba(15,23,42,.14)!important}
+  .fg3-header:before{left:48px!important;right:48px!important;height:2px!important}
+  .fg3-brand{gap:8px!important;min-width:0!important;max-width:58vw!important}
+  .fg3-logo{width:34px!important;height:34px!important;border-radius:11px!important;font-size:11px!important;flex:none!important}
+  .fg3-brand h1{font-size:14px!important;line-height:1.05!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  .fg3-brand p,.fg3-live,.fg12-version{display:none!important}
+  .fg3-nav{display:none!important}
+  .fg12-tools{margin-left:auto!important;padding-left:0!important;border:0!important;gap:5px!important;flex:none!important}
+  .fg12-tool{width:34px!important;height:34px!important;border-radius:11px!important;font-size:14px!important}
+  .fg12-tool[data-fg12='saved'],.fg12-tool[data-fg12='full'],.fg12-tool[data-fg12='theme']{display:none!important}
+
+  /* compact map search instead of the desktop information card */
+  .fg3-side{left:8px!important;right:8px!important;top:calc(69px + var(--fgm-safe-top))!important;width:auto!important;max-height:none!important;height:50px!important;padding:6px!important;border-radius:16px!important;overflow:visible!important;background:rgba(255,255,255,.96)!important;box-shadow:0 10px 26px rgba(15,23,42,.14)!important;z-index:1700!important}
+  .fg3-side:before,.fg44-collapse,.fg3-eyebrow,.fg3-road{display:none!important}
+  .fg3-search{height:38px!important}
+  .fg3-search input{height:38px!important;border-radius:11px!important;padding:8px 12px 8px 36px!important;font-size:16px!important;background:#f8fafc!important}
+  .fg3-search:before{left:12px!important;top:7px!important;font-size:18px!important}
+  .fg3-results{left:0!important;right:0!important;top:44px!important;margin:0!important;max-height:min(48dvh,360px)!important;border-radius:14px!important;box-shadow:0 18px 42px rgba(15,23,42,.2)!important}
+  .fg3-result{padding:11px 12px!important;font-size:13px!important}.fg3-result small{font-size:11px!important}
+
+  .fg90-active-trip{left:8px!important;right:8px!important;top:calc(126px + var(--fgm-safe-top))!important;width:auto!important;max-width:none!important;border-radius:14px!important}
+  .fg3-float{display:none!important}
+  .fg3-footnote,.fg13-heat-legend{display:none!important}
+  .leaflet-top{top:calc(128px + var(--fgm-safe-top))!important}.leaflet-bottom{bottom:calc(var(--fgm-nav-h) + var(--fgm-safe-bottom) + 8px)!important}
+  .leaflet-control-zoom{margin-left:8px!important}.leaflet-control-attribution{font-size:7px!important;max-width:65vw!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+
+  /* persistent mobile dock */
+  .fg12-mobile-nav{position:fixed!important;left:8px!important;right:8px!important;bottom:calc(7px + var(--fgm-safe-bottom))!important;height:60px!important;z-index:1780!important;display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:4px!important;padding:5px!important;border-radius:19px!important;background:rgba(255,255,255,.97)!important;border:1px solid rgba(226,232,240,.92)!important;box-shadow:0 14px 38px rgba(15,23,42,.2)!important;backdrop-filter:blur(22px) saturate(145%)!important}
+  .fg12-mobile-nav button{min-width:0!important;border-radius:13px!important;font-size:19px!important;line-height:1!important;gap:3px!important;color:#64748b!important}
+  .fg12-mobile-nav button span{font-size:10px!important;line-height:1.05!important;font-weight:800!important;letter-spacing:0!important}
+  .fg12-mobile-nav button.active{background:#eaf3ff!important;color:#1d4ed8!important;box-shadow:inset 0 0 0 1px #cfe1fb!important}
+  .fg14-more-sheet{position:fixed!important;left:8px!important;right:8px!important;bottom:calc(74px + var(--fgm-safe-bottom))!important;border-radius:22px!important;padding:10px!important;z-index:1810!important}
+  .fg14-more-head b{font-size:13px!important}.fg14-more-grid{gap:8px!important}.fg14-more-item{padding:12px!important;border-radius:15px!important}.fg14-more-item strong{width:38px!important;height:38px!important;font-size:18px!important}.fg14-more-item b{font-size:12px!important}.fg14-more-item span{font-size:10px!important}
+  .fg14-more-backdrop{position:fixed!important;z-index:1800!important}
+
+  /* SOS must stay thumb-reachable without covering the nav */
+  .fg16-sos-fab{right:15px!important;bottom:calc(82px + var(--fgm-safe-bottom))!important;width:58px!important;height:58px!important;padding:0!important;justify-content:center!important;border-radius:50%!important;z-index:1840!important;box-shadow:0 12px 32px rgba(185,28,28,.42),0 0 0 5px rgba(255,255,255,.9)!important}
+  .fg16-sos-fab span{display:none!important}.fg16-sos-fab i{width:auto!important;height:auto!important;background:transparent!important;font-size:21px!important}
+
+  /* all decision panels behave like mobile pages */
+  .fg3-routepanel,.fg4-evpanel,.fg3-drawer,.fg10-panel,.fg70-panel,.fg3-stationpanel,.fg3-overview,.fg13-alertpanel{
+    position:fixed!important;left:6px!important;right:6px!important;top:calc(68px + var(--fgm-safe-top))!important;bottom:calc(73px + var(--fgm-safe-bottom))!important;width:auto!important;max-width:none!important;border-radius:20px!important;z-index:1760!important;box-shadow:0 20px 58px rgba(15,23,42,.26)!important
+  }
+  .fg3-route-scroll,.fg4-evscroll,.fg3-scroll,.fg10-scroll,.fg70-scroll,.fg3-stationpanel{padding-bottom:24px!important;-webkit-overflow-scrolling:touch!important}
+  .fg3-route-head,.fg4-evhead,.fg3-drawer-head,.fg10-head,.fg70-head{padding:13px 14px!important;min-height:58px!important}
+  .fg3-route-head h2,.fg4-evhead h2,.fg3-drawer-head h2,.fg10-head h2,.fg70-head h2{font-size:17px!important}
+  .fg3-route-head p,.fg4-evhead p,.fg3-drawer-head p,.fg10-head p,.fg70-head p{font-size:11px!important;line-height:1.4!important}
+  .fg3-input,.fg3-select,.fg3-route-input,.fg4-evinput,.fg4-evselect,.fg10-panel input,.fg10-panel select,.fg70-panel input,.fg70-panel select{font-size:16px!important;min-height:44px!important}
+  .fg3-run,.fg3-route-run,.fg4-evlocbtn,.fg10-btn,.fg70-btn{min-height:44px!important;font-size:12px!important}
+  .fg3-resultcard .label,.fg3-field label,.fg3-route-field label,.fg4-evlabel,.fg4-evfield label{font-size:10px!important}.fg3-resultcard .desc,.fg3-note,.fg4-evstatus{font-size:11px!important;line-height:1.5!important}
+  .fg3-resultcard .big{font-size:22px!important}
+  .fg10-kpis,.fg70-grid{grid-template-columns:1fr 1fr!important}
+  .fg3-station-list{grid-template-columns:1fr!important}.fg3-station-name{font-size:13px!important}.fg3-station-place{font-size:11px!important}.fg3-station-action{font-size:10px!important;min-height:36px!important}
+
+  /* Emergency Rescue becomes a dedicated mobile app screen */
+  .fg16-panel{inset:0!important;border:0!important;border-radius:0!important;background:#f4f7fb!important;z-index:2100!important;height:100dvh!important;max-height:100dvh!important}
+  .fg16-panel.show{display:grid!important;grid-template-rows:auto auto 1fr!important}
+  .fg16-head{padding:calc(8px + var(--fgm-safe-top)) 10px 8px!important;min-height:60px!important;gap:8px!important;position:relative!important;z-index:2!important}
+  .fg16-head-icon{width:36px!important;height:36px!important;border-radius:11px!important;font-size:18px!important}.fg16-head h2{font-size:15px!important;line-height:1.1!important}.fg16-head p{display:none!important}
+  .fg16-head-btn:not(.fg16-close){display:none!important}.fg16-close{width:38px!important;height:38px!important;border-radius:11px!important;font-size:20px!important}
+  .fg16-shell{display:contents!important}
+  .fg16-side{display:block!important;grid-row:2!important;padding:6px 8px!important;background:#10283f!important;overflow-x:auto!important;overflow-y:hidden!important;white-space:nowrap!important;scrollbar-width:none!important}
+  .fg16-side::-webkit-scrollbar{display:none!important}.fg16-brandnote,.fg16-side-live{display:none!important}.fg16-nav{display:flex!important;gap:5px!important;margin:0!important;width:max-content!important;min-width:100%!important}
+  .fg16-nav button{flex:1 0 auto!important;min-height:38px!important;padding:7px 10px!important;border-radius:10px!important;font-size:11px!important;text-align:center!important;white-space:nowrap!important}
+  .fg16-main{grid-row:3!important;padding:12px 10px calc(24px + var(--fgm-safe-bottom))!important;overflow:auto!important;-webkit-overflow-scrolling:touch!important}
+  .fg16-title{margin-bottom:10px!important;gap:8px!important}.fg16-title h3{font-size:19px!important;line-height:1.2!important}.fg16-title p{font-size:12px!important;line-height:1.45!important}.fg16-statuspill{font-size:10px!important;padding:5px 8px!important}
+  .fg16-grid{grid-template-columns:1fr!important;gap:10px!important}.fg16-card,.fg16-card.wide{grid-column:auto!important;border-radius:16px!important;padding:13px!important}.fg16-card-title{font-size:14px!important}.fg16-card-sub{font-size:11.5px!important;line-height:1.5!important;margin-bottom:10px!important}
+  .fg16-fields{grid-template-columns:1fr!important;gap:8px!important}.fg16-field.full{grid-column:auto!important}.fg16-field label,.fg17-addressbox label{font-size:10px!important;margin-bottom:5px!important}.fg16-input,.fg16-select,.fg16-textarea{font-size:16px!important;min-height:46px!important;border-radius:12px!important;padding:11px 12px!important}.fg16-textarea{min-height:92px!important}
+  .fg16-locbox{padding:11px!important;border-radius:14px!important}.fg16-locrow{align-items:center!important}.fg16-locmain b{font-size:12px!important}.fg16-locmain span,.fg17-addresshint,.fg17-addressstate{font-size:10.5px!important}.fg17-addressline{grid-template-columns:1fr!important}.fg16-mini-btn,.fg16-btn{min-height:42px!important;padding:9px 11px!important;border-radius:11px!important;font-size:11px!important}.fg16-btn.sos{width:100%!important;min-height:50px!important;font-size:14px!important}
+  .fg16-chips{gap:7px!important}.fg16-chip{min-height:38px!important;padding:8px 10px!important;border-radius:11px!important;font-size:11px!important}
+  .fg16-priority{grid-template-columns:70px 1fr!important;padding:10px!important}.fg16-score{height:62px!important}.fg16-score b{font-size:24px!important}.fg16-score span{font-size:9px!important}.fg16-priority-text b{font-size:12px!important}.fg16-priority-text p,.fg16-safety,.fg16-note{font-size:10.5px!important;line-height:1.5!important}
+  .fg16-photo{grid-template-columns:88px 1fr!important}.fg16-photo-preview{width:88px!important;height:72px!important}.fg16-photo input{font-size:11px!important}
+  .fg16-chat{height:calc(100dvh - 245px)!important;min-height:360px!important;border-radius:15px!important}.fg16-messages{padding:10px!important;gap:8px!important}.fg16-msg{max-width:86%!important;padding:9px 10px!important;border-radius:13px!important;font-size:12px!important}.fg16-msg small{font-size:9px!important}.fg16-chatbar{gap:7px!important;padding:8px!important}.fg16-chatbar input{font-size:16px!important;min-height:44px!important;border-radius:11px!important}.fg16-chatbar button{min-width:64px!important;font-size:12px!important;border-radius:11px!important}.fg16-quickchat button{font-size:10px!important;padding:7px 9px!important}
+  .fg16-ticket-head b{font-size:12px!important}.fg16-ticket p,.fg16-ticket small,.fg16-event{font-size:10.5px!important}.fg16-meta{grid-template-columns:1fr!important}.fg16-metaitem span{font-size:9px!important}.fg16-metaitem b{font-size:11.5px!important}.fg16-setting-row{grid-template-columns:1fr!important}.fg16-setting-row b{font-size:12px!important}.fg16-setting-row p{font-size:10.5px!important}
+  .fg16-notify{left:10px!important;right:10px!important;top:calc(66px + var(--fgm-safe-top))!important;width:auto!important}.fg16-toast{font-size:11px!important;border-radius:13px!important}
+
+  /* sheets should never trigger iOS auto-zoom */
+  input,select,textarea,button{max-width:100%}
+}
+@media (max-width:380px){
+  .fg3-brand h1{font-size:12.5px!important}.fg12-tools{gap:3px!important}.fg12-tool{width:32px!important;height:32px!important}.fg12-mobile-nav button span{font-size:9px!important}.fg14-more-grid{grid-template-columns:1fr!important}.fg16-head h2{font-size:14px!important}.fg16-nav button{font-size:10px!important;padding:7px 8px!important}.fg16-title h3{font-size:17px!important}
+}
+</style>
+<script id="fg-mobile-production-1-js">
+(function(){
+  if(window.FG_MOBILE_PROD_1)return; window.FG_MOBILE_PROD_1=true;
+  const root=document.documentElement;
+  const sync=()=>{root.style.setProperty('--fgm-vh',(window.visualViewport?.height||innerHeight)+'px');document.body.classList.toggle('fg-mobile-production',matchMedia('(max-width:700px)').matches)};
+  sync(); addEventListener('resize',sync,{passive:true}); window.visualViewport?.addEventListener('resize',sync,{passive:true});
+})();
+</script>
+
+<style id="fg-adaptive-mode-1-style">
+/* ===== FloodGuard Adaptive Display Mode 1.1 ===== */
+.fg-mode-switch{position:fixed;right:14px;top:82px;z-index:2250;font-family:Inter,Segoe UI,Arial,sans-serif;pointer-events:auto}
+.fg-mode-btn{display:flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.9);background:rgba(15,23,42,.9);color:#fff;border-radius:999px;padding:7px 10px;box-shadow:0 9px 25px rgba(15,23,42,.22);backdrop-filter:blur(14px);font-size:10px;font-weight:850;cursor:pointer}
+.fg-mode-btn .ico{font-size:14px}.fg-mode-btn .chev{opacity:.65;font-size:9px}
+.fg-mode-menu{position:absolute;right:0;top:calc(100% + 7px);width:190px;padding:7px;background:rgba(255,255,255,.98);border:1px solid #dce6ef;border-radius:14px;box-shadow:0 18px 44px rgba(15,23,42,.2);display:none}
+.fg-mode-switch.open .fg-mode-menu{display:block}
+.fg-mode-option{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;border:0;background:transparent;border-radius:10px;padding:9px 10px;color:#334e68;font-size:10px;font-weight:800;cursor:pointer;text-align:left}
+.fg-mode-option:hover{background:#f1f5f9}.fg-mode-option.active{background:#e8f1ff;color:#1557b0}.fg-mode-option small{font-size:8px;color:#8294a6;font-weight:650}.fg-mode-option.active small{color:#3974b8}
+.fg-mode-preview{position:fixed;inset:0;z-index:999990;background:radial-gradient(circle at 50% 10%,#213b55,#081522 62%);display:grid;grid-template-rows:auto 1fr;font-family:Inter,Segoe UI,Arial,sans-serif;color:#fff}
+.fg-mode-previewbar{min-height:54px;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid rgba(255,255,255,.1);background:rgba(7,20,33,.92);backdrop-filter:blur(16px)}
+.fg-mode-previewbar .title{min-width:0}.fg-mode-previewbar b{display:block;font-size:12px}.fg-mode-previewbar span{display:block;font-size:9px;color:#a9c2d8;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fg-mode-preview-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.fg-mode-preview-actions button{border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#d8e8f7;border-radius:9px;padding:7px 9px;font-size:9px;font-weight:800;cursor:pointer}.fg-mode-preview-actions button.active{background:#1677ff;color:#fff;border-color:#4d98ff}
+.fg-mode-stage{position:relative;min-height:0;overflow:auto;display:grid;place-items:start center;padding:12px}
+.fg-mode-phone{width:min(430px,calc(100vw - 24px));height:calc(100vh - 78px);max-height:900px;border-radius:28px;overflow:hidden;border:8px solid #0a1420;box-shadow:0 26px 80px rgba(0,0,0,.45);background:#fff}
+.fg-mode-phone iframe{width:100%;height:100%;border:0;background:#fff;display:block}
+.fg-mode-desktop-wrap{position:relative;margin:0 auto;overflow:hidden;border-radius:16px;border:6px solid #0a1420;box-shadow:0 24px 70px rgba(0,0,0,.45);background:#fff}
+.fg-mode-desktop-wrap iframe{position:absolute;left:0;top:0;border:0;background:#fff;transform-origin:0 0}
+@media(max-width:700px){
+ .fg-mode-switch{right:12px;top:auto;bottom:calc(151px + env(safe-area-inset-bottom,0px))}
+ .fg-mode-btn{padding:6px 8px;font-size:9px;background:rgba(15,23,42,.86)}
+ .fg-mode-menu{width:180px;bottom:calc(100% + 7px);top:auto}
+ .fg-mode-previewbar{align-items:flex-start}.fg-mode-previewbar .title span{max-width:43vw}.fg-mode-preview-actions button{padding:6px 7px}
+ .fg-mode-stage{padding:8px}
+}
+</style>
+<script id="fg-adaptive-mode-1-js">
+(function(){
+  if(window.FG_ADAPTIVE_MODE_1)return;window.FG_ADAPTIVE_MODE_1=true;
+  const KEY='fg_display_mode_v1';
+  const q=new URLSearchParams(location.search);const preview=q.get('fg_preview_mode');
+  const getMode=()=>{const m=localStorage.getItem(KEY);return ['auto','mobile','desktop'].includes(m)?m:'auto'};
+  const setMode=(m)=>{if(!['auto','mobile','desktop'].includes(m))m='auto';localStorage.setItem(KEY,m);location.reload()};
+  const modeLabel=m=>m==='mobile'?'Mobile':m==='desktop'?'Desktop':'Auto';
+  const modeIcon=m=>m==='mobile'?'📱':m==='desktop'?'🖥️':'↔';
+  const cleanUrl=(previewMode)=>{const u=new URL(location.href);u.searchParams.set('fg_preview_mode',previewMode);return u.toString()};
+  const isMobileViewport=()=>window.innerWidth<=700;
+  function previewShell(mode){
+    const shell=document.createElement('div');shell.className='fg-mode-preview';shell.id='fgModePreview';
+    shell.innerHTML='<div class="fg-mode-previewbar"><div class="title"><b>FloodGuard · Chế độ xem '+modeLabel(mode)+'</b><span>'+ (mode==='mobile'?'Mô phỏng giao diện điện thoại trên màn hình lớn.':'Mô phỏng giao diện máy tính trên màn hình nhỏ.') +'</span></div><div class="fg-mode-preview-actions"><button data-m="auto">↔ Auto</button><button data-m="mobile">📱 Mobile</button><button data-m="desktop">🖥️ Desktop</button></div></div><div class="fg-mode-stage" id="fgModeStage"></div>';
+    document.body.appendChild(shell);
+    shell.querySelectorAll('[data-m]').forEach(b=>{b.classList.toggle('active',b.dataset.m===mode);b.onclick=()=>setMode(b.dataset.m)});
+    const stage=shell.querySelector('#fgModeStage');
+    if(mode==='mobile'){
+      const phone=document.createElement('div');phone.className='fg-mode-phone';
+      const fr=document.createElement('iframe');fr.src=cleanUrl('mobile');fr.title='FloodGuard Mobile Preview';phone.appendChild(fr);stage.appendChild(phone);
+    }else{
+      const W=1280;const availW=Math.max(280,window.innerWidth-16);const availH=Math.max(420,window.innerHeight-70);const scale=Math.min(1,availW/W);const H=Math.max(820,Math.floor(availH/scale));
+      const wrap=document.createElement('div');wrap.className='fg-mode-desktop-wrap';wrap.style.width=(W*scale)+'px';wrap.style.height=availH+'px';
+      const fr=document.createElement('iframe');fr.src=cleanUrl('desktop');fr.title='FloodGuard Desktop Preview';fr.style.width=W+'px';fr.style.height=H+'px';fr.style.transform='scale('+scale+')';wrap.appendChild(fr);stage.appendChild(wrap);
+    }
+  }
+  function normalControl(mode){
+    const root=document.createElement('div');root.className='fg-mode-switch';root.id='fgModeSwitch';
+    root.innerHTML='<button class="fg-mode-btn" type="button" aria-expanded="false"><span class="ico">'+modeIcon(mode)+'</span><span>'+modeLabel(mode)+'</span><span class="chev">▾</span></button><div class="fg-mode-menu"><button class="fg-mode-option" data-m="auto"><span>↔ Auto</span><small>Tự nhận thiết bị</small></button><button class="fg-mode-option" data-m="mobile"><span>📱 Mobile</span><small>Ép giao diện điện thoại</small></button><button class="fg-mode-option" data-m="desktop"><span>🖥️ Desktop</span><small>Ép giao diện máy tính</small></button></div>';
+    document.body.appendChild(root);const btn=root.querySelector('.fg-mode-btn');
+    btn.onclick=e=>{e.stopPropagation();root.classList.toggle('open');btn.setAttribute('aria-expanded',root.classList.contains('open')?'true':'false')};
+    root.querySelectorAll('[data-m]').forEach(b=>{b.classList.toggle('active',b.dataset.m===mode);b.onclick=()=>setMode(b.dataset.m)});
+    document.addEventListener('click',e=>{if(!root.contains(e.target)){root.classList.remove('open');btn.setAttribute('aria-expanded','false')}});
+  }
+  function init(){
+    if(preview){ document.documentElement.dataset.fgPreviewMode=preview; return; }
+    const mode=getMode();document.documentElement.dataset.fgDisplayMode=mode;
+    const mismatch=(mode==='mobile'&&!isMobileViewport())||(mode==='desktop'&&isMobileViewport());
+    if(mismatch) previewShell(mode); else normalControl(mode);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+
 </body></html>

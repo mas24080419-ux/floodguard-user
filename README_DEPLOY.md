@@ -1,16 +1,17 @@
-# FloodGuard User - Production Static Site
+# FloodGuard Adaptive Production 1.1
 
-Backend đã cấu hình sẵn: `https://floodguard-rescue-backend.onrender.com`
+Production frontend with responsive desktop/mobile UI and a manual display-mode switch.
 
-## Upload GitHub
-Tạo repo `floodguard-user`, upload toàn bộ file trong thư mục này vào **root** repo.
+## Display modes
+- Auto: desktop on large screens, mobile on small screens.
+- Mobile: mobile UI; on desktop it opens a phone-size preview frame.
+- Desktop: desktop UI; on phones it opens a scaled desktop preview frame.
 
-## Render
-New -> Static Site -> chọn repo.
-- Build Command: để trống (hoặc `echo static`)
+The selection is stored locally in the browser and can be changed from the floating Auto/Mobile/Desktop control.
+
+## Deploy on Render Static Site
+- Build Command: `echo static`
 - Publish Directory: `.`
+- Root Directory: blank
 
-Sau khi deploy, người dùng chỉ cần mở URL của Static Site. Không cần cấu hình Webhook/Sync URL.
-
-## PWA
-Website có manifest + service worker. Trên trình duyệt hỗ trợ, người dùng có thể Add to Home Screen.
+Upload all files in this folder to the root of the `floodguard-user` GitHub repository. Auto-deploy will update the existing Render site.
