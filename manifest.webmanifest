@@ -1,12 +1,12 @@
 {
-  "name": "FloodGuard HCMC",
+  "name": "FloodGuard HCMC · Minimal Clean",
   "short_name": "FloodGuard",
-  "description": "FloodGuard HCMC adaptive desktop/mobile flood risk, EV routing and emergency rescue web app.",
+  "description": "FloodGuard HCMC minimal clean responsive flood risk, EV routing and emergency rescue web app.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#eef3f8",
-  "theme_color": "#0b1f33",
+  "background_color": "#f7f8fb",
+  "theme_color": "#7aa7ff",
   "lang": "vi",
   "icons": [
     {

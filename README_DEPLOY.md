@@ -1,17 +1,10 @@
-# FloodGuard Adaptive Production 1.1
+# FloodGuard Minimal & Clean Production 1.3
 
-Production frontend with responsive desktop/mobile UI and a manual display-mode switch.
+Giao diện responsive mới cho desktop và mobile.
 
-## Display modes
-- Auto: desktop on large screens, mobile on small screens.
-- Mobile: mobile UI; on desktop it opens a phone-size preview frame.
-- Desktop: desktop UI; on phones it opens a scaled desktop preview frame.
+Style: pastel, bo góc mềm, shadow nhẹ, typography elegant, minimal & clean.
 
-The selection is stored locally in the browser and can be changed from the floating Auto/Mobile/Desktop control.
+## Deploy
+Upload/replace toàn bộ file trong thư mục này vào repo `floodguard-user`. Render Static Site sẽ tự deploy nếu Auto-Deploy đang bật.
 
-## Deploy on Render Static Site
-- Build Command: `echo static`
-- Publish Directory: `.`
-- Root Directory: blank
-
-Upload all files in this folder to the root of the `floodguard-user` GitHub repository. Auto-deploy will update the existing Render site.
+Backend giữ nguyên: `https://floodguard-rescue-backend.onrender.com`.

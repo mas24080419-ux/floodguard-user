@@ -8,7 +8,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 
-<title>FloodGuard Mobile Production 1.0 | FloodGuard HCMC | Flood Risk & Emergency EV Rescue</title>
+<title>FloodGuard Adaptive Production 1.2 | FloodGuard HCMC | Flood Risk & Emergency EV Rescue</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css'"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/MarkerCluster.css'"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css'"/>
@@ -3512,6 +3512,66 @@ if('serviceWorker' in navigator && location.protocol !== 'file:'){window.addEven
 })();
 </script>
 
+<style id="fg-mobile-hotfix-1-2-style">
+/* ===== FloodGuard Mobile Hotfix 1.2 ===== */
+@media (max-width:700px){
+  /* Keep scenario rain inside the Active Trip card instead of covering its text. */
+  .fg90-active-trip{padding-right:128px!important;min-height:58px!important}
+  .fg90-active-trip .txt{min-width:0!important}
+  .fg90-active-trip b{font-size:11px!important;line-height:1.25!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  .fg90-active-trip span{font-size:9px!important;line-height:1.25!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  .fg12-rain-orb{left:auto!important;right:16px!important;top:calc(137px + var(--fgm-safe-top))!important;transform:none!important;height:34px!important;max-width:116px!important;padding:0 9px!important;gap:5px!important;z-index:1735!important;border-radius:12px!important;box-shadow:none!important;background:#f8fbff!important;border:1px solid #dbeafe!important}
+  .fg12-rain-orb>span:nth-of-type(2){font-size:0!important}
+  .fg12-rain-orb>span:nth-of-type(2):after{content:'Mưa';font-size:8px!important;color:#64748b!important}
+  .fg12-rain-orb b{font-size:10px!important;white-space:nowrap!important}
+  .fg12-rain-orb .live{width:6px!important;height:6px!important;flex:none!important}
+  .fg12-rain-pop{left:8px!important;right:8px!important;top:calc(192px + var(--fgm-safe-top))!important;width:auto!important;transform:translateY(-6px)!important;z-index:1740!important}
+  .fg12-rain-pop.show{transform:none!important}
+
+  /* Move Leaflet controls slightly lower so they never collide with the trip card. */
+  .leaflet-top{top:calc(196px + var(--fgm-safe-top))!important}
+
+  /* Messenger/in-app browsers sometimes paint the map gray before tiles arrive. */
+  #map,.leaflet-container{background:#dfe9e6!important}
+  .leaflet-tile-pane{will-change:transform;transform:translateZ(0)}
+  .leaflet-tile{image-rendering:auto!important}
+}
+@media (max-width:380px){
+  .fg90-active-trip{padding-right:114px!important}
+  .fg12-rain-orb{right:12px!important;max-width:104px!important;padding:0 7px!important}
+}
+</style>
+<script id="fg-mobile-map-fallback-1-2">
+(function(){
+  if(window.FG_MOBILE_MAP_FIX_12)return;window.FG_MOBILE_MAP_FIX_12=true;
+  const mobile=()=>matchMedia('(max-width:700px)').matches;
+  if(!mobile())return;
+  const providers=[
+    {name:'OSM Humanitarian',url:'https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png'},
+    {name:'OpenStreetMap',url:'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'},
+    {name:'OSM DE',url:'https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png'}
+  ];
+  let index=0,errors=0,loads=0,switchedAt=0;
+  function useProvider(i,reason){
+    if(!baseStreet||typeof baseStreet.setUrl!=='function')return;
+    index=Math.max(0,Math.min(i,providers.length-1));errors=0;loads=0;switchedAt=Date.now();
+    baseStreet.setUrl(providers[index].url,true);
+    try{map.invalidateSize({pan:false,animate:false})}catch(_){ }
+    document.documentElement.dataset.fgMobileMapProvider=providers[index].name;
+    console.info('[FloodGuard] Mobile basemap:',providers[index].name,reason||'');
+  }
+  // HOT has proven more reliable in the in-app browser used in testing.
+  useProvider(0,'mobile-default');
+  baseStreet.on('tileload',()=>{loads++});
+  baseStreet.on('tileerror',()=>{
+    errors++;
+    if(errors>=4 && index<providers.length-1 && Date.now()-switchedAt>700)useProvider(index+1,'tile-errors');
+  });
+  setTimeout(()=>{if(loads===0&&index<providers.length-1)useProvider(index+1,'startup-timeout')},4500);
+  // When returning from Messenger/Safari background, force Leaflet to repaint tiles.
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden){setTimeout(()=>{try{map.invalidateSize({pan:false});baseStreet.redraw()}catch(_){ }},180)}});
+})();
+</script>
 <style id="fg-adaptive-mode-1-style">
 /* ===== FloodGuard Adaptive Display Mode 1.1 ===== */
 .fg-mode-switch{position:fixed;right:14px;top:82px;z-index:2250;font-family:Inter,Segoe UI,Arial,sans-serif;pointer-events:auto}
@@ -3582,4 +3642,265 @@ if('serviceWorker' in navigator && location.protocol !== 'file:'){window.addEven
 })();
 </script>
 
-</body></html>
+</body>
+<style id="fg-minimal-clean-1-3-style">
+/* ===== FloodGuard Minimal & Clean UI 1.3 ===== */
+:root{
+  --mc-bg:#f7f8fb;
+  --mc-surface:rgba(255,255,255,.90);
+  --mc-surface-solid:#ffffff;
+  --mc-text:#25324a;
+  --mc-muted:#7c8799;
+  --mc-line:rgba(127,143,165,.16);
+  --mc-blue:#7aa7ff;
+  --mc-blue-soft:#edf4ff;
+  --mc-mint:#8fd8ba;
+  --mc-mint-soft:#edf9f4;
+  --mc-lilac:#b7a4ef;
+  --mc-lilac-soft:#f4f0ff;
+  --mc-peach:#f4b38d;
+  --mc-peach-soft:#fff4ec;
+  --mc-rose:#ef9aa5;
+  --mc-rose-soft:#fff0f3;
+  --mc-shadow:0 12px 34px rgba(65,78,102,.10);
+  --mc-shadow-lg:0 24px 64px rgba(65,78,102,.14);
+  --mc-radius:22px;
+  --mc-radius-sm:15px;
+}
+html,body{font-family:"Be Vietnam Pro",Inter,Segoe UI,Arial,sans-serif!important;color:var(--mc-text)!important;background:var(--mc-bg)!important}
+body:not(.fg12-dark) #map{background:#e9eef1!important}
+body:not(.fg12-dark) .leaflet-control-zoom,
+body:not(.fg12-dark) .leaflet-control-attribution,
+body:not(.fg12-dark) .leaflet-control-scale-line{filter:saturate(.75)}
+
+/* Top app bar */
+body:not(.fg12-dark) .fg3-header{
+  background:rgba(255,255,255,.88)!important;
+  border:1px solid rgba(255,255,255,.88)!important;
+  border-radius:24px!important;
+  box-shadow:var(--mc-shadow)!important;
+  backdrop-filter:blur(22px) saturate(120%)!important;
+}
+body:not(.fg12-dark) .fg3-header:before{display:none!important}
+body:not(.fg12-dark) .fg3-logo{
+  background:linear-gradient(145deg,#82b6ff,#8f9ef2)!important;
+  border-radius:14px!important;
+  box-shadow:0 8px 20px rgba(122,167,255,.26)!important;
+}
+body:not(.fg12-dark) .fg3-brand h1{color:#233149!important;font-weight:780!important;letter-spacing:-.025em!important}
+body:not(.fg12-dark) .fg3-brand p{color:#8b95a7!important}
+body:not(.fg12-dark) .fg3-live{background:var(--mc-mint-soft)!important;color:#4e8f75!important;border-color:#d8efe4!important}
+
+/* Desktop segmented nav */
+body:not(.fg12-dark) .fg3-nav{
+  background:rgba(244,246,250,.82)!important;
+  border:1px solid rgba(218,224,233,.68)!important;
+  border-radius:16px!important;
+  padding:4px!important;
+  box-shadow:none!important;
+}
+body:not(.fg12-dark) .fg3-nav .fg3-btn{color:#7a8798!important;border-radius:12px!important;font-weight:720!important}
+body:not(.fg12-dark) .fg3-nav .fg3-btn:hover{background:#fff!important;color:#50647e!important;box-shadow:0 5px 15px rgba(74,89,112,.07)!important}
+body:not(.fg12-dark) .fg3-nav .fg3-btn.active,
+body:not(.fg12-dark) .fg3-nav .fg3-btn.primary{background:var(--mc-blue-soft)!important;color:#5479c6!important;box-shadow:none!important}
+body:not(.fg12-dark) .fg12-tool{background:rgba(246,248,251,.9)!important;border-color:var(--mc-line)!important;color:#66778b!important;border-radius:13px!important}
+
+/* Search/sidebar card */
+body:not(.fg12-dark) .fg3-side{
+  background:rgba(255,255,255,.90)!important;
+  border:1px solid rgba(255,255,255,.86)!important;
+  border-radius:24px!important;
+  box-shadow:var(--mc-shadow)!important;
+  backdrop-filter:blur(22px) saturate(120%)!important;
+}
+body:not(.fg12-dark) .fg3-side:before{display:none!important}
+body:not(.fg12-dark) .fg3-search input,
+body:not(.fg12-dark) .fg3-input,
+body:not(.fg12-dark) .fg3-select,
+body:not(.fg12-dark) .fg3-route-input,
+body:not(.fg12-dark) .fg4-evinput,
+body:not(.fg12-dark) .fg4-evselect,
+body:not(.fg12-dark) .fg16-field input,
+body:not(.fg12-dark) .fg16-field select,
+body:not(.fg12-dark) .fg16-field textarea{
+  background:#fafbfc!important;
+  border:1px solid rgba(151,163,180,.18)!important;
+  border-radius:14px!important;
+  color:var(--mc-text)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9)!important;
+}
+body:not(.fg12-dark) input:focus,
+body:not(.fg12-dark) select:focus,
+body:not(.fg12-dark) textarea:focus{
+  border-color:#b9cff7!important;
+  box-shadow:0 0 0 4px rgba(122,167,255,.12)!important;
+  outline:none!important;
+}
+body:not(.fg12-dark) .fg3-result{border-radius:12px!important}
+body:not(.fg12-dark) .fg3-result:hover{background:#f5f7fa!important}
+
+/* Active trip */
+body:not(.fg12-dark) .fg90-active-trip{
+  background:rgba(255,255,255,.91)!important;
+  border:1px solid rgba(255,255,255,.88)!important;
+  border-radius:20px!important;
+  box-shadow:var(--mc-shadow)!important;
+  backdrop-filter:blur(18px)!important;
+}
+body:not(.fg12-dark) .fg12-rain-orb{
+  background:var(--mc-blue-soft)!important;
+  border-color:#dce9ff!important;
+  color:#5878b2!important;
+  border-radius:14px!important;
+}
+
+/* Main drawers and cards */
+body:not(.fg12-dark) .fg3-drawer,
+body:not(.fg12-dark) .fg3-routepanel,
+body:not(.fg12-dark) .fg4-evpanel,
+body:not(.fg12-dark) .fg3-stationpanel,
+body:not(.fg12-dark) .fg3-overview,
+body:not(.fg12-dark) .fg10-panel,
+body:not(.fg12-dark) .fg70-panel{
+  background:rgba(251,252,254,.96)!important;
+  border:1px solid rgba(255,255,255,.90)!important;
+  border-radius:26px!important;
+  box-shadow:var(--mc-shadow-lg)!important;
+  backdrop-filter:blur(22px) saturate(115%)!important;
+}
+body:not(.fg12-dark) .fg3-drawer-head,
+body:not(.fg12-dark) .fg3-route-head,
+body:not(.fg12-dark) .fg4-evhead,
+body:not(.fg12-dark) .fg10-head,
+body:not(.fg12-dark) .fg70-head{
+  background:rgba(255,255,255,.82)!important;
+  border-bottom:1px solid rgba(160,174,193,.14)!important;
+  color:var(--mc-text)!important;
+}
+body:not(.fg12-dark) .fg3-route-head:before{background:linear-gradient(#9bdcc1,#76bfa3)!important}
+body:not(.fg12-dark) .fg3-resultcard,
+body:not(.fg12-dark) .fg3-route-card,
+body:not(.fg12-dark) .fg4-evcard,
+body:not(.fg12-dark) .fg3-station-card,
+body:not(.fg12-dark) .fg3-ocard,
+body:not(.fg12-dark) .fg16-card{
+  background:rgba(255,255,255,.93)!important;
+  border:1px solid rgba(151,163,180,.14)!important;
+  border-radius:18px!important;
+  box-shadow:0 7px 20px rgba(69,84,106,.055)!important;
+}
+body:not(.fg12-dark) .fg3-resultcard:hover,
+body:not(.fg12-dark) .fg3-route-card:hover,
+body:not(.fg12-dark) .fg4-evcard:hover,
+body:not(.fg12-dark) .fg3-station-card:hover{
+  transform:translateY(-1px)!important;
+  box-shadow:0 12px 26px rgba(69,84,106,.085)!important;
+}
+
+/* Buttons: soft rather than saturated */
+body:not(.fg12-dark) .fg3-btn,
+body:not(.fg12-dark) .fg3-linkbtn,
+body:not(.fg12-dark) .fg3-chip,
+body:not(.fg12-dark) .fg4-evaction,
+body:not(.fg12-dark) .fg3-station-action,
+body:not(.fg12-dark) .fg3-route-detailbtn,
+body:not(.fg12-dark) .fg16-nav button{
+  border-radius:13px!important;
+  font-weight:720!important;
+}
+body:not(.fg12-dark) .fg3-run,
+body:not(.fg12-dark) .fg3-route-run,
+body:not(.fg12-dark) .fg4-evlocbtn,
+body:not(.fg12-dark) .fg16-primary,
+body:not(.fg12-dark) .fg10-btn.primary,
+body:not(.fg12-dark) .fg70-btn.primary{
+  background:linear-gradient(135deg,#7aa7ff,#788eea)!important;
+  border:0!important;
+  border-radius:14px!important;
+  box-shadow:0 8px 20px rgba(122,167,255,.22)!important;
+  color:#fff!important;
+}
+body:not(.fg12-dark) .fg3-run:hover,
+body:not(.fg12-dark) .fg3-route-run:hover,
+body:not(.fg12-dark) .fg4-evlocbtn:hover,
+body:not(.fg12-dark) .fg16-primary:hover{filter:brightness(.985);transform:translateY(-1px)!important}
+
+/* Chips and semantic pastels */
+body:not(.fg12-dark) .risk-low,
+body:not(.fg12-dark) .tier-good{color:#548c75!important}
+body:not(.fg12-dark) .fg3-badge-med{background:var(--mc-peach-soft)!important;color:#a16d4f!important}
+body:not(.fg12-dark) .fg3-badge-high{background:var(--mc-rose-soft)!important;color:#a95f6a!important}
+body:not(.fg12-dark) .fg3-tier.tier-good{background:var(--mc-mint-soft)!important}
+body:not(.fg12-dark) .fg3-tier.tier-warn{background:var(--mc-peach-soft)!important;color:#9c714e!important}
+body:not(.fg12-dark) .fg3-chip.active{background:var(--mc-lilac-soft)!important;color:#6d62a8!important;border-color:#e2dafa!important}
+
+/* Emergency rescue: calm, premium, still obvious */
+body:not(.fg12-dark) .fg16-panel{background:#f8f9fc!important}
+body:not(.fg12-dark) .fg16-head{
+  background:linear-gradient(135deg,#fff5f6,#f7f2ff 58%,#eef6ff)!important;
+  color:#344054!important;
+  border-bottom:1px solid rgba(164,177,196,.14)!important;
+}
+body:not(.fg12-dark) .fg16-head-icon{background:#fff!important;color:#d96978!important;border:1px solid #f5d9df!important;box-shadow:0 8px 20px rgba(217,105,120,.12)!important}
+body:not(.fg12-dark) .fg16-side{background:#f5f7fb!important;border-right:1px solid rgba(155,168,187,.14)!important}
+body:not(.fg12-dark) .fg16-nav button{color:#6f7b8e!important;background:transparent!important}
+body:not(.fg12-dark) .fg16-nav button.active{background:#fff!important;color:#596f9a!important;box-shadow:0 7px 20px rgba(73,89,111,.07)!important}
+body:not(.fg12-dark) .fg16-score{background:var(--mc-mint-soft)!important;color:#4f8a71!important;border-radius:18px!important}
+body:not(.fg12-dark) .fg16-safety{background:var(--mc-peach-soft)!important;border-color:#f5e2d4!important;color:#8c6a50!important}
+body:not(.fg12-dark) .fg16-chip{background:#fff!important;border-color:rgba(151,163,180,.18)!important;color:#66758a!important}
+body:not(.fg12-dark) .fg16-chip.active{background:var(--mc-blue-soft)!important;border-color:#dbe7fb!important;color:#5b76ab!important}
+body:not(.fg12-dark) .fg16-sos-fab{
+  background:linear-gradient(145deg,#f38e9b,#e96c79)!important;
+  border:0!important;
+  box-shadow:0 14px 32px rgba(233,108,121,.27),0 0 0 5px rgba(255,255,255,.88)!important;
+}
+
+/* Mobile dock */
+@media(max-width:700px){
+  body:not(.fg12-dark) .fg3-header{border-radius:20px!important;box-shadow:0 10px 28px rgba(65,78,102,.10)!important}
+  body:not(.fg12-dark) .fg3-side{background:rgba(255,255,255,.92)!important;border-radius:18px!important;box-shadow:0 10px 25px rgba(65,78,102,.09)!important}
+  body:not(.fg12-dark) .fg12-mobile-nav{
+    background:rgba(255,255,255,.94)!important;
+    border:1px solid rgba(255,255,255,.94)!important;
+    border-radius:22px!important;
+    box-shadow:0 14px 36px rgba(64,78,102,.14)!important;
+    backdrop-filter:blur(24px) saturate(115%)!important;
+  }
+  body:not(.fg12-dark) .fg12-mobile-nav button{color:#8290a2!important;border-radius:16px!important}
+  body:not(.fg12-dark) .fg12-mobile-nav button.active{background:var(--mc-blue-soft)!important;color:#5b78b5!important;box-shadow:none!important}
+  body:not(.fg12-dark) .fg14-more-sheet{background:rgba(255,255,255,.97)!important;border:1px solid rgba(255,255,255,.9)!important;box-shadow:0 24px 60px rgba(65,78,102,.16)!important}
+  body:not(.fg12-dark) .fg14-more-item{background:#fafbfc!important;border-color:rgba(151,163,180,.14)!important}
+  body:not(.fg12-dark) .fg14-more-item strong{background:var(--mc-lilac-soft)!important;color:#6f63a8!important}
+  body:not(.fg12-dark) .fg3-routepanel,
+  body:not(.fg12-dark) .fg4-evpanel,
+  body:not(.fg12-dark) .fg3-drawer,
+  body:not(.fg12-dark) .fg10-panel,
+  body:not(.fg12-dark) .fg70-panel,
+  body:not(.fg12-dark) .fg3-stationpanel,
+  body:not(.fg12-dark) .fg3-overview{border-radius:24px!important}
+  body:not(.fg12-dark) .fg16-panel{background:#f8f9fc!important}
+  body:not(.fg12-dark) .fg16-side{background:rgba(247,248,251,.96)!important;border-bottom:1px solid rgba(150,164,183,.12)!important}
+  body:not(.fg12-dark) .fg16-nav button.active{background:var(--mc-blue-soft)!important;color:#5c78ad!important;box-shadow:none!important}
+}
+
+/* Display mode control made quieter */
+body:not(.fg12-dark) .fg-mode-btn{background:rgba(45,56,76,.88)!important;border-color:rgba(255,255,255,.75)!important;box-shadow:0 8px 22px rgba(56,68,88,.16)!important}
+body:not(.fg12-dark) .fg-mode-menu{border-color:rgba(151,163,180,.14)!important;border-radius:16px!important;box-shadow:0 18px 42px rgba(65,78,102,.12)!important}
+body:not(.fg12-dark) .fg-mode-option.active{background:var(--mc-blue-soft)!important;color:#5b76ac!important}
+
+/* Typography rhythm */
+body:not(.fg12-dark) h1,body:not(.fg12-dark) h2,body:not(.fg12-dark) h3,body:not(.fg12-dark) h4{letter-spacing:-.025em!important}
+body:not(.fg12-dark) p,body:not(.fg12-dark) small,body:not(.fg12-dark) .fg3-note,body:not(.fg12-dark) .fg3-event{color:var(--mc-muted)!important}
+
+/* Reduce heavy decorative gradients from previous skins */
+body:not(.fg12-dark) .fg3-route-card:before{background:#cbd9ef!important;width:2px!important}
+body:not(.fg12-dark) .fg3-drawer-head:after,
+body:not(.fg12-dark) .fg4-evhead:after{opacity:.3!important}
+
+@media(max-width:380px){
+  body:not(.fg12-dark) .fg3-brand h1{font-size:12.5px!important}
+  body:not(.fg12-dark) .fg12-mobile-nav{left:6px!important;right:6px!important}
+}
+</style>
+
+</html>
