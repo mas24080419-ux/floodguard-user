@@ -1,10 +1,9 @@
-# FloodGuard User 3.2 — Auth Initialization Fix
+# FloodGuard Admin Dashboard 1.1 – Account Auth
 
-Bản hotfix cho lỗi `Cannot read properties of null (reading auth)` khi người dùng bấm đăng ký trước khi Supabase client khởi tạo xong.
+Admin Dashboard dùng chính phiên đăng nhập Supabase của FloodGuard User.
 
-## Yêu cầu backend
-- FloodGuard Rescue Backend 19.0 đang Live.
-- `GET /api/public-config` trả `multi_user: true` và `supabase.url`, `supabase.anon_key`.
+- Không nhập Operator Key.
+- Chỉ tài khoản có email nằm trong `ADMIN_EMAILS` ở Render Backend mới truy cập được.
+- Dashboard hiển thị tổng user, online, đăng ký hôm nay, email alerts, watchlist, hoạt động và email cảnh báo.
 
-## Cập nhật
-Upload đè toàn bộ file của thư mục này vào repo `floodguard-user`. Render Static Site sẽ tự deploy lại.
+Upload `admin.html` vào root repo `floodguard-user`.
