@@ -1,9 +1,5 @@
-# FloodGuard Street Picker Production 2.6
+# FloodGuard User 3.1 – Multi-user Auth
 
-- Giữ nguyên Live Realtime 2.5 và toàn bộ chức năng hiện có.
-- Danh sách tuyến hiển thị đầy đủ, cuộn được trên desktop/mobile.
-- Khi gõ, tuyến khớp chính xác / bắt đầu bằng chữ nhập / khớp đầu từ / chứa chuỗi được đưa lên trước.
-- Xóa các note “dữ liệu định lượng / dòng bằng chứng” dưới tên tuyến trong autocomplete.
-- Cập nhật Service Worker cache v2.6.
+Frontend production with Supabase login/register, per-user personalization, route/station history and Gmail alert preferences.
 
-Upload đè 6 file trong thư mục này lên repo `floodguard-user`; Render Auto-Deploy sẽ cập nhật website.
+Deploy the files in this folder to the existing `floodguard-user` Static Site. The frontend reads Supabase public configuration from the Rescue Backend, so no secret key is embedded in `index.html`.
