@@ -1,8 +1,5 @@
-# FloodGuard Smart Location Production 1.4
+# FloodGuard 2.4 – EV Radius Update
 
-- Backend fixed: https://floodguard-rescue-backend.onrender.com
-- Address alone is sufficient: automatic address -> coordinates geocoding before SOS.
-- Device GPS remains optional/preferred when available.
-- Each SOS sends `address`, `location`, and `location_source`.
-- Rescue Control can geocode address-only cases as a fallback.
-- Upload all files to the root of the `floodguard-user` GitHub repo; Render Static Site auto-deploys.
+Bổ sung các mức bán kính tìm kiếm trạm sạc EV: **1 km, 3 km, 5 km, 10 km, 20 km, 50 km, Không giới hạn**.
+
+Upload đè toàn bộ file trong thư mục này lên repo `floodguard-user`. Render Auto-Deploy sẽ tự cập nhật website.
