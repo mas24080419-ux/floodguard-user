@@ -1,6 +1,10 @@
 (()=>{
 'use strict';
 if(window.__FG_SITE_NAV_V4__)return;window.__FG_SITE_NAV_V4__=true;
+function installAtelierTheme(){
+ if(document.querySelector('link[data-fg-atelier-v47]')||[...document.styleSheets].some(s=>String(s.href||'').includes('site-atelier-v47.css')))return;
+ const l=document.createElement('link');l.rel='stylesheet';l.href='./site-atelier-v47.css?v=47';l.dataset.fgAtelierV47='1';document.head.appendChild(l);
+}
 const ROUTES={
  'trang chủ':'./',
  'vấn đề':'./problem.html',
@@ -49,7 +53,7 @@ function installMotionStyles(){
  .site-links a,.wh-links a{position:relative;transition:color .22s var(--fg-ease)}
  .site-links a:after,.wh-links a:after{content:"";position:absolute;left:0;right:100%;bottom:-7px;height:2px;border-radius:999px;background:linear-gradient(90deg,#2f7ae5,#6b62e6);transition:right .28s var(--fg-ease-out)}
  .site-links a:hover:after,.site-links a.active:after,.wh-links a:hover:after{right:0}
- .site-btn,.wh-btn,.fgmp-card,.info-card,.step,.threshold,.problem-stat,.impact-box{transition:transform .25s var(--fg-ease-out),box-shadow .25s var(--fg-ease-out),border-color .25s var(--fg-ease-out),background-color .25s var(--fg-ease-out)}
+ .site-btn,.wh-btn,.fgmp-card,.info-card,.step,.threshold,.problem-stat,.impact-box,.wh-card,.wh-step,.wh-panel{transition:transform .25s var(--fg-ease-out),box-shadow .25s var(--fg-ease-out),border-color .25s var(--fg-ease-out),background-color .25s var(--fg-ease-out)}
  .info-card:hover,.step:hover,.threshold:hover,.problem-stat:hover,.impact-box:hover{transform:translateY(-4px);box-shadow:0 18px 38px rgba(24,64,108,.10);border-color:#cbdced}
  @media(max-width:980px){.mobile-drawer{display:grid!important;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-9px) scale(.985);transform-origin:top right;transition:opacity .22s var(--fg-ease),transform .28s var(--fg-ease-out),visibility .22s}.mobile-drawer.open{opacity:1;visibility:visible;pointer-events:auto;transform:none}}
  @media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none!important}html.fg-js-motion main,html.fg-js-motion #fgWebsiteHome,.fg-reveal,.site-btn,.wh-btn,.fgmp-card,.info-card,.step,.threshold,.problem-stat,.impact-box,.mobile-drawer{transition:none!important;animation:none!important;transform:none!important;filter:none!important;opacity:1!important}}
@@ -120,7 +124,7 @@ function smoothNavigation(){
  },true);
 }
 function revealContent(){
- const targets=[...document.querySelectorAll('main .info-card,main .step,main .threshold,main .timeline-item,main .visual-card,main .dark-item,main .metric,main .cta-box,main .problem-stat,main .impact-box,main .source-item,#fgMultiPageExplore .fgmp-head,#fgMultiPageExplore .fgmp-card')];
+ const targets=[...document.querySelectorAll('main .info-card,main .step,main .threshold,main .timeline-item,main .visual-card,main .dark-item,main .metric,main .cta-box,main .problem-stat,main .impact-box,main .source-item,#fgMultiPageExplore .fgmp-head,#fgMultiPageExplore .fgmp-card,#fgWebsiteHome .wh-card,#fgWebsiteHome .wh-step,#fgWebsiteHome .wh-panel,#fgWebsiteHome .wh-copy,#fgWebsiteHome .wh-sos,#fgWebsiteHome .wh-about')];
  if(!targets.length)return;
  if(reduced()||!('IntersectionObserver'in window)){targets.forEach(x=>x.classList.add('fg-visible'));return}
  targets.forEach((el,i)=>{el.classList.add('fg-reveal');el.style.setProperty('--fg-delay',Math.min((i%6)*48,240)+'ms')});
@@ -133,6 +137,6 @@ function pageEntrance(){
  requestAnimationFrame(()=>requestAnimationFrame(()=>h.classList.remove('fg-enter')));
  window.addEventListener('pageshow',()=>h.classList.remove('fg-page-leaving'));
 }
-function start(){installMotionStyles();rewriteHomeNav();normalizeSiteNav();mobileMenu();markActive();prefetchLinks();smoothNavigation();revealContent();pageEntrance()}
+function start(){installAtelierTheme();installMotionStyles();rewriteHomeNav();normalizeSiteNav();mobileMenu();markActive();prefetchLinks();smoothNavigation();revealContent();pageEntrance()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
