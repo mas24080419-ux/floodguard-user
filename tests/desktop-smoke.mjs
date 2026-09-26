@@ -23,7 +23,8 @@ function staticAudit(){
     legacyRunawayPattern:/new MutationObserver\(\(\)=>mount\(\)\).*observe\(document\.documentElement/s.test(watch),
     hasSmoothMotion:/FG_SITE_NAV_V4/.test(nav)&&/view-transition/.test(nav)&&/IntersectionObserver/.test(nav),
     motionIntervals:(nav.match(/setInterval\s*\(/g)||[]).length,
-    problemHasSources:/23\/09\/2026/.test(problem)&&/World Bank/.test(problem)&&/Nguyên nhân/.test(problem),
+    problemHasSources:/25\/09\/2026/.test(problem)&&/World Bank/.test(problem)&&/Nguyên nhân/.test(problem),
+    problemHasMedia:/IzeVvIJVpSM/.test(problem)&&/media-gallery/.test(problem)&&/youtube-nocookie\.com/.test(problem),
     premiumCss:/FloodGuard Atelier UI v47/.test(atelierCss)&&bridgeCss.includes('site-atelier-v47.css')&&atelierCss.includes('site-luxe.css'),
     diverseCss:['feature-bento','flow-roadmap','alert-console','ev-console','rescue-console','about-story'].every(x=>css.includes('.'+x))
   };
@@ -33,6 +34,7 @@ function staticAudit(){
   if(!report.hasSmoothMotion)throw new Error('Smooth multi-page motion module missing');
   if(report.motionIntervals>0)throw new Error('Navigation animation must not use polling intervals');
   if(!report.problemHasSources)throw new Error('Problem page is missing dated evidence/sources');
+  if(!report.problemHasMedia)throw new Error('Problem page is missing flood video/photo evidence');
   if(!report.premiumCss)throw new Error('Atelier v47 design system is not wired correctly');
   if(!report.diverseCss)throw new Error('Distinct page layout system is incomplete');
 }
@@ -85,6 +87,10 @@ async function run(){
     if(!(await p.locator('h1').first().innerText().catch(()=>'' )).trim())throw new Error(path+' missing H1');
     if((await p.locator('.site-links a').first().innerText()).trim().toLowerCase()!=='vấn đề')throw new Error(path+' nav order broken');
     if(await p.locator('#fgSmoothMotionV4').count()!==1)throw new Error(path+' motion module missing');
+    if(path==='problem.html'){
+      if(await p.locator('#evidence iframe[src*="youtube-nocookie.com"]').count()!==1)throw new Error('problem media video missing');
+      if(await p.locator('#evidence .media-photo').count()<3)throw new Error('problem media gallery incomplete');
+    }
     const href=await p.locator('a.site-btn.primary').first().getAttribute('href').catch(()=>null);if(!href?.includes('?login=1'))throw new Error(path+' login CTA broken');
     const serious=errs.filter(x=>!/(ResizeObserver loop|Failed to fetch|NetworkError|Load failed)/i.test(x));if(serious.length)throw new Error(path+' page errors: '+serious.join(' | '));
     await eventLoopProbe(p,label.replace(/\s/g,'_').toUpperCase());
