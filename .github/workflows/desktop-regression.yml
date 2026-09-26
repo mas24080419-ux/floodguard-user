@@ -7,6 +7,14 @@ on:
       - 'index.html'
       - 'app-core.html'
       - 'watchlist-email-v40.js'
+      - 'site-pages.css'
+      - 'site-navigation-v2.js'
+      - 'features.html'
+      - 'how-it-works.html'
+      - 'alerts.html'
+      - 'ev.html'
+      - 'rescue.html'
+      - 'about.html'
       - 'sw.js'
       - 'tests/desktop-smoke.mjs'
       - '.github/workflows/desktop-regression.yml'
@@ -38,7 +46,7 @@ jobs:
           for i in {1..30}; do curl -fsS http://127.0.0.1:4173/index.html >/dev/null && exit 0; sleep 1; done
           cat /tmp/floodguard-http.log
           exit 1
-      - name: Run desktop responsiveness tests
+      - name: Run desktop responsiveness and multi-page tests
         env:
           LOCAL_URL: http://127.0.0.1:4173
         run: node tests/desktop-smoke.mjs
@@ -47,7 +55,19 @@ jobs:
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/ -o /tmp/index.html
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/sw.js -o /tmp/sw.js
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/watchlist-email-v40.js -o /tmp/watch.js
-          grep -q 'floodguard-user-v40-watchlist-freeze-fix' /tmp/sw.js
+          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/features.html -o /tmp/features.html
+          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/how-it-works.html -o /tmp/how.html
+          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/alerts.html -o /tmp/alerts.html
+          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/ev.html -o /tmp/ev.html
+          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/rescue.html -o /tmp/rescue.html
+          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/about.html -o /tmp/about.html
+          grep -q 'floodguard-user-v41-multipage-site' /tmp/sw.js
           grep -q 'FG40_WATCHLIST_EMAIL' /tmp/watch.js
-          test -s /tmp/index.html
-          echo 'PRODUCTION_ASSETS_OK'
+          grep -q 'site-navigation-v2.js' /tmp/index.html
+          grep -q 'NỀN TẢNG FLOODGUARD' /tmp/features.html
+          grep -q 'CÁCH HOẠT ĐỘNG' /tmp/how.html
+          grep -q 'WATCHLIST & EMAIL' /tmp/alerts.html
+          grep -q 'EV CHARGING' /tmp/ev.html
+          grep -q 'SOS RESCUE' /tmp/rescue.html
+          grep -q 'ABOUT FLOODGUARD' /tmp/about.html
+          echo 'PRODUCTION_MULTIPAGE_ASSETS_OK'
