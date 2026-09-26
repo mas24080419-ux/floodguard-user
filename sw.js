@@ -1,5 +1,5 @@
-const CACHE='floodguard-user-v43-smooth-multipage';
-const CORE=['./','./index.html','./app-core.html','./watchlist-email-v40.js','./site-pages.css','./site-navigation-v2.js','./features.html','./how-it-works.html','./alerts.html','./ev.html','./rescue.html','./about.html','./admin.html','./accounts.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
+const CACHE='floodguard-user-v44-problem-first';
+const CORE=['./','./index.html','./app-core.html','./watchlist-email-v40.js','./site-pages.css','./site-navigation-v2.js','./problem.html','./features.html','./how-it-works.html','./alerts.html','./ev.html','./rescue.html','./about.html','./admin.html','./accounts.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)));self.skipWaiting()});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 function navKey(u){
@@ -7,6 +7,7 @@ function navKey(u){
   if(p.endsWith('/app-core.html'))return './app-core.html';
   if(p.endsWith('/admin.html'))return './admin.html';
   if(p.endsWith('/accounts.html'))return './accounts.html';
+  if(p.endsWith('/problem.html'))return './problem.html';
   if(p.endsWith('/features.html'))return './features.html';
   if(p.endsWith('/how-it-works.html'))return './how-it-works.html';
   if(p.endsWith('/alerts.html'))return './alerts.html';
