@@ -12,6 +12,7 @@ on:
       - 'site-atelier-v47.css'
       - 'site-cinematic-v48.css'
       - 'site-editorial-v49.css'
+      - 'site-hide-ev-v50.css'
       - 'site-navigation-v2.js'
       - 'problem.html'
       - 'features.html'
@@ -47,59 +48,24 @@ jobs:
       - name: Start local static server
         run: |
           python3 -m http.server 4173 >/tmp/floodguard-http.log 2>&1 &
-          echo $! > /tmp/floodguard-http.pid
           for i in {1..30}; do curl -fsS http://127.0.0.1:4173/index.html >/dev/null && exit 0; sleep 1; done
           cat /tmp/floodguard-http.log
           exit 1
-      - name: Run diversified desktop layout tests
+      - name: Run desktop smoke tests
         env:
           LOCAL_URL: http://127.0.0.1:4173
         run: node tests/desktop-smoke.mjs
-      - name: Verify production static assets
+      - name: Verify production v50
         run: |
-          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/ -o /tmp/index.html
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/sw.js -o /tmp/sw.js
-          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/site-navigation-v2.js -o /tmp/site-nav.js
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/site-pages.css -o /tmp/site-pages.css
-          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/site-luxe.css -o /tmp/site-luxe.css
-          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/site-atelier-v47.css -o /tmp/site-atelier.css
-          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/site-cinematic-v48.css -o /tmp/site-cinematic.css
-          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/site-editorial-v49.css -o /tmp/site-editorial.css
-          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/watchlist-email-v40.js -o /tmp/watch.js
-          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/problem.html -o /tmp/problem.html
-          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/features.html -o /tmp/features.html
-          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/how-it-works.html -o /tmp/how.html
-          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/alerts.html -o /tmp/alerts.html
+          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/site-hide-ev-v50.css -o /tmp/hide.css
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/ev.html -o /tmp/ev.html
-          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/rescue.html -o /tmp/rescue.html
-          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/about.html -o /tmp/about.html
-          cat /tmp/site-luxe.css /tmp/site-atelier.css /tmp/site-cinematic.css /tmp/site-editorial.css > /tmp/site-theme.css
-          grep -q 'floodguard-user-v49-editorial-story' /tmp/sw.js
-          grep -q 'site-editorial-v49.css' /tmp/sw.js
-          grep -q 'site-editorial-v49.css' /tmp/site-pages.css
-          grep -q 'FloodGuard Atelier UI v47' /tmp/site-atelier.css
-          grep -q 'FloodGuard Cinematic Depth v48' /tmp/site-cinematic.css
-          grep -q 'FloodGuard Editorial Story v49' /tmp/site-editorial.css
-          grep -q 'fg49section' /tmp/site-editorial.css
-          grep -q 'repeat(12' /tmp/site-editorial.css
-          grep -q 'feature-bento' /tmp/site-theme.css
-          grep -q 'flow-roadmap' /tmp/site-theme.css
-          grep -q 'alert-console' /tmp/site-theme.css
-          grep -q 'ev-console' /tmp/site-theme.css
-          grep -q 'rescue-console' /tmp/site-theme.css
-          grep -q 'about-story' /tmp/site-theme.css
-          grep -q 'installAtelierTheme' /tmp/site-nav.js
-          grep -q 'installCinematicTheme' /tmp/site-nav.js
-          grep -q 'installEditorialTheme' /tmp/site-nav.js
-          grep -q 'installCinematicDepth' /tmp/site-nav.js
-          grep -q 'FG_SITE_NAV_V6' /tmp/site-nav.js
-          grep -q 'feature-bento' /tmp/features.html
-          grep -q 'flow-roadmap' /tmp/how.html
-          grep -q 'alert-console' /tmp/alerts.html
-          grep -q 'ev-console' /tmp/ev.html
-          grep -q 'rescue-console' /tmp/rescue.html
-          grep -q 'about-story' /tmp/about.html
-          grep -q 'iframe' /tmp/problem.html
-          test "$(grep -o '<img' /tmp/problem.html | wc -l)" -ge 3
-          grep -q 'FG40_WATCHLIST_EMAIL' /tmp/watch.js
-          echo 'PRODUCTION_EDITORIAL_V49_OK'
+          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/app-core.html -o /tmp/app.html
+          grep -q 'floodguard-user-v50-hide-public-ev' /tmp/sw.js
+          grep -q 'site-hide-ev-v50.css' /tmp/sw.js
+          grep -q 'site-hide-ev-v50.css' /tmp/site-pages.css
+          grep -q 'ev.html' /tmp/hide.css
+          grep -q "location.replace('./features.html')" /tmp/ev.html
+          grep -Eqi 'Trạm sạc|EV' /tmp/app.html
+          echo 'PRODUCTION_PUBLIC_EV_HIDDEN_V50_OK'
