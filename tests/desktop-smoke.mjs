@@ -89,9 +89,16 @@ async function run(){
   console.log('INDEX_HTTP',shellResponse?.status());
   if(!shellResponse || shellResponse.status()>=400) throw new Error('index HTTP failure');
   await shell.waitForTimeout(1500);
+  const homepageVisible=await shell.locator('#fgWebsiteHome').isVisible().catch(()=>false);
+  console.log('HOMEPAGE_VISIBLE',homepageVisible);
+  if(!homepageVisible) throw new Error('Public website homepage is not visible');
+  const homeTitle=await shell.locator('#fgWebsiteHome h1').innerText().catch(()=> '');
+  if(!/nguy cơ ngập/i.test(homeTitle)) throw new Error('Homepage hero content missing');
+  await shell.locator('[data-fg-home-login]').first().click();
+  await shell.waitForTimeout(250);
   const loginVisible=await shell.locator('#loginEmail').isVisible().catch(()=>false);
   console.log('LOGIN_VISIBLE',loginVisible);
-  if(!loginVisible) throw new Error('Desktop login form is not visible');
+  if(!loginVisible) throw new Error('Desktop login form is not visible after entering app');
   await shell.locator('#loginEmail').fill('smoke.test@example.com');
   const filled=await shell.locator('#loginEmail').inputValue();
   if(filled!=='smoke.test@example.com') throw new Error('Login input is not responsive');
