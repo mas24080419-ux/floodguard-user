@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-if(window.__FG_SITE_NAV_V6__)return;window.__FG_SITE_NAV_V6__=true;
+if(window.__FG_SITE_NAV_V7__)return;window.__FG_SITE_NAV_V7__=true;
 function installAtelierTheme(){
  if(document.querySelector('link[data-fg-atelier-v47]')||[...document.styleSheets].some(s=>String(s.href||'').includes('site-atelier-v47.css')))return;
  const l=document.createElement('link');l.rel='stylesheet';l.href='./site-atelier-v47.css?v=47';l.dataset.fgAtelierV47='1';document.head.appendChild(l);
@@ -20,18 +20,25 @@ const ROUTES={
  'tính năng':'./features.html',
  'cách hoạt động':'./how-it-works.html',
  'cảnh báo':'./alerts.html',
- 'trạm sạc ev':'./ev.html',
  'cứu hộ':'./rescue.html',
  'giới thiệu':'./about.html'
 };
-const ORDER=['Vấn đề','Tính năng','Cách hoạt động','Cảnh báo','Trạm sạc EV','Cứu hộ','Giới thiệu'];
+const ORDER=['Vấn đề','Tính năng','Cách hoạt động','Cảnh báo','Cứu hộ','Giới thiệu'];
+const HIDDEN_KEYS=new Set(['trạm sạc ev']);
 const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 function norm(s){return String(s||'').trim().toLowerCase().replace(/\s+/g,' ')}
+function linkKey(a){return norm(a?.textContent).replace(/→/g,'').trim()}
+function isHiddenLink(a){
+ const k=linkKey(a),href=String(a?.getAttribute?.('href')||'').split('?')[0].toLowerCase();
+ return HIDDEN_KEYS.has(k)||/(^|\/)ev\.html$/.test(href.replace(/^\.\//,''));
+}
+function purgeHiddenLinks(scope=document){scope.querySelectorAll?.('a[href],a').forEach(a=>{if(isHiddenLink(a))a.remove()})}
 function replaceLink(a,href){const clone=a.cloneNode(true);clone.setAttribute('href',href);a.replaceWith(clone);return clone}
 function ensureOrderedLinks(container,home=false){
  if(!container)return;
+ [...container.querySelectorAll('a')].forEach(a=>{if(isHiddenLink(a))a.remove()});
  const existing=[...container.querySelectorAll('a')];
- const map=new Map(existing.map(a=>[norm(a.textContent).replace(/→/g,'').trim(),a]));
+ const map=new Map(existing.map(a=>[linkKey(a),a]));
  const frag=document.createDocumentFragment();
  if(home){const h=map.get('trang chủ');if(h)frag.appendChild(h)}
  ORDER.forEach(label=>{
@@ -39,7 +46,7 @@ function ensureOrderedLinks(container,home=false){
   if(!a){a=document.createElement('a');a.textContent=label}
   a.setAttribute('href',ROUTES[key]);frag.appendChild(a);
  });
- existing.forEach(a=>{const k=norm(a.textContent).replace(/→/g,'').trim();if(!ROUTES[k]&&k!=='trang chủ')frag.appendChild(a)});
+ existing.forEach(a=>{const k=linkKey(a);if(!ROUTES[k]&&k!=='trang chủ'&&!HIDDEN_KEYS.has(k)&&!isHiddenLink(a))frag.appendChild(a)});
  container.replaceChildren(frag);
 }
 function installMotionStyles(){
@@ -76,22 +83,26 @@ function buildHomepageExplore(root){
   @media(max-width:860px){#fgMultiPageExplore .fgmp-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){#fgMultiPageExplore{padding:48px 0}#fgMultiPageExplore .fgmp-grid{grid-template-columns:1fr}}
   `;document.head.appendChild(st);
  }
- const section=document.createElement('section');section.id='fgMultiPageExplore';section.innerHTML=`<div class="wh-shell"><div class="fgmp-head"><span>Bắt đầu từ vấn đề</span><h2>Hiểu vì sao ngập xảy ra trước khi xem FloodGuard làm gì</h2><p>Website đi theo một câu chuyện rõ ràng: thực trạng và nguyên nhân ngập → tính năng → cách hệ thống hoạt động → các module cảnh báo, EV và cứu hộ.</p></div><div class="fgmp-grid"><a class="fgmp-card problem" href="./problem.html"><span class="fgmp-icon">🌧</span><b>Vấn đề ngập đô thị</b><small>Thực trạng TP.HCM, các nguyên nhân chính và tác động tới giao thông, EV và cứu hộ.</small><em>Xem vấn đề trước →</em></a><a class="fgmp-card" href="./features.html"><span class="fgmp-icon">🧩</span><b>Tính năng</b><small>Dự báo ngập, tìm đường, Watchlist, EV và SOS trong cùng nền tảng.</small><em>Mở trang →</em></a><a class="fgmp-card" href="./how-it-works.html"><span class="fgmp-icon">⚙️</span><b>Cách hoạt động</b><small>Từ dữ liệu mưa và lịch sử ngập đến mức rủi ro trên tuyến đường.</small><em>Mở trang →</em></a><a class="fgmp-card" href="./alerts.html"><span class="fgmp-icon">🔔</span><b>Cảnh báo</b><small>Watchlist, ngưỡng MEDIUM/HIGH và email cảnh báo tự động.</small><em>Mở trang →</em></a><a class="fgmp-card" href="./ev.html"><span class="fgmp-icon">⚡</span><b>Trạm sạc EV</b><small>Khả năng tiếp cận trạm sạc trong bối cảnh mưa và ngập.</small><em>Mở trang →</em></a><a class="fgmp-card" href="./rescue.html"><span class="fgmp-icon">🆘</span><b>Cứu hộ</b><small>Gửi SOS, chia sẻ vị trí, theo dõi trạng thái và trao đổi hỗ trợ.</small><em>Mở trang →</em></a><a class="fgmp-card" href="./about.html"><span class="fgmp-icon">FG</span><b>Giới thiệu</b><small>Phạm vi, mục tiêu và nguyên tắc phát triển FloodGuard HCMC.</small><em>Mở trang →</em></a></div></div>`;
+ const section=document.createElement('section');section.id='fgMultiPageExplore';section.innerHTML=`<div class="wh-shell"><div class="fgmp-head"><span>Bắt đầu từ vấn đề</span><h2>Hiểu vì sao ngập xảy ra trước khi xem FloodGuard làm gì</h2><p>Website đi theo một câu chuyện rõ ràng: thực trạng và nguyên nhân ngập → tính năng → cách hệ thống hoạt động → cảnh báo và cứu hộ.</p></div><div class="fgmp-grid"><a class="fgmp-card problem" href="./problem.html"><span class="fgmp-icon">🌧</span><b>Vấn đề ngập đô thị</b><small>Thực trạng TP.HCM, các nguyên nhân chính và tác động tới giao thông, EV và cứu hộ.</small><em>Xem vấn đề trước →</em></a><a class="fgmp-card" href="./features.html"><span class="fgmp-icon">🧩</span><b>Tính năng</b><small>Dự báo ngập, tìm đường, Watchlist, EV và SOS trong cùng nền tảng.</small><em>Mở trang →</em></a><a class="fgmp-card" href="./how-it-works.html"><span class="fgmp-icon">⚙️</span><b>Cách hoạt động</b><small>Từ dữ liệu mưa và lịch sử ngập đến mức rủi ro trên tuyến đường.</small><em>Mở trang →</em></a><a class="fgmp-card" href="./alerts.html"><span class="fgmp-icon">🔔</span><b>Cảnh báo</b><small>Watchlist, ngưỡng MEDIUM/HIGH và email cảnh báo tự động.</small><em>Mở trang →</em></a><a class="fgmp-card" href="./rescue.html"><span class="fgmp-icon">🆘</span><b>Cứu hộ</b><small>Gửi SOS, chia sẻ vị trí, theo dõi trạng thái và trao đổi hỗ trợ.</small><em>Mở trang →</em></a><a class="fgmp-card" href="./about.html"><span class="fgmp-icon">FG</span><b>Giới thiệu</b><small>Phạm vi, mục tiêu và nguyên tắc phát triển FloodGuard HCMC.</small><em>Mở trang →</em></a></div></div>`;
  const footer=root.querySelector('.wh-footer');if(footer)footer.before(section);else root.appendChild(section);
 }
 function rewriteHomeNav(){
  const root=document.getElementById('fgWebsiteHome');if(!root)return;
- root.querySelectorAll('.wh-links a,.wh-foot-links a').forEach(a=>{const key=norm(a.textContent).replace(/→/g,'').trim();if(ROUTES[key])replaceLink(a,ROUTES[key])});
+ purgeHiddenLinks(root);
+ root.querySelectorAll('.wh-links a,.wh-foot-links a').forEach(a=>{const key=linkKey(a);if(ROUTES[key])replaceLink(a,ROUTES[key])});
  ensureOrderedLinks(root.querySelector('.wh-links'));
  const foot=root.querySelector('.wh-foot-links');if(foot)ensureOrderedLinks(foot);
  buildHomepageExplore(root);
+ purgeHiddenLinks(root);
  const params=new URLSearchParams(location.search);
  if(params.get('login')==='1'||location.hash==='#login'){root.classList.add('hidden');document.getElementById('authScreen')?.classList.remove('hidden');document.body.style.overflow='hidden'}
 }
 function normalizeSiteNav(){
+ purgeHiddenLinks(document);
  ensureOrderedLinks(document.querySelector('.site-links'));
  ensureOrderedLinks(document.querySelector('.mobile-drawer'),true);
  const footer=document.querySelector('.footer-links');if(footer)ensureOrderedLinks(footer);
+ purgeHiddenLinks(document);
 }
 function mobileMenu(){
  const btn=document.querySelector('[data-site-menu]'),drawer=document.querySelector('[data-site-drawer]');if(!btn||!drawer)return;
