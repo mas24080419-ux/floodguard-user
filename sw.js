@@ -1,13 +1,14 @@
-const CACHE='floodguard-user-v37-password-otp';
-const CORE=['./','./index.html','./app-core.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
+const CACHE='floodguard-user-v38-admin-accounts';
+const CORE=['./','./index.html','./app-core.html','./admin.html','./accounts.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)));self.skipWaiting()});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
+function navKey(u){if(u.pathname.endsWith('/app-core.html'))return './app-core.html';if(u.pathname.endsWith('/admin.html'))return './admin.html';if(u.pathname.endsWith('/accounts.html'))return './accounts.html';return './index.html'}
 self.addEventListener('fetch',e=>{
   if(e.request.method!=='GET')return;
   const u=new URL(e.request.url);
   if(e.request.mode==='navigate'){
-    const key=u.pathname.endsWith('/app-core.html')?'./app-core.html':'./index.html';
-    e.respondWith(fetch(e.request).then(r=>{const x=r.clone();caches.open(CACHE).then(c=>c.put(key,x));return r}).catch(()=>caches.match(key)));
+    const key=navKey(u);
+    e.respondWith(fetch(e.request,{cache:'no-store'}).then(r=>{const x=r.clone();caches.open(CACHE).then(c=>c.put(key,x));return r}).catch(()=>caches.match(key)));
     return;
   }
   if(u.origin===location.origin){
