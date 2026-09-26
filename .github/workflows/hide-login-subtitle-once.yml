@@ -1,0 +1,40 @@
+name: Hide login subtitle once
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  hide-login-subtitle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Hide FloodGuard login subtitle
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          marker = '.brand-copy p{display:none!important}'
+          if marker not in s:
+              if '</style>' not in s:
+                  raise SystemExit('Could not find </style> in index.html')
+              s = s.replace('</style>', marker + '\n</style>', 1)
+              p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit change if needed
+        shell: bash
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No change needed"
+            exit 0
+          fi
+          git config user.name "FloodGuard Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git commit -m "Hide login hero subtitle"
+          git push
