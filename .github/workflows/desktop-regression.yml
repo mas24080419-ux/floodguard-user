@@ -1,0 +1,53 @@
+name: FloodGuard desktop regression
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'app-core.html'
+      - 'watchlist-email-v40.js'
+      - 'sw.js'
+      - 'tests/desktop-smoke.mjs'
+      - '.github/workflows/desktop-regression.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  desktop-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Start local static server
+        run: |
+          python3 -m http.server 4173 >/tmp/floodguard-http.log 2>&1 &
+          echo $! > /tmp/floodguard-http.pid
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/index.html >/dev/null && exit 0; sleep 1; done
+          cat /tmp/floodguard-http.log
+          exit 1
+      - name: Run desktop responsiveness tests
+        env:
+          LOCAL_URL: http://127.0.0.1:4173
+        run: node tests/desktop-smoke.mjs
+      - name: Verify production static assets
+        run: |
+          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/ -o /tmp/index.html
+          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/sw.js -o /tmp/sw.js
+          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/watchlist-email-v40.js -o /tmp/watch.js
+          grep -q 'floodguard-user-v40-watchlist-freeze-fix' /tmp/sw.js
+          grep -q 'FG40_WATCHLIST_EMAIL' /tmp/watch.js
+          test -s /tmp/index.html
+          echo 'PRODUCTION_ASSETS_OK'
