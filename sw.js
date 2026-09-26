@@ -1,4 +1,4 @@
-const CACHE='floodguard-user-v42-multipage-site';
+const CACHE='floodguard-user-v43-smooth-multipage';
 const CORE=['./','./index.html','./app-core.html','./watchlist-email-v40.js','./site-pages.css','./site-navigation-v2.js','./features.html','./how-it-works.html','./alerts.html','./ev.html','./rescue.html','./about.html','./admin.html','./accounts.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)));self.skipWaiting()});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
