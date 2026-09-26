@@ -1,6 +1,35 @@
-name: FloodGuard desktop regression
+name: FloodGuard regression
 
 on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'app-core.html'
+      - 'watchlist-email-v40.js'
+      - 'site-pages.css'
+      - 'site-luxe.css'
+      - 'site-atelier-v47.css'
+      - 'site-cinematic-v48.css'
+      - 'site-editorial-v49.css'
+      - 'site-hide-ev-v50.css'
+      - 'site-navigation-v2.js'
+      - 'problem.html'
+      - 'features.html'
+      - 'how-it-works.html'
+      - 'alerts.html'
+      - 'ev.html'
+      - 'rescue.html'
+      - 'about.html'
+      - 'data.html'
+      - 'faq.html'
+      - 'contact.html'
+      - 'robots.txt'
+      - 'sitemap.xml'
+      - 'sw.js'
+      - 'tests/desktop-smoke.mjs'
+      - 'tests/mobile-seo-smoke.mjs'
+      - '.github/workflows/desktop-regression.yml'
   push:
     branches: [main]
     paths:
@@ -21,8 +50,14 @@ on:
       - 'ev.html'
       - 'rescue.html'
       - 'about.html'
+      - 'data.html'
+      - 'faq.html'
+      - 'contact.html'
+      - 'robots.txt'
+      - 'sitemap.xml'
       - 'sw.js'
       - 'tests/desktop-smoke.mjs'
+      - 'tests/mobile-seo-smoke.mjs'
       - '.github/workflows/desktop-regression.yml'
   workflow_dispatch:
 
@@ -30,7 +65,7 @@ permissions:
   contents: read
 
 jobs:
-  desktop-smoke:
+  smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
@@ -55,7 +90,12 @@ jobs:
         env:
           LOCAL_URL: http://127.0.0.1:4173
         run: node tests/desktop-smoke.mjs
+      - name: Run mobile and SEO smoke tests
+        env:
+          LOCAL_URL: http://127.0.0.1:4173
+        run: node tests/mobile-seo-smoke.mjs
       - name: Verify production v50
+        if: github.event_name == 'push'
         run: |
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/sw.js -o /tmp/sw.js
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/site-pages.css -o /tmp/site-pages.css
