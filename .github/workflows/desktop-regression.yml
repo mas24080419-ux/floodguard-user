@@ -8,6 +8,7 @@ on:
       - 'app-core.html'
       - 'watchlist-email-v40.js'
       - 'site-pages.css'
+      - 'site-luxe.css'
       - 'site-navigation-v2.js'
       - 'problem.html'
       - 'features.html'
@@ -57,6 +58,7 @@ jobs:
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/sw.js -o /tmp/sw.js
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/site-navigation-v2.js -o /tmp/site-nav.js
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/site-pages.css -o /tmp/site-pages.css
+          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/site-luxe.css -o /tmp/site-luxe.css
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/watchlist-email-v40.js -o /tmp/watch.js
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/problem.html -o /tmp/problem.html
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/features.html -o /tmp/features.html
@@ -65,14 +67,17 @@ jobs:
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/ev.html -o /tmp/ev.html
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/rescue.html -o /tmp/rescue.html
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/about.html -o /tmp/about.html
-          grep -q 'floodguard-user-v45-diverse-layouts' /tmp/sw.js
+          grep -q 'floodguard-user-v46-premium-visual-system' /tmp/sw.js
+          grep -q 'site-luxe.css' /tmp/sw.js
+          grep -q 'site-luxe.css' /tmp/site-pages.css
+          grep -q 'FloodGuard Luxe UI v46' /tmp/site-luxe.css
+          grep -q 'feature-bento' /tmp/site-luxe.css
+          grep -q 'flow-roadmap' /tmp/site-luxe.css
+          grep -q 'alert-console' /tmp/site-luxe.css
+          grep -q 'ev-console' /tmp/site-luxe.css
+          grep -q 'rescue-console' /tmp/site-luxe.css
+          grep -q 'about-story' /tmp/site-luxe.css
           grep -q 'FG_SITE_NAV_V4' /tmp/site-nav.js
-          grep -q 'feature-bento' /tmp/site-pages.css
-          grep -q 'flow-roadmap' /tmp/site-pages.css
-          grep -q 'alert-console' /tmp/site-pages.css
-          grep -q 'ev-console' /tmp/site-pages.css
-          grep -q 'rescue-console' /tmp/site-pages.css
-          grep -q 'about-story' /tmp/site-pages.css
           grep -q 'VẤN ĐỀ NGẬP ĐÔ THỊ' /tmp/problem.html
           grep -q 'feature-bento' /tmp/features.html
           grep -q 'flow-roadmap' /tmp/how.html
@@ -81,4 +86,4 @@ jobs:
           grep -q 'rescue-console' /tmp/rescue.html
           grep -q 'about-story' /tmp/about.html
           grep -q 'FG40_WATCHLIST_EMAIL' /tmp/watch.js
-          echo 'PRODUCTION_DIVERSE_LAYOUTS_OK'
+          echo 'PRODUCTION_PREMIUM_VISUAL_SYSTEM_OK'
