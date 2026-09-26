@@ -1,3 +1,4 @@
+// FloodGuard desktop regression: homepage + login + watchlist responsiveness
 import fs from 'node:fs';
 import { chromium } from 'playwright';
 
@@ -82,7 +83,7 @@ async function run(){
   if(mutationResult.duration>2500 || mutationResult.watchCount>1) throw new Error('DOM mutation stress indicates UI loop');
   await eventLoopProbe(page,'AFTER_STRESS');
 
-  // Login shell should remain responsive on desktop.
+  // Public homepage + login should remain responsive on desktop.
   const shell=await context.newPage();
   const shellErrors=[];shell.on('pageerror',e=>shellErrors.push(String(e.message||e)));
   const shellResponse=await shell.goto(target+'/',{waitUntil:'domcontentloaded',timeout:90000});
@@ -94,6 +95,7 @@ async function run(){
   if(!homepageVisible) throw new Error('Public website homepage is not visible');
   const homeTitle=await shell.locator('#fgWebsiteHome h1').innerText().catch(()=> '');
   if(!/nguy cơ ngập/i.test(homeTitle)) throw new Error('Homepage hero content missing');
+  await eventLoopProbe(shell,'HOMEPAGE');
   await shell.locator('[data-fg-home-login]').first().click();
   await shell.waitForTimeout(250);
   const loginVisible=await shell.locator('#loginEmail').isVisible().catch(()=>false);
