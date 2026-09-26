@@ -1,4 +1,4 @@
-// FloodGuard desktop regression: homepage + login + watchlist responsiveness
+// FloodGuard desktop regression: homepage + multi-page site + login + watchlist responsiveness
 import fs from 'node:fs';
 import { chromium } from 'playwright';
 
@@ -27,13 +27,10 @@ function staticAudit(){
 async function eventLoopProbe(page,label){
   const result=await page.evaluate(async()=>{
     const start=performance.now();
-    const delays=[];
-    let last=start;
+    const delays=[];let last=start;
     for(let i=0;i<40;i++){
       await new Promise(r=>setTimeout(r,25));
-      const now=performance.now();
-      delays.push(now-last-25);
-      last=now;
+      const now=performance.now();delays.push(now-last-25);last=now;
     }
     delays.sort((a,b)=>a-b);
     const p95=delays[Math.floor(delays.length*.95)]||0;
@@ -59,7 +56,6 @@ async function run(){
   await page.waitForTimeout(3500);
   await eventLoopProbe(page,'BASE');
 
-  // Explicitly exercise the Watchlist module even when the production service worker is not controlling this test tab.
   await page.addScriptTag({url:target+'/watchlist-email-v40.js?v=40-test'});
   await page.waitForTimeout(3500);
   const watchCount=await page.locator('#fg40Watch').count();
@@ -67,46 +63,74 @@ async function run(){
   if(watchCount>1) throw new Error('Watchlist mounted more than once');
   await eventLoopProbe(page,'WATCHLIST');
 
-  // Generate benign DOM changes. The old bug would repeatedly re-render and stall here.
   const mutationResult=await page.evaluate(async()=>{
     const host=document.createElement('div');host.id='fg-smoke-mutations';document.body.appendChild(host);
     const t0=performance.now();
-    for(let i=0;i<500;i++){
-      const x=document.createElement('span');x.textContent=String(i);host.appendChild(x);if(host.childNodes.length>20)host.firstChild.remove();
-    }
+    for(let i=0;i<500;i++){const x=document.createElement('span');x.textContent=String(i);host.appendChild(x);if(host.childNodes.length>20)host.firstChild.remove();}
     await new Promise(r=>setTimeout(r,250));
-    const count=document.querySelectorAll('#fg40Watch').length;
-    host.remove();
+    const count=document.querySelectorAll('#fg40Watch').length;host.remove();
     return {duration:performance.now()-t0,watchCount:count};
   });
   console.log('DOM_MUTATION_STRESS',JSON.stringify(mutationResult));
   if(mutationResult.duration>2500 || mutationResult.watchCount>1) throw new Error('DOM mutation stress indicates UI loop');
   await eventLoopProbe(page,'AFTER_STRESS');
 
-  // Public homepage + login should remain responsive on desktop.
   const shell=await context.newPage();
   const shellErrors=[];shell.on('pageerror',e=>shellErrors.push(String(e.message||e)));
   const shellResponse=await shell.goto(target+'/',{waitUntil:'domcontentloaded',timeout:90000});
   console.log('INDEX_HTTP',shellResponse?.status());
   if(!shellResponse || shellResponse.status()>=400) throw new Error('index HTTP failure');
-  await shell.waitForTimeout(1500);
+  await shell.waitForTimeout(1200);
   const homepageVisible=await shell.locator('#fgWebsiteHome').isVisible().catch(()=>false);
   console.log('HOMEPAGE_VISIBLE',homepageVisible);
   if(!homepageVisible) throw new Error('Public website homepage is not visible');
   const homeTitle=await shell.locator('#fgWebsiteHome h1').innerText().catch(()=> '');
   if(!/nguy cơ ngập/i.test(homeTitle)) throw new Error('Homepage hero content missing');
+  const featureHref=await shell.locator('#fgWebsiteHome .wh-links a').filter({hasText:'Tính năng'}).first().getAttribute('href').catch(()=>null);
+  console.log('HOME_FEATURE_HREF',featureHref);
+  if(!featureHref || !featureHref.includes('features.html')) throw new Error('Homepage navigation still points to an in-page anchor');
   await eventLoopProbe(shell,'HOMEPAGE');
-  await shell.locator('[data-fg-home-login]').first().click();
-  await shell.waitForTimeout(250);
-  const loginVisible=await shell.locator('#loginEmail').isVisible().catch(()=>false);
-  console.log('LOGIN_VISIBLE',loginVisible);
-  if(!loginVisible) throw new Error('Desktop login form is not visible after entering app');
-  await shell.locator('#loginEmail').fill('smoke.test@example.com');
-  const filled=await shell.locator('#loginEmail').inputValue();
-  if(filled!=='smoke.test@example.com') throw new Error('Login input is not responsive');
-  await eventLoopProbe(shell,'LOGIN');
 
-  const seriousErrors=[...pageErrors,...shellErrors].filter(x=>!/(ResizeObserver loop|Failed to fetch|NetworkError|Load failed)/i.test(x));
+  const pages=[
+    ['features.html','Tính năng'],
+    ['how-it-works.html','Cách hoạt động'],
+    ['alerts.html','Cảnh báo'],
+    ['ev.html','Trạm sạc EV'],
+    ['rescue.html','Cứu hộ'],
+    ['about.html','Giới thiệu']
+  ];
+  for(const [path,label] of pages){
+    const p=await context.newPage();
+    const errs=[];p.on('pageerror',e=>errs.push(String(e.message||e)));
+    const r=await p.goto(target+'/'+path,{waitUntil:'domcontentloaded',timeout:90000});
+    console.log('SITE_PAGE',path,'HTTP',r?.status());
+    if(!r||r.status()>=400) throw new Error(`${path} HTTP failure`);
+    const h1=(await p.locator('h1').first().innerText().catch(()=>'' )).trim();
+    if(!h1) throw new Error(`${path} missing H1`);
+    const brand=await p.locator('.site-brand').first().isVisible().catch(()=>false);
+    if(!brand) throw new Error(`${path} missing site header`);
+    const appHref=await p.locator('a.site-btn.primary').first().getAttribute('href').catch(()=>null);
+    if(!appHref || !appHref.includes('?login=1')) throw new Error(`${path} does not link into FloodGuard login`);
+    const serious=errs.filter(x=>!/(ResizeObserver loop|Failed to fetch|NetworkError|Load failed)/i.test(x));
+    if(serious.length) throw new Error(`${path} page errors: ${serious.join(' | ')}`);
+    console.log('SITE_PAGE_OK',label,h1.slice(0,80));
+    await p.close();
+  }
+
+  const loginPage=await context.newPage();
+  const loginErrors=[];loginPage.on('pageerror',e=>loginErrors.push(String(e.message||e)));
+  const loginResponse=await loginPage.goto(target+'/?login=1',{waitUntil:'domcontentloaded',timeout:90000});
+  if(!loginResponse || loginResponse.status()>=400) throw new Error('login route HTTP failure');
+  await loginPage.waitForTimeout(500);
+  const loginVisible=await loginPage.locator('#loginEmail').isVisible().catch(()=>false);
+  console.log('LOGIN_VISIBLE',loginVisible);
+  if(!loginVisible) throw new Error('Desktop login form is not visible from ?login=1');
+  await loginPage.locator('#loginEmail').fill('smoke.test@example.com');
+  const filled=await loginPage.locator('#loginEmail').inputValue();
+  if(filled!=='smoke.test@example.com') throw new Error('Login input is not responsive');
+  await eventLoopProbe(loginPage,'LOGIN');
+
+  const seriousErrors=[...pageErrors,...shellErrors,...loginErrors].filter(x=>!/(ResizeObserver loop|Failed to fetch|NetworkError|Load failed)/i.test(x));
   console.log('PAGE_ERRORS',JSON.stringify(seriousErrors.slice(0,20)));
   if(seriousErrors.length) throw new Error('Unexpected page errors: '+seriousErrors.slice(0,5).join(' | '));
 
