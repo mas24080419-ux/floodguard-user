@@ -1,8 +1,9 @@
 (()=>{
 'use strict';
-if(window.__FG_SITE_NAV_V3__)return;window.__FG_SITE_NAV_V3__=true;
+if(window.__FG_SITE_NAV_V4__)return;window.__FG_SITE_NAV_V4__=true;
 const ROUTES={
  'trang chủ':'./',
+ 'vấn đề':'./problem.html',
  'tính năng':'./features.html',
  'cách hoạt động':'./how-it-works.html',
  'cảnh báo':'./alerts.html',
@@ -10,12 +11,30 @@ const ROUTES={
  'cứu hộ':'./rescue.html',
  'giới thiệu':'./about.html'
 };
+const ORDER=['Vấn đề','Tính năng','Cách hoạt động','Cảnh báo','Trạm sạc EV','Cứu hộ','Giới thiệu'];
 const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 function norm(s){return String(s||'').trim().toLowerCase().replace(/\s+/g,' ')}
 function replaceLink(a,href){const clone=a.cloneNode(true);clone.setAttribute('href',href);a.replaceWith(clone);return clone}
+function ensureOrderedLinks(container,home=false){
+ if(!container)return;
+ const existing=[...container.querySelectorAll('a')];
+ const map=new Map(existing.map(a=>[norm(a.textContent).replace(/→/g,'').trim(),a]));
+ const frag=document.createDocumentFragment();
+ if(home){
+  const h=map.get('trang chủ');
+  if(h)frag.appendChild(h);
+ }
+ ORDER.forEach(label=>{
+  const key=norm(label);let a=map.get(key);
+  if(!a){a=document.createElement('a');a.textContent=label}
+  a.setAttribute('href',ROUTES[key]);frag.appendChild(a);
+ });
+ existing.forEach(a=>{const k=norm(a.textContent).replace(/→/g,'').trim();if(!ROUTES[k]&&k!=='trang chủ')frag.appendChild(a)});
+ container.replaceChildren(frag);
+}
 function installMotionStyles(){
- if(document.getElementById('fgSmoothMotionV3'))return;
- const s=document.createElement('style');s.id='fgSmoothMotionV3';s.textContent=`
+ if(document.getElementById('fgSmoothMotionV4'))return;
+ const s=document.createElement('style');s.id='fgSmoothMotionV4';s.textContent=`
  :root{--fg-ease:cubic-bezier(.22,.61,.36,1);--fg-ease-out:cubic-bezier(.16,1,.3,1)}
  @view-transition{navigation:auto}
  ::view-transition-old(root){animation:fgVtOld .18s var(--fg-ease) both}
@@ -30,10 +49,10 @@ function installMotionStyles(){
  .site-links a,.wh-links a{position:relative;transition:color .22s var(--fg-ease)}
  .site-links a:after,.wh-links a:after{content:"";position:absolute;left:0;right:100%;bottom:-7px;height:2px;border-radius:999px;background:linear-gradient(90deg,#2f7ae5,#6b62e6);transition:right .28s var(--fg-ease-out)}
  .site-links a:hover:after,.site-links a.active:after,.wh-links a:hover:after{right:0}
- .site-btn,.wh-btn,.fgmp-card,.info-card,.step,.threshold{transition:transform .25s var(--fg-ease-out),box-shadow .25s var(--fg-ease-out),border-color .25s var(--fg-ease-out),background-color .25s var(--fg-ease-out)}
- .info-card:hover,.step:hover,.threshold:hover{transform:translateY(-4px);box-shadow:0 18px 38px rgba(24,64,108,.10);border-color:#cbdced}
+ .site-btn,.wh-btn,.fgmp-card,.info-card,.step,.threshold,.problem-stat,.impact-box{transition:transform .25s var(--fg-ease-out),box-shadow .25s var(--fg-ease-out),border-color .25s var(--fg-ease-out),background-color .25s var(--fg-ease-out)}
+ .info-card:hover,.step:hover,.threshold:hover,.problem-stat:hover,.impact-box:hover{transform:translateY(-4px);box-shadow:0 18px 38px rgba(24,64,108,.10);border-color:#cbdced}
  @media(max-width:980px){.mobile-drawer{display:grid!important;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-9px) scale(.985);transform-origin:top right;transition:opacity .22s var(--fg-ease),transform .28s var(--fg-ease-out),visibility .22s}.mobile-drawer.open{opacity:1;visibility:visible;pointer-events:auto;transform:none}}
- @media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none!important}html.fg-js-motion main,html.fg-js-motion #fgWebsiteHome,.fg-reveal,.site-btn,.wh-btn,.fgmp-card,.info-card,.step,.threshold,.mobile-drawer{transition:none!important;animation:none!important;transform:none!important;filter:none!important;opacity:1!important}}
+ @media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none!important}html.fg-js-motion main,html.fg-js-motion #fgWebsiteHome,.fg-reveal,.site-btn,.wh-btn,.fgmp-card,.info-card,.step,.threshold,.problem-stat,.impact-box,.mobile-drawer{transition:none!important;animation:none!important;transform:none!important;filter:none!important;opacity:1!important}}
  `;document.head.appendChild(s);
 }
 function buildHomepageExplore(root){
@@ -42,20 +61,27 @@ function buildHomepageExplore(root){
  if(!document.getElementById('fgMultiPageHomeStyle')){
   const st=document.createElement('style');st.id='fgMultiPageHomeStyle';st.textContent=`
   #fgMultiPageExplore{padding:70px 0 76px;background:#fff;border-top:1px solid #e0e9f3;border-bottom:1px solid #e0e9f3}
-  #fgMultiPageExplore .fgmp-head{max-width:720px;margin-bottom:27px}#fgMultiPageExplore .fgmp-head span{font-size:11px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:#2d6fc8}#fgMultiPageExplore .fgmp-head h2{font-size:clamp(30px,4vw,46px);line-height:1.08;letter-spacing:-.04em;margin:8px 0 10px;color:#102a43}#fgMultiPageExplore .fgmp-head p{margin:0;color:#6b7f93;font-size:14px;line-height:1.7}
-  #fgMultiPageExplore .fgmp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}#fgMultiPageExplore .fgmp-card{display:block;text-decoration:none;color:#17304f;border:1px solid #dfe9f3;border-radius:20px;padding:20px;background:#f9fbfe;min-height:155px}#fgMultiPageExplore .fgmp-card:hover{transform:translateY(-5px);background:#fff;box-shadow:0 18px 38px rgba(26,64,108,.10);border-color:#cddced}#fgMultiPageExplore .fgmp-icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:#eaf3ff;margin-bottom:14px;font-size:18px}#fgMultiPageExplore .fgmp-card b{display:block;font-size:16px;margin-bottom:6px}#fgMultiPageExplore .fgmp-card small{display:block;color:#718399;font-size:11px;line-height:1.55}#fgMultiPageExplore .fgmp-card em{display:block;margin-top:12px;color:#2d6fc8;font-size:10px;font-style:normal;font-weight:900}
+  #fgMultiPageExplore .fgmp-head{max-width:760px;margin-bottom:27px}#fgMultiPageExplore .fgmp-head span{font-size:11px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:#2d6fc8}#fgMultiPageExplore .fgmp-head h2{font-size:clamp(30px,4vw,46px);line-height:1.08;letter-spacing:-.04em;margin:8px 0 10px;color:#102a43}#fgMultiPageExplore .fgmp-head p{margin:0;color:#6b7f93;font-size:14px;line-height:1.7}
+  #fgMultiPageExplore .fgmp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}#fgMultiPageExplore .fgmp-card{display:block;text-decoration:none;color:#17304f;border:1px solid #dfe9f3;border-radius:20px;padding:20px;background:#f9fbfe;min-height:155px}#fgMultiPageExplore .fgmp-card:hover{transform:translateY(-5px);background:#fff;box-shadow:0 18px 38px rgba(26,64,108,.10);border-color:#cddced}#fgMultiPageExplore .fgmp-card.problem{background:linear-gradient(145deg,#f6faff,#edf5ff);border-color:#cfe0f3}#fgMultiPageExplore .fgmp-icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:#eaf3ff;margin-bottom:14px;font-size:18px}#fgMultiPageExplore .fgmp-card b{display:block;font-size:16px;margin-bottom:6px}#fgMultiPageExplore .fgmp-card small{display:block;color:#718399;font-size:11px;line-height:1.55}#fgMultiPageExplore .fgmp-card em{display:block;margin-top:12px;color:#2d6fc8;font-size:10px;font-style:normal;font-weight:900}
   @media(max-width:860px){#fgMultiPageExplore .fgmp-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){#fgMultiPageExplore{padding:48px 0}#fgMultiPageExplore .fgmp-grid{grid-template-columns:1fr}}
   `;document.head.appendChild(st);
  }
- const section=document.createElement('section');section.id='fgMultiPageExplore';section.innerHTML=`<div class="wh-shell"><div class="fgmp-head"><span>Khám phá FloodGuard</span><h2>Mỗi chức năng có một trang riêng</h2><p>Chọn nội dung bạn muốn xem. Trang chủ không còn cuộn qua toàn bộ các phần chi tiết.</p></div><div class="fgmp-grid"><a class="fgmp-card" href="./features.html"><span class="fgmp-icon">🧩</span><b>Tính năng</b><small>Dự báo ngập, tìm đường, Watchlist, EV và SOS trong cùng nền tảng.</small><em>Mở trang →</em></a><a class="fgmp-card" href="./how-it-works.html"><span class="fgmp-icon">⚙️</span><b>Cách hoạt động</b><small>Từ dữ liệu mưa và lịch sử ngập đến mức rủi ro trên tuyến đường.</small><em>Mở trang →</em></a><a class="fgmp-card" href="./alerts.html"><span class="fgmp-icon">🔔</span><b>Cảnh báo</b><small>Watchlist, ngưỡng MEDIUM/HIGH và email cảnh báo tự động.</small><em>Mở trang →</em></a><a class="fgmp-card" href="./ev.html"><span class="fgmp-icon">⚡</span><b>Trạm sạc EV</b><small>Khả năng tiếp cận trạm sạc trong bối cảnh mưa và ngập.</small><em>Mở trang →</em></a><a class="fgmp-card" href="./rescue.html"><span class="fgmp-icon">🆘</span><b>Cứu hộ</b><small>Gửi SOS, chia sẻ vị trí, theo dõi trạng thái và trao đổi hỗ trợ.</small><em>Mở trang →</em></a><a class="fgmp-card" href="./about.html"><span class="fgmp-icon">FG</span><b>Giới thiệu</b><small>Phạm vi, mục tiêu và nguyên tắc phát triển FloodGuard HCMC.</small><em>Mở trang →</em></a></div></div>`;
+ const section=document.createElement('section');section.id='fgMultiPageExplore';section.innerHTML=`<div class="wh-shell"><div class="fgmp-head"><span>Bắt đầu từ vấn đề</span><h2>Hiểu vì sao ngập xảy ra trước khi xem FloodGuard làm gì</h2><p>Website đi theo một câu chuyện rõ ràng: thực trạng và nguyên nhân ngập → tính năng → cách hệ thống hoạt động → các module cảnh báo, EV và cứu hộ.</p></div><div class="fgmp-grid"><a class="fgmp-card problem" href="./problem.html"><span class="fgmp-icon">🌧</span><b>Vấn đề ngập đô thị</b><small>Thực trạng TP.HCM, các nguyên nhân chính và tác động tới giao thông, EV và cứu hộ.</small><em>Xem vấn đề trước →</em></a><a class="fgmp-card" href="./features.html"><span class="fgmp-icon">🧩</span><b>Tính năng</b><small>Dự báo ngập, tìm đường, Watchlist, EV và SOS trong cùng nền tảng.</small><em>Mở trang →</em></a><a class="fgmp-card" href="./how-it-works.html"><span class="fgmp-icon">⚙️</span><b>Cách hoạt động</b><small>Từ dữ liệu mưa và lịch sử ngập đến mức rủi ro trên tuyến đường.</small><em>Mở trang →</em></a><a class="fgmp-card" href="./alerts.html"><span class="fgmp-icon">🔔</span><b>Cảnh báo</b><small>Watchlist, ngưỡng MEDIUM/HIGH và email cảnh báo tự động.</small><em>Mở trang →</em></a><a class="fgmp-card" href="./ev.html"><span class="fgmp-icon">⚡</span><b>Trạm sạc EV</b><small>Khả năng tiếp cận trạm sạc trong bối cảnh mưa và ngập.</small><em>Mở trang →</em></a><a class="fgmp-card" href="./rescue.html"><span class="fgmp-icon">🆘</span><b>Cứu hộ</b><small>Gửi SOS, chia sẻ vị trí, theo dõi trạng thái và trao đổi hỗ trợ.</small><em>Mở trang →</em></a><a class="fgmp-card" href="./about.html"><span class="fgmp-icon">FG</span><b>Giới thiệu</b><small>Phạm vi, mục tiêu và nguyên tắc phát triển FloodGuard HCMC.</small><em>Mở trang →</em></a></div></div>`;
  const footer=root.querySelector('.wh-footer');if(footer)footer.before(section);else root.appendChild(section);
 }
 function rewriteHomeNav(){
  const root=document.getElementById('fgWebsiteHome');if(!root)return;
  root.querySelectorAll('.wh-links a,.wh-foot-links a').forEach(a=>{const key=norm(a.textContent).replace(/→/g,'').trim();if(ROUTES[key])replaceLink(a,ROUTES[key])});
+ ensureOrderedLinks(root.querySelector('.wh-links'));
+ const foot=root.querySelector('.wh-foot-links');if(foot)ensureOrderedLinks(foot);
  buildHomepageExplore(root);
  const params=new URLSearchParams(location.search);
  if(params.get('login')==='1'||location.hash==='#login'){root.classList.add('hidden');document.getElementById('authScreen')?.classList.remove('hidden');document.body.style.overflow='hidden'}
+}
+function normalizeSiteNav(){
+ ensureOrderedLinks(document.querySelector('.site-links'));
+ ensureOrderedLinks(document.querySelector('.mobile-drawer'),true);
+ const footer=document.querySelector('.footer-links');if(footer)ensureOrderedLinks(footer);
 }
 function mobileMenu(){
  const btn=document.querySelector('[data-site-menu]'),drawer=document.querySelector('[data-site-drawer]');if(!btn||!drawer)return;
@@ -94,7 +120,7 @@ function smoothNavigation(){
  },true);
 }
 function revealContent(){
- const targets=[...document.querySelectorAll('main .info-card,main .step,main .threshold,main .timeline-item,main .visual-card,main .dark-item,main .metric,main .cta-box,#fgMultiPageExplore .fgmp-head,#fgMultiPageExplore .fgmp-card')];
+ const targets=[...document.querySelectorAll('main .info-card,main .step,main .threshold,main .timeline-item,main .visual-card,main .dark-item,main .metric,main .cta-box,main .problem-stat,main .impact-box,main .source-item,#fgMultiPageExplore .fgmp-head,#fgMultiPageExplore .fgmp-card')];
  if(!targets.length)return;
  if(reduced()||!('IntersectionObserver'in window)){targets.forEach(x=>x.classList.add('fg-visible'));return}
  targets.forEach((el,i)=>{el.classList.add('fg-reveal');el.style.setProperty('--fg-delay',Math.min((i%6)*48,240)+'ms')});
@@ -107,6 +133,6 @@ function pageEntrance(){
  requestAnimationFrame(()=>requestAnimationFrame(()=>h.classList.remove('fg-enter')));
  window.addEventListener('pageshow',()=>h.classList.remove('fg-page-leaving'));
 }
-function start(){installMotionStyles();rewriteHomeNav();mobileMenu();markActive();prefetchLinks();smoothNavigation();revealContent();pageEntrance()}
+function start(){installMotionStyles();rewriteHomeNav();normalizeSiteNav();mobileMenu();markActive();prefetchLinks();smoothNavigation();revealContent();pageEntrance()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
