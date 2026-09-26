@@ -24,18 +24,25 @@ async function probe(page,label){
   if(r.p95>250||r.max>1200)throw new Error(label+' main thread unresponsive');
 }
 
+async function waitForV50Control(page){
+  await page.evaluate(async()=>{if('serviceWorker'in navigator){try{await navigator.serviceWorker.ready}catch(_){}}});
+  await page.reload({waitUntil:'domcontentloaded',timeout:90000});
+  await page.waitForTimeout(900);
+}
+
 async function run(){
   staticAudit();
   const browser=await chromium.launch({headless:true});
-  const context=await browser.newContext({viewport:{width:1440,height:900},serviceWorkers:'block'});
+  const context=await browser.newContext({viewport:{width:1440,height:900}});
 
   const home=await context.newPage();
   let r=await home.goto(target+'/',{waitUntil:'domcontentloaded',timeout:90000});
   if(!r||r.status()>=400)throw new Error('Homepage HTTP failure');
   await home.waitForTimeout(1200);
+  await waitForV50Control(home);
   if(!await home.locator('#fgWebsiteHome').isVisible().catch(()=>false))throw new Error('Homepage hidden');
   const visibleEvLinks=await home.locator('a[href$="ev.html"]:visible').count();
-  if(visibleEvLinks!==0)throw new Error('Public EV link still visible on homepage');
+  if(visibleEvLinks!==0)throw new Error('Public EV link still visible on homepage after v50 activation');
   const navText=norm((await home.locator('#fgWebsiteHome .wh-links').innerText().catch(()=>'')));
   if(navText.includes('trạm sạc ev'))throw new Error('EV page still visible in homepage navigation');
   await probe(home,'HOME');
