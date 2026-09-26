@@ -102,13 +102,17 @@ async function run(){
   const featureHref=await shell.locator('#fgWebsiteHome .wh-links a').filter({hasText:'Tính năng'}).first().getAttribute('href').catch(()=>null);
   console.log('HOME_FEATURE_HREF',featureHref);
   if(!featureHref || !featureHref.includes('features.html')) throw new Error('Homepage navigation still points to an in-page anchor');
-  await shell.waitForTimeout(650);
-  const visibleRevealCount=await shell.locator('#fgMultiPageExplore .fgmp-card.fg-visible').count().catch(()=>0);
-  console.log('HOME_REVEAL_VISIBLE_COUNT',visibleRevealCount);
-  if(visibleRevealCount<1) throw new Error('Homepage reveal animation did not settle');
+  const revealTargets=await shell.locator('#fgMultiPageExplore .fgmp-card.fg-reveal').count().catch(()=>0);
+  console.log('HOME_REVEAL_TARGETS',revealTargets);
+  if(revealTargets<1) throw new Error('Homepage reveal animation targets were not initialized');
+  const firstReveal=shell.locator('#fgMultiPageExplore .fgmp-card').first();
+  await firstReveal.scrollIntoViewIfNeeded();
+  await shell.waitForTimeout(750);
+  const revealVisible=await firstReveal.evaluate(el=>el.classList.contains('fg-visible')).catch(()=>false);
+  console.log('HOME_REVEAL_VISIBLE_AFTER_SCROLL',revealVisible);
+  if(!revealVisible) throw new Error('Homepage reveal animation did not settle after entering viewport');
   await eventLoopProbe(shell,'HOMEPAGE_MOTION');
 
-  // Click real links and measure end-to-end page navigation. This catches old in-page scroll and sluggish transitions.
   const navProbe=await context.newPage();
   const navErrors=[];navProbe.on('pageerror',e=>navErrors.push(String(e.message||e)));
   await navProbe.goto(target+'/',{waitUntil:'domcontentloaded',timeout:90000});
