@@ -23,6 +23,12 @@
 @media(max-width:560px){.auth-layout{align-items:flex-start;padding:20px 12px 32px}.card{border-radius:24px;padding:21px 17px 20px;margin-top:4vh}.card-head{margin-bottom:16px}.card-head h2{font-size:20px}.waves{height:23%}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.spinner{animation:none}.primary{transition:none}}
 .brand-copy p{display:none!important}
+
+/* password-recovery-v2 */
+.recovery-overlay{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:18px;background:rgba(5,20,43,.58);backdrop-filter:blur(9px)}
+.recovery-box{width:min(430px,100%);background:#fff;border:1px solid rgba(255,255,255,.85);border-radius:24px;box-shadow:0 24px 70px rgba(0,20,55,.34);padding:24px;color:#172b47}
+.recovery-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:16px}.recovery-head h3{margin:0;font-size:20px}.recovery-head p{margin:6px 0 0;color:#718098;font-size:11px;line-height:1.55}.recovery-close{border:0;background:#eef3f9;border-radius:10px;width:34px;height:34px;cursor:pointer;color:#50637d;font-size:18px}.recovery-step{display:grid;gap:12px}.recovery-note{padding:11px 12px;border-radius:13px;background:#f1f6ff;color:#49617f;font-size:10px;line-height:1.55;border:1px solid #e0e9f5}.recovery-actions{display:flex;gap:9px}.recovery-actions .primary{flex:1}.secondary{border:1px solid #dce5ef;background:#fff;border-radius:14px;padding:12px 14px;color:#536880;font-weight:800;cursor:pointer}.recovery-msg{min-height:16px;font-size:10px;line-height:1.5}.recovery-msg.error{color:var(--danger)}.recovery-msg.ok{color:var(--ok)}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -63,6 +69,27 @@
       <p class="fine">Phiên đăng nhập được xác thực bằng Supabase Auth. FloodGuard không lưu mật khẩu dạng văn bản trong trình duyệt.</p>
     </main>
   </div>
+
+  <div class="recovery-overlay hidden" id="recoveryOverlay" role="dialog" aria-modal="true" aria-labelledby="recoveryTitle">
+    <div class="recovery-box">
+      <div class="recovery-head">
+        <div><h3 id="recoveryTitle">Xác minh tài khoản</h3><p id="recoverySubtitle">Xác minh email trước khi đặt lại mật khẩu.</p></div>
+        <button class="recovery-close" id="recoveryClose" type="button" aria-label="Đóng">×</button>
+      </div>
+      <form class="recovery-step" id="recoveryEmailForm">
+        <div class="recovery-note">FloodGuard sẽ gửi một liên kết xác minh tới email đã đăng ký. Chỉ người có quyền truy cập hộp thư đó mới có thể tiếp tục đổi mật khẩu.</div>
+        <div class="field"><label for="recoveryEmail">Email tài khoản</label><input id="recoveryEmail" type="email" inputmode="email" autocomplete="email" placeholder="tenban@gmail.com" required></div>
+        <button class="primary" id="sendRecoveryBtn" type="submit">Gửi liên kết xác minh</button>
+      </form>
+      <form class="recovery-step hidden" id="recoveryResetForm">
+        <div class="recovery-note">Email đã được xác minh qua liên kết khôi phục. Hãy tạo mật khẩu mới cho tài khoản.</div>
+        <div class="field"><label for="newRecoveryPassword">Mật khẩu mới</label><div class="input-wrap"><input class="password-input" id="newRecoveryPassword" type="password" autocomplete="new-password" minlength="8" placeholder="Tối thiểu 8 ký tự" required><button class="password-toggle" type="button" data-recovery-toggle="newRecoveryPassword">Hiện</button></div></div>
+        <div class="field"><label for="confirmRecoveryPassword">Xác nhận mật khẩu mới</label><div class="input-wrap"><input class="password-input" id="confirmRecoveryPassword" type="password" autocomplete="new-password" minlength="8" placeholder="Nhập lại mật khẩu" required><button class="password-toggle" type="button" data-recovery-toggle="confirmRecoveryPassword">Hiện</button></div></div>
+        <button class="primary" id="saveRecoveryBtn" type="submit">Đổi mật khẩu</button>
+      </form>
+      <div class="recovery-msg" id="recoveryMessage" role="status" aria-live="polite"></div>
+    </div>
+  </div>
 </section>
 <section class="appview hidden" id="appView"><iframe id="appFrame" title="FloodGuard HCMC" allow="geolocation; clipboard-read; clipboard-write; fullscreen"></iframe></section>
 <script>
@@ -70,22 +97,39 @@
 'use strict';
 const API='https://floodguard-rescue-backend.onrender.com';
 const $=id=>document.getElementById(id);
-let sb=null,busy=false;
+let sb=null,busy=false,recoveryMode=(location.hash.includes('type=recovery')||new URLSearchParams(location.search).get('type')==='recovery');
 const ui={auth:$('authScreen'),app:$('appView'),frame:$('appFrame'),message:$('message'),statusText:$('statusText'),statusDot:$('statusDot'),loginBtn:$('loginBtn'),signupBtn:$('signupBtn'),googleBtn:$('googleBtn')};
+function setRecoveryMessage(text='',kind=''){const el=$('recoveryMessage');if(!el)return;el.textContent=text;el.className='recovery-msg'+(kind?' '+kind:'')}
+function openRecovery(step='email'){
+  const overlay=$('recoveryOverlay'),emailForm=$('recoveryEmailForm'),resetForm=$('recoveryResetForm');
+  if(!overlay)return;
+  overlay.classList.remove('hidden');setRecoveryMessage();
+  const reset=step==='reset';emailForm.classList.toggle('hidden',reset);resetForm.classList.toggle('hidden',!reset);
+  $('recoveryTitle').textContent=reset?'Tạo mật khẩu mới':'Xác minh tài khoản';
+  $('recoverySubtitle').textContent=reset?'Hoàn tất khôi phục tài khoản FloodGuard.':'Xác minh email trước khi đặt lại mật khẩu.';
+  if(!reset){$('recoveryEmail').value=$('loginEmail').value.trim();setTimeout(()=>$('recoveryEmail').focus(),50)}
+  else setTimeout(()=>$('newRecoveryPassword').focus(),50);
+}
+function closeRecovery(){if(recoveryMode)return;$('recoveryOverlay')?.classList.add('hidden');setRecoveryMessage()}
 function setMessage(text='',kind=''){ui.message.textContent=text;ui.message.className='msg'+(kind?' '+kind:'')}
 function setStatus(text,ok=false){ui.statusText.textContent=text;ui.statusDot.classList.toggle('ok',!!ok)}
 function setBusy(on,label){busy=on;[ui.loginBtn,ui.signupBtn,ui.googleBtn].forEach(b=>b.disabled=on);if(label&&on)ui.loginBtn.innerHTML='<span class="spinner"></span>'+label;else ui.loginBtn.textContent='Đăng nhập'}
 function friendlyError(error){const m=String(error?.message||error||'').toLowerCase();if(m.includes('invalid login credentials'))return 'Sai email hoặc mật khẩu. Vui lòng kiểm tra lại.';if(m.includes('email not confirmed'))return 'Email chưa được xác minh. Hãy kiểm tra hộp thư của bạn.';if(m.includes('user already registered'))return 'Email này đã được đăng ký.';if(m.includes('provider')&&(m.includes('disabled')||m.includes('not enabled')||m.includes('unsupported')))return 'Đăng nhập Google chưa được bật trong Supabase. Cần bật Google Provider một lần trong cấu hình dự án.';if(m.includes('network')||m.includes('fetch'))return 'Không thể kết nối máy chủ tài khoản. Hãy kiểm tra mạng và thử lại.';return error?.message||'Đã xảy ra lỗi. Vui lòng thử lại.'}
 function showApp(){setMessage();ui.auth.classList.add('hidden');ui.app.classList.remove('hidden');if(!ui.frame.src)ui.frame.src='./app-core.html'}
 function showLogin(){ui.app.classList.add('hidden');ui.auth.classList.remove('hidden');if(ui.frame.src){ui.frame.removeAttribute('src')}setStatus(sb?'Sẵn sàng đăng nhập': 'Đang kết nối hệ thống tài khoản…',!!sb)}
-async function init(){try{if(!window.supabase?.createClient)throw new Error('Không tải được Supabase SDK');const r=await fetch(API+'/api/public-config',{cache:'no-store'});const d=await r.json().catch(()=>({}));if(!r.ok||!d.supabase?.url||!d.supabase?.anon_key)throw new Error('Backend/Supabase chưa sẵn sàng');sb=window.supabase.createClient(d.supabase.url,d.supabase.anon_key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});sb.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_OUT')showLogin();if(session&&(event==='SIGNED_IN'||event==='INITIAL_SESSION'||event==='TOKEN_REFRESHED'))showApp()});const {data,error}=await sb.auth.getSession();if(error)throw error;if(data.session){showApp()}else{showLogin();setStatus('Sẵn sàng đăng nhập',true)}}catch(e){setStatus('Không kết nối được hệ thống tài khoản');setMessage(friendlyError(e),'error')}}
+async function init(){try{if(!window.supabase?.createClient)throw new Error('Không tải được Supabase SDK');const r=await fetch(API+'/api/public-config',{cache:'no-store'});const d=await r.json().catch(()=>({}));if(!r.ok||!d.supabase?.url||!d.supabase?.anon_key)throw new Error('Backend/Supabase chưa sẵn sàng');sb=window.supabase.createClient(d.supabase.url,d.supabase.anon_key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});sb.auth.onAuthStateChange((event,session)=>{if(event==='PASSWORD_RECOVERY'){recoveryMode=true;showLogin();openRecovery('reset');return}if(event==='SIGNED_OUT'){recoveryMode=false;showLogin()}if(session&&!recoveryMode&&(event==='SIGNED_IN'||event==='INITIAL_SESSION'||event==='TOKEN_REFRESHED'))showApp()});const {data,error}=await sb.auth.getSession();if(error)throw error;if(recoveryMode){showLogin();openRecovery('reset');setStatus('Đang khôi phục mật khẩu',true)}else if(data.session){showApp()}else{showLogin();setStatus('Sẵn sàng đăng nhập',true)}}catch(e){setStatus('Không kết nối được hệ thống tài khoản');setMessage(friendlyError(e),'error')}}
 function switchTab(tab){const login=tab==='login';$('loginTab').classList.toggle('active',login);$('signupTab').classList.toggle('active',!login);$('loginForm').classList.toggle('hidden',!login);$('signupForm').classList.toggle('hidden',login);setMessage()}
 $('loginTab').onclick=()=>switchTab('login');$('signupTab').onclick=()=>switchTab('signup');
 document.querySelectorAll('[data-toggle]').forEach(btn=>btn.onclick=()=>{const input=$(btn.dataset.toggle);const show=input.type==='password';input.type=show?'text':'password';btn.textContent=show?'Ẩn':'Hiện'});
 $('loginForm').addEventListener('submit',async e=>{e.preventDefault();if(!sb||busy)return;const email=$('loginEmail').value.trim(),password=$('loginPassword').value;if(!email||!password)return setMessage('Vui lòng nhập đầy đủ email và mật khẩu.','error');setBusy(true,'Đang xác thực…');setMessage();try{const {data,error}=await sb.auth.signInWithPassword({email,password});if(error)throw error;if(!data.session)throw new Error('Không tạo được phiên đăng nhập');showApp()}catch(err){setMessage(friendlyError(err),'error')}finally{setBusy(false)}});
 $('signupForm').addEventListener('submit',async e=>{e.preventDefault();if(!sb||busy)return;const full_name=$('signupName').value.trim(),email=$('signupEmail').value.trim(),password=$('signupPassword').value;if(!full_name||!email||password.length<6)return setMessage('Hãy nhập họ tên, email và mật khẩu tối thiểu 6 ký tự.','error');busy=true;ui.signupBtn.disabled=ui.googleBtn.disabled=true;ui.signupBtn.innerHTML='<span class="spinner"></span>Đang tạo tài khoản…';setMessage();try{const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name}}});if(error)throw error;if(data.session){showApp()}else{switchTab('login');$('loginEmail').value=email;setMessage('Đã tạo tài khoản. Hãy kiểm tra email để xác minh trước khi đăng nhập.','ok')}}catch(err){setMessage(friendlyError(err),'error')}finally{busy=false;ui.signupBtn.disabled=ui.googleBtn.disabled=false;ui.signupBtn.textContent='Tạo tài khoản'}});
 ui.googleBtn.onclick=async()=>{if(!sb||busy)return;busy=true;ui.googleBtn.disabled=ui.loginBtn.disabled=ui.signupBtn.disabled=true;setMessage();setStatus('Đang chuyển tới Google…',true);try{const redirectTo=new URL('./',location.href).href;const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo,queryParams:{access_type:'offline',prompt:'select_account'}}});if(error)throw error}catch(err){busy=false;ui.googleBtn.disabled=ui.loginBtn.disabled=ui.signupBtn.disabled=false;setStatus('Sẵn sàng đăng nhập',true);setMessage(friendlyError(err),'error')}};
-$('forgotPassword').onclick=async()=>{if(!sb||busy)return;const email=$('loginEmail').value.trim();if(!email)return setMessage('Nhập email của bạn trước, sau đó bấm “Quên mật khẩu?”.','error');try{const redirectTo=new URL('./',location.href).href;const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo});if(error)throw error;setMessage('Đã gửi hướng dẫn đặt lại mật khẩu tới email của bạn.','ok')}catch(err){setMessage(friendlyError(err),'error')}};
+$('forgotPassword').onclick=()=>{if(!sb||busy)return setMessage('Hệ thống tài khoản chưa sẵn sàng.','error');openRecovery('email')};
+$('recoveryClose').onclick=closeRecovery;
+$('recoveryOverlay').addEventListener('click',e=>{if(e.target===$('recoveryOverlay'))closeRecovery()});
+document.querySelectorAll('[data-recovery-toggle]').forEach(btn=>btn.onclick=()=>{const input=$(btn.dataset.recoveryToggle);const show=input.type==='password';input.type=show?'text':'password';btn.textContent=show?'Ẩn':'Hiện'});
+$('recoveryEmailForm').addEventListener('submit',async e=>{e.preventDefault();if(!sb||busy)return;const email=$('recoveryEmail').value.trim();if(!email)return setRecoveryMessage('Vui lòng nhập email đã đăng ký.','error');const btn=$('sendRecoveryBtn');busy=true;btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Đang gửi…';setRecoveryMessage();try{const redirectTo=new URL('./',location.href).href;const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo});if(error)throw error;$('loginEmail').value=email;setRecoveryMessage('Đã gửi liên kết xác minh. Hãy mở email của bạn và bấm liên kết để tiếp tục đổi mật khẩu.','ok')}catch(err){setRecoveryMessage(friendlyError(err),'error')}finally{busy=false;btn.disabled=false;btn.textContent='Gửi lại liên kết xác minh'}});
+$('recoveryResetForm').addEventListener('submit',async e=>{e.preventDefault();if(!sb||busy)return;const p1=$('newRecoveryPassword').value,p2=$('confirmRecoveryPassword').value;if(p1.length<8)return setRecoveryMessage('Mật khẩu mới phải có ít nhất 8 ký tự.','error');if(p1!==p2)return setRecoveryMessage('Hai mật khẩu chưa khớp.','error');const btn=$('saveRecoveryBtn');busy=true;btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Đang cập nhật…';setRecoveryMessage();try{const {error}=await sb.auth.updateUser({password:p1});if(error)throw error;recoveryMode=false;await sb.auth.signOut({scope:'local'}).catch(()=>{});history.replaceState({},document.title,location.pathname);$('recoveryOverlay').classList.add('hidden');$('newRecoveryPassword').value='';$('confirmRecoveryPassword').value='';showLogin();setStatus('Sẵn sàng đăng nhập',true);setMessage('Đổi mật khẩu thành công. Hãy đăng nhập bằng mật khẩu mới.','ok')}catch(err){setRecoveryMessage(friendlyError(err),'error')}finally{busy=false;btn.disabled=false;btn.textContent='Đổi mật khẩu'}});
 window.addEventListener('message',e=>{if(e.origin===location.origin&&e.data==='floodguard:signed-out')showLogin()});
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
