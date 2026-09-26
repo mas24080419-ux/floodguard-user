@@ -11,6 +11,7 @@ on:
       - 'site-luxe.css'
       - 'site-atelier-v47.css'
       - 'site-cinematic-v48.css'
+      - 'site-editorial-v49.css'
       - 'site-navigation-v2.js'
       - 'problem.html'
       - 'features.html'
@@ -63,6 +64,7 @@ jobs:
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/site-luxe.css -o /tmp/site-luxe.css
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/site-atelier-v47.css -o /tmp/site-atelier.css
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/site-cinematic-v48.css -o /tmp/site-cinematic.css
+          curl -fLsS --max-time 30 https://floodguard-user.onrender.com/site-editorial-v49.css -o /tmp/site-editorial.css
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/watchlist-email-v40.js -o /tmp/watch.js
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/problem.html -o /tmp/problem.html
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/features.html -o /tmp/features.html
@@ -71,14 +73,15 @@ jobs:
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/ev.html -o /tmp/ev.html
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/rescue.html -o /tmp/rescue.html
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/about.html -o /tmp/about.html
-          cat /tmp/site-luxe.css /tmp/site-atelier.css /tmp/site-cinematic.css > /tmp/site-theme.css
-          grep -q 'floodguard-user-v48-cinematic-depth' /tmp/sw.js
-          grep -q 'site-cinematic-v48.css' /tmp/sw.js
+          cat /tmp/site-luxe.css /tmp/site-atelier.css /tmp/site-cinematic.css /tmp/site-editorial.css > /tmp/site-theme.css
+          grep -q 'floodguard-user-v49-editorial-story' /tmp/sw.js
+          grep -q 'site-editorial-v49.css' /tmp/sw.js
+          grep -q 'site-editorial-v49.css' /tmp/site-pages.css
           grep -q 'FloodGuard Atelier UI v47' /tmp/site-atelier.css
           grep -q 'FloodGuard Cinematic Depth v48' /tmp/site-cinematic.css
-          grep -q 'fg48Aurora' /tmp/site-cinematic.css
-          grep -q 'fg-depth-target' /tmp/site-cinematic.css
-          grep -q 'fg48ScrollProgress' /tmp/site-cinematic.css
+          grep -q 'FloodGuard Editorial Story v49' /tmp/site-editorial.css
+          grep -q 'fg49section' /tmp/site-editorial.css
+          grep -q 'repeat(12' /tmp/site-editorial.css
           grep -q 'feature-bento' /tmp/site-theme.css
           grep -q 'flow-roadmap' /tmp/site-theme.css
           grep -q 'alert-console' /tmp/site-theme.css
@@ -87,8 +90,9 @@ jobs:
           grep -q 'about-story' /tmp/site-theme.css
           grep -q 'installAtelierTheme' /tmp/site-nav.js
           grep -q 'installCinematicTheme' /tmp/site-nav.js
+          grep -q 'installEditorialTheme' /tmp/site-nav.js
           grep -q 'installCinematicDepth' /tmp/site-nav.js
-          grep -q 'FG_SITE_NAV_V5' /tmp/site-nav.js
+          grep -q 'FG_SITE_NAV_V6' /tmp/site-nav.js
           grep -q 'feature-bento' /tmp/features.html
           grep -q 'flow-roadmap' /tmp/how.html
           grep -q 'alert-console' /tmp/alerts.html
@@ -98,4 +102,4 @@ jobs:
           grep -q 'iframe' /tmp/problem.html
           test "$(grep -o '<img' /tmp/problem.html | wc -l)" -ge 3
           grep -q 'FG40_WATCHLIST_EMAIL' /tmp/watch.js
-          echo 'PRODUCTION_CINEMATIC_V48_OK'
+          echo 'PRODUCTION_EDITORIAL_V49_OK'
