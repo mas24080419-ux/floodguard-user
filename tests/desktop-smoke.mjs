@@ -1,4 +1,4 @@
-// FloodGuard desktop regression: homepage + multi-page site + login + watchlist responsiveness
+// FloodGuard desktop regression: homepage + multi-page motion + login + watchlist responsiveness
 import fs from 'node:fs';
 import { chromium } from 'playwright';
 
@@ -9,6 +9,7 @@ const target = local || APP_URL;
 function staticAudit(){
   const core=fs.readFileSync('app-core.html','utf8');
   const watch=fs.readFileSync('watchlist-email-v40.js','utf8');
+  const nav=fs.readFileSync('site-navigation-v2.js','utf8');
   const report={
     appCoreBytes:Buffer.byteLength(core),
     mutationObservers:(core.match(/MutationObserver/g)||[]).length,
@@ -16,11 +17,15 @@ function staticAudit(){
     requestAnimationFrames:(core.match(/requestAnimationFrame\s*\(/g)||[]).length,
     watchlistWholeDocumentObservers:(watch.match(/observe\(document\.documentElement/g)||[]).length,
     watchlistDisconnects:(watch.match(/\.disconnect\(\)/g)||[]).length,
-    legacyRunawayPattern:/new MutationObserver\(\(\)=>mount\(\)\).*observe\(document\.documentElement/s.test(watch)
+    legacyRunawayPattern:/new MutationObserver\(\(\)=>mount\(\)\).*observe\(document\.documentElement/s.test(watch),
+    hasSmoothMotion:/FG_SITE_NAV_V3/.test(nav)&&/view-transition/.test(nav)&&/IntersectionObserver/.test(nav),
+    motionIntervals:(nav.match(/setInterval\s*\(/g)||[]).length
   };
   console.log('STATIC_AUDIT',JSON.stringify(report));
   if(report.legacyRunawayPattern) throw new Error('Runaway Watchlist observer pattern detected');
   if(report.watchlistWholeDocumentObservers>0 && report.watchlistDisconnects===0) throw new Error('Whole-document observer has no disconnect');
+  if(!report.hasSmoothMotion) throw new Error('Smooth multi-page motion module missing');
+  if(report.motionIntervals>0) throw new Error('Navigation animation must not use polling intervals');
   return report;
 }
 
@@ -85,6 +90,9 @@ async function run(){
   if(!homepageVisible) throw new Error('Public website homepage is not visible');
   const homeTitle=await shell.locator('#fgWebsiteHome h1').innerText().catch(()=> '');
   if(!/nguy cơ ngập/i.test(homeTitle)) throw new Error('Homepage hero content missing');
+  const motionStyle=await shell.locator('#fgSmoothMotionV3').count();
+  console.log('SMOOTH_MOTION_STYLE',motionStyle);
+  if(motionStyle!==1) throw new Error('Smooth transition style did not mount exactly once');
   const exploreVisible=await shell.locator('#fgMultiPageExplore').isVisible().catch(()=>false);
   console.log('MULTIPAGE_EXPLORE_VISIBLE',exploreVisible);
   if(!exploreVisible) throw new Error('Homepage multi-page directory is not visible');
@@ -94,19 +102,38 @@ async function run(){
   const featureHref=await shell.locator('#fgWebsiteHome .wh-links a').filter({hasText:'Tính năng'}).first().getAttribute('href').catch(()=>null);
   console.log('HOME_FEATURE_HREF',featureHref);
   if(!featureHref || !featureHref.includes('features.html')) throw new Error('Homepage navigation still points to an in-page anchor');
-  await eventLoopProbe(shell,'HOMEPAGE');
+  await shell.waitForTimeout(650);
+  const visibleRevealCount=await shell.locator('#fgMultiPageExplore .fgmp-card.fg-visible').count().catch(()=>0);
+  console.log('HOME_REVEAL_VISIBLE_COUNT',visibleRevealCount);
+  if(visibleRevealCount<1) throw new Error('Homepage reveal animation did not settle');
+  await eventLoopProbe(shell,'HOMEPAGE_MOTION');
 
-  // Click the real header link, not only inspect href. This catches the old smooth-scroll listener.
+  // Click real links and measure end-to-end page navigation. This catches old in-page scroll and sluggish transitions.
   const navProbe=await context.newPage();
   const navErrors=[];navProbe.on('pageerror',e=>navErrors.push(String(e.message||e)));
   await navProbe.goto(target+'/',{waitUntil:'domcontentloaded',timeout:90000});
   await navProbe.waitForTimeout(700);
+  let t0=Date.now();
   await Promise.all([
     navProbe.waitForURL(/features\.html$/, {timeout:10000}),
     navProbe.locator('#fgWebsiteHome .wh-links a').filter({hasText:'Tính năng'}).first().click()
   ]);
-  if(navErrors.length) throw new Error('Homepage navigation emitted JS errors: '+navErrors.join(' | '));
-  console.log('REAL_HEADER_NAVIGATION_OK',navProbe.url());
+  const homeToFeaturesMs=Date.now()-t0;
+  console.log('NAV_HOME_TO_FEATURES_MS',homeToFeaturesMs);
+  if(homeToFeaturesMs>3000) throw new Error('Homepage to features transition is too slow');
+  await navProbe.waitForTimeout(500);
+  if(await navProbe.locator('#fgSmoothMotionV3').count()!==1) throw new Error('Motion module missing after page navigation');
+  await eventLoopProbe(navProbe,'FEATURES_MOTION');
+  t0=Date.now();
+  await Promise.all([
+    navProbe.waitForURL(/alerts\.html$/, {timeout:10000}),
+    navProbe.locator('.site-links a').filter({hasText:'Cảnh báo'}).first().click()
+  ]);
+  const featuresToAlertsMs=Date.now()-t0;
+  console.log('NAV_FEATURES_TO_ALERTS_MS',featuresToAlertsMs);
+  if(featuresToAlertsMs>3000) throw new Error('Features to alerts transition is too slow');
+  if(navErrors.length) throw new Error('Multi-page navigation emitted JS errors: '+navErrors.join(' | '));
+  console.log('REAL_SMOOTH_NAVIGATION_OK',navProbe.url());
   await navProbe.close();
 
   const pages=[
@@ -123,10 +150,13 @@ async function run(){
     const r=await p.goto(target+'/'+path,{waitUntil:'domcontentloaded',timeout:90000});
     console.log('SITE_PAGE',path,'HTTP',r?.status());
     if(!r||r.status()>=400) throw new Error(`${path} HTTP failure`);
+    await p.waitForTimeout(450);
     const h1=(await p.locator('h1').first().innerText().catch(()=>'' )).trim();
     if(!h1) throw new Error(`${path} missing H1`);
     const brand=await p.locator('.site-brand').first().isVisible().catch(()=>false);
     if(!brand) throw new Error(`${path} missing site header`);
+    const motion=await p.locator('#fgSmoothMotionV3').count();
+    if(motion!==1) throw new Error(`${path} missing smooth motion module`);
     const appHref=await p.locator('a.site-btn.primary').first().getAttribute('href').catch(()=>null);
     if(!appHref || !appHref.includes('?login=1')) throw new Error(`${path} does not link into FloodGuard login`);
     const serious=errs.filter(x=>!/(ResizeObserver loop|Failed to fetch|NetworkError|Load failed)/i.test(x));
@@ -153,7 +183,7 @@ async function run(){
   if(seriousErrors.length) throw new Error('Unexpected page errors: '+seriousErrors.slice(0,5).join(' | '));
 
   await browser.close();
-  console.log('DESKTOP_SMOKE_OK');
+  console.log('SMOOTH_MULTIPAGE_DESKTOP_OK');
 }
 
 run().catch(err=>{console.error('DESKTOP_SMOKE_FAILED',err);process.exit(1)});
