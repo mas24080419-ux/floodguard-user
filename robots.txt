@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /accounts.html
+
+Sitemap: https://floodguard-user.onrender.com/sitemap.xml
