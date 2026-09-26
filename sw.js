@@ -1,5 +1,5 @@
-const CACHE='floodguard-user-v46-premium-visual-system';
-const CORE=['./','./index.html','./app-core.html','./watchlist-email-v40.js','./site-pages.css','./site-luxe.css','./site-navigation-v2.js','./problem.html','./features.html','./how-it-works.html','./alerts.html','./ev.html','./rescue.html','./about.html','./admin.html','./accounts.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
+const CACHE='floodguard-user-v47-atelier-luxury-ui';
+const CORE=['./','./index.html','./app-core.html','./watchlist-email-v40.js','./site-pages.css','./site-luxe.css','./site-atelier-v47.css','./site-navigation-v2.js','./problem.html','./features.html','./how-it-works.html','./alerts.html','./ev.html','./rescue.html','./about.html','./admin.html','./accounts.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)));self.skipWaiting()});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 function navKey(u){
@@ -30,8 +30,8 @@ async function injectWatchlist(r){
 async function injectHomepageTheme(r){
   if(!r)return r;
   const html=await r.text();
-  const tag='<link rel="stylesheet" href="./site-luxe.css?v=46">';
-  const body=html.includes('site-luxe.css')?html:(html.includes('</head>')?html.replace('</head>',tag+'</head>'):tag+html);
+  const tag='<link rel="stylesheet" href="./site-atelier-v47.css?v=47">';
+  const body=html.includes('site-atelier-v47.css')?html:(html.includes('</head>')?html.replace('</head>',tag+'</head>'):tag+html);
   return htmlResponse(r,body);
 }
 self.addEventListener('fetch',e=>{
@@ -51,7 +51,7 @@ self.addEventListener('fetch',e=>{
     return;
   }
   if(u.origin===location.origin){
-    const freshAsset=u.pathname.endsWith('/site-navigation-v2.js')||u.pathname.endsWith('/site-pages.css')||u.pathname.endsWith('/site-luxe.css');
+    const freshAsset=u.pathname.endsWith('/site-navigation-v2.js')||u.pathname.endsWith('/site-pages.css')||u.pathname.endsWith('/site-luxe.css')||u.pathname.endsWith('/site-atelier-v47.css');
     if(freshAsset){
       e.respondWith(fetch(e.request,{cache:'no-store'}).then(r=>{if(r.ok){const x=r.clone();caches.open(CACHE).then(c=>c.put(e.request,x))}return r}).catch(()=>caches.match(e.request)));
       return;
