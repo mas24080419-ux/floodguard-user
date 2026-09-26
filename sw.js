@@ -1,13 +1,13 @@
-const CACHE='floodguard-user-v39-watchlist-email';
-const CORE=['./','./index.html','./app-core.html','./watchlist-email.js','./admin.html','./accounts.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
+const CACHE='floodguard-user-v40-watchlist-freeze-fix';
+const CORE=['./','./index.html','./app-core.html','./watchlist-email-v40.js','./admin.html','./accounts.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)));self.skipWaiting()});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 function navKey(u){if(u.pathname.endsWith('/app-core.html'))return './app-core.html';if(u.pathname.endsWith('/admin.html'))return './admin.html';if(u.pathname.endsWith('/accounts.html'))return './accounts.html';return './index.html'}
 async function injectWatchlist(r){
   if(!r)return r;
   const html=await r.text();
-  const tag='<script src="./watchlist-email.js?v=39"></script>';
-  const body=html.includes('watchlist-email.js')?html:(html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag);
+  const tag='<script src="./watchlist-email-v40.js?v=40"></script>';
+  const body=html.includes('watchlist-email-v40.js')?html:(html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag);
   const h=new Headers(r.headers);h.set('Content-Type','text/html; charset=utf-8');h.set('Cache-Control','no-store');h.delete('Content-Length');
   return new Response(body,{status:r.status,statusText:r.statusText,headers:h});
 }
