@@ -1,4 +1,4 @@
-// FloodGuard desktop regression: diverse layouts + problem-first story + login + watchlist responsiveness
+// FloodGuard desktop regression: premium diverse layouts + problem-first story + login + watchlist responsiveness
 import fs from 'node:fs';
 import { chromium } from 'playwright';
 
@@ -10,7 +10,9 @@ function staticAudit(){
   const core=fs.readFileSync('app-core.html','utf8');
   const watch=fs.readFileSync('watchlist-email-v40.js','utf8');
   const nav=fs.readFileSync('site-navigation-v2.js','utf8');
-  const css=fs.readFileSync('site-pages.css','utf8');
+  const bridgeCss=fs.readFileSync('site-pages.css','utf8');
+  const luxeCss=fs.readFileSync('site-luxe.css','utf8');
+  const css=bridgeCss+'\n'+luxeCss;
   const problem=fs.readFileSync('problem.html','utf8');
   const report={
     mutationObservers:(core.match(/MutationObserver/g)||[]).length,
@@ -21,6 +23,7 @@ function staticAudit(){
     hasSmoothMotion:/FG_SITE_NAV_V4/.test(nav)&&/view-transition/.test(nav)&&/IntersectionObserver/.test(nav),
     motionIntervals:(nav.match(/setInterval\s*\(/g)||[]).length,
     problemHasSources:/23\/09\/2026/.test(problem)&&/World Bank/.test(problem)&&/Nguyên nhân/.test(problem),
+    premiumCss:/FloodGuard Luxe UI v46/.test(luxeCss)&&bridgeCss.includes('site-luxe.css'),
     diverseCss:['feature-bento','flow-roadmap','alert-console','ev-console','rescue-console','about-story'].every(x=>css.includes('.'+x))
   };
   console.log('STATIC_AUDIT',JSON.stringify(report));
@@ -29,6 +32,7 @@ function staticAudit(){
   if(!report.hasSmoothMotion)throw new Error('Smooth multi-page motion module missing');
   if(report.motionIntervals>0)throw new Error('Navigation animation must not use polling intervals');
   if(!report.problemHasSources)throw new Error('Problem page is missing dated evidence/sources');
+  if(!report.premiumCss)throw new Error('Premium design system is not wired correctly');
   if(!report.diverseCss)throw new Error('Distinct page layout system is incomplete');
 }
 
@@ -101,6 +105,6 @@ async function run(){
   await eventLoopProbe(login,'LOGIN');
 
   const serious=[...appErrors,...homeErrors].filter(x=>!/(ResizeObserver loop|Failed to fetch|NetworkError|Load failed)/i.test(x));if(serious.length)throw new Error('Unexpected errors: '+serious.join(' | '));
-  await browser.close();console.log('DIVERSE_LAYOUTS_DESKTOP_OK');
+  await browser.close();console.log('PREMIUM_DIVERSE_LAYOUTS_DESKTOP_OK');
 }
 run().catch(err=>{console.error('DESKTOP_SMOKE_FAILED',err);process.exit(1)});
