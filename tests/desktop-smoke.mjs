@@ -1,4 +1,4 @@
-// FloodGuard desktop regression: premium diverse layouts + problem-first story + login + watchlist responsiveness
+// FloodGuard desktop regression: Atelier v47 + diverse layouts + problem-first story + login + watchlist responsiveness
 import fs from 'node:fs';
 import { chromium } from 'playwright';
 
@@ -12,7 +12,8 @@ function staticAudit(){
   const nav=fs.readFileSync('site-navigation-v2.js','utf8');
   const bridgeCss=fs.readFileSync('site-pages.css','utf8');
   const luxeCss=fs.readFileSync('site-luxe.css','utf8');
-  const css=bridgeCss+'\n'+luxeCss;
+  const atelierCss=fs.readFileSync('site-atelier-v47.css','utf8');
+  const css=bridgeCss+'\n'+luxeCss+'\n'+atelierCss;
   const problem=fs.readFileSync('problem.html','utf8');
   const report={
     mutationObservers:(core.match(/MutationObserver/g)||[]).length,
@@ -23,7 +24,7 @@ function staticAudit(){
     hasSmoothMotion:/FG_SITE_NAV_V4/.test(nav)&&/view-transition/.test(nav)&&/IntersectionObserver/.test(nav),
     motionIntervals:(nav.match(/setInterval\s*\(/g)||[]).length,
     problemHasSources:/23\/09\/2026/.test(problem)&&/World Bank/.test(problem)&&/Nguyên nhân/.test(problem),
-    premiumCss:/FloodGuard Luxe UI v46/.test(luxeCss)&&bridgeCss.includes('site-luxe.css'),
+    premiumCss:/FloodGuard Atelier UI v47/.test(atelierCss)&&bridgeCss.includes('site-atelier-v47.css')&&atelierCss.includes('site-luxe.css'),
     diverseCss:['feature-bento','flow-roadmap','alert-console','ev-console','rescue-console','about-story'].every(x=>css.includes('.'+x))
   };
   console.log('STATIC_AUDIT',JSON.stringify(report));
@@ -32,7 +33,7 @@ function staticAudit(){
   if(!report.hasSmoothMotion)throw new Error('Smooth multi-page motion module missing');
   if(report.motionIntervals>0)throw new Error('Navigation animation must not use polling intervals');
   if(!report.problemHasSources)throw new Error('Problem page is missing dated evidence/sources');
-  if(!report.premiumCss)throw new Error('Premium design system is not wired correctly');
+  if(!report.premiumCss)throw new Error('Atelier v47 design system is not wired correctly');
   if(!report.diverseCss)throw new Error('Distinct page layout system is incomplete');
 }
 
@@ -59,9 +60,10 @@ async function run(){
 
   const home=await context.newPage();const homeErrors=[];home.on('pageerror',e=>homeErrors.push(String(e.message||e)));
   r=await home.goto(target+'/',{waitUntil:'domcontentloaded',timeout:90000});if(!r||r.status()>=400)throw new Error('homepage HTTP failure');
-  await home.waitForTimeout(1000);
+  await home.waitForTimeout(1200);
   if(!await home.locator('#fgWebsiteHome').isVisible().catch(()=>false))throw new Error('homepage hidden');
   if(await home.locator('#fgSmoothMotionV4').count()!==1)throw new Error('motion module missing on homepage');
+  if(await home.locator('link[href*="site-atelier-v47.css"]').count()<1)throw new Error('Atelier stylesheet missing on homepage');
   const labels=await home.locator('#fgWebsiteHome .wh-links a').allTextContents();if(norm(labels[0])!=='vấn đề')throw new Error('Problem not first in navigation');
   await eventLoopProbe(home,'HOMEPAGE');
 
@@ -78,7 +80,7 @@ async function run(){
     const p=await context.newPage();const errs=[];p.on('pageerror',e=>errs.push(String(e.message||e)));
     const res=await p.goto(target+'/'+path,{waitUntil:'domcontentloaded',timeout:90000});
     if(!res||res.status()>=400)throw new Error(path+' HTTP failure');
-    await p.waitForTimeout(500);
+    await p.waitForTimeout(700);
     if(!await p.locator(selector).first().isVisible().catch(()=>false))throw new Error(path+' unique layout missing: '+selector);
     if(!(await p.locator('h1').first().innerText().catch(()=>'' )).trim())throw new Error(path+' missing H1');
     if((await p.locator('.site-links a').first().innerText()).trim().toLowerCase()!=='vấn đề')throw new Error(path+' nav order broken');
@@ -91,7 +93,7 @@ async function run(){
   }
 
   const nav=await context.newPage();
-  await nav.goto(target+'/',{waitUntil:'domcontentloaded',timeout:90000});await nav.waitForTimeout(600);
+  await nav.goto(target+'/',{waitUntil:'domcontentloaded',timeout:90000});await nav.waitForTimeout(700);
   const t0=Date.now();await Promise.all([nav.waitForURL(/problem\.html$/,{timeout:10000}),nav.locator('#fgWebsiteHome .wh-links a').filter({hasText:'Vấn đề'}).first().click()]);
   if(Date.now()-t0>3000)throw new Error('Homepage to problem transition too slow');
   const t1=Date.now();await Promise.all([nav.waitForURL(/features\.html$/,{timeout:10000}),nav.locator('.site-links a').filter({hasText:'Tính năng'}).first().click()]);
@@ -100,11 +102,11 @@ async function run(){
 
   const login=await context.newPage();
   r=await login.goto(target+'/?login=1',{waitUntil:'domcontentloaded',timeout:90000});if(!r||r.status()>=400)throw new Error('login HTTP failure');
-  await login.waitForTimeout(400);if(!await login.locator('#loginEmail').isVisible().catch(()=>false))throw new Error('login form hidden');
+  await login.waitForTimeout(600);if(!await login.locator('#loginEmail').isVisible().catch(()=>false))throw new Error('login form hidden');
   await login.locator('#loginEmail').fill('smoke.test@example.com');if(await login.locator('#loginEmail').inputValue()!=='smoke.test@example.com')throw new Error('login input not responsive');
   await eventLoopProbe(login,'LOGIN');
 
   const serious=[...appErrors,...homeErrors].filter(x=>!/(ResizeObserver loop|Failed to fetch|NetworkError|Load failed)/i.test(x));if(serious.length)throw new Error('Unexpected errors: '+serious.join(' | '));
-  await browser.close();console.log('PREMIUM_DIVERSE_LAYOUTS_DESKTOP_OK');
+  await browser.close();console.log('ATELIER_V47_DESKTOP_OK');
 }
 run().catch(err=>{console.error('DESKTOP_SMOKE_FAILED',err);process.exit(1)});
