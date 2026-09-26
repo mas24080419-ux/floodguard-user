@@ -26,8 +26,7 @@ function staticAudit(){
 
 async function eventLoopProbe(page,label){
   const result=await page.evaluate(async()=>{
-    const start=performance.now();
-    const delays=[];let last=start;
+    const start=performance.now();const delays=[];let last=start;
     for(let i=0;i<40;i++){
       await new Promise(r=>setTimeout(r,25));
       const now=performance.now();delays.push(now-last-25);last=now;
@@ -86,10 +85,29 @@ async function run(){
   if(!homepageVisible) throw new Error('Public website homepage is not visible');
   const homeTitle=await shell.locator('#fgWebsiteHome h1').innerText().catch(()=> '');
   if(!/nguy cơ ngập/i.test(homeTitle)) throw new Error('Homepage hero content missing');
+  const exploreVisible=await shell.locator('#fgMultiPageExplore').isVisible().catch(()=>false);
+  console.log('MULTIPAGE_EXPLORE_VISIBLE',exploreVisible);
+  if(!exploreVisible) throw new Error('Homepage multi-page directory is not visible');
+  const legacyEvVisible=await shell.locator('#fgWebsiteHome #ev').isVisible().catch(()=>false);
+  console.log('LEGACY_EV_SECTION_VISIBLE',legacyEvVisible);
+  if(legacyEvVisible) throw new Error('Homepage still exposes long-scroll EV section');
   const featureHref=await shell.locator('#fgWebsiteHome .wh-links a').filter({hasText:'Tính năng'}).first().getAttribute('href').catch(()=>null);
   console.log('HOME_FEATURE_HREF',featureHref);
   if(!featureHref || !featureHref.includes('features.html')) throw new Error('Homepage navigation still points to an in-page anchor');
   await eventLoopProbe(shell,'HOMEPAGE');
+
+  // Click the real header link, not only inspect href. This catches the old smooth-scroll listener.
+  const navProbe=await context.newPage();
+  const navErrors=[];navProbe.on('pageerror',e=>navErrors.push(String(e.message||e)));
+  await navProbe.goto(target+'/',{waitUntil:'domcontentloaded',timeout:90000});
+  await navProbe.waitForTimeout(700);
+  await Promise.all([
+    navProbe.waitForURL(/features\.html$/, {timeout:10000}),
+    navProbe.locator('#fgWebsiteHome .wh-links a').filter({hasText:'Tính năng'}).first().click()
+  ]);
+  if(navErrors.length) throw new Error('Homepage navigation emitted JS errors: '+navErrors.join(' | '));
+  console.log('REAL_HEADER_NAVIGATION_OK',navProbe.url());
+  await navProbe.close();
 
   const pages=[
     ['features.html','Tính năng'],
