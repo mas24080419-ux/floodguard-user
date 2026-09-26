@@ -1,4 +1,4 @@
-const CACHE='floodguard-user-v41-multipage-site';
+const CACHE='floodguard-user-v42-multipage-site';
 const CORE=['./','./index.html','./app-core.html','./watchlist-email-v40.js','./site-pages.css','./site-navigation-v2.js','./features.html','./how-it-works.html','./alerts.html','./ev.html','./rescue.html','./about.html','./admin.html','./accounts.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)));self.skipWaiting()});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
@@ -36,6 +36,11 @@ self.addEventListener('fetch',e=>{
     return;
   }
   if(u.origin===location.origin){
+    const freshAsset=u.pathname.endsWith('/site-navigation-v2.js')||u.pathname.endsWith('/site-pages.css');
+    if(freshAsset){
+      e.respondWith(fetch(e.request,{cache:'no-store'}).then(r=>{if(r.ok){const x=r.clone();caches.open(CACHE).then(c=>c.put(e.request,x))}return r}).catch(()=>caches.match(e.request)));
+      return;
+    }
     e.respondWith(caches.match(e.request).then(hit=>hit||fetch(e.request).then(r=>{if(r.ok){const x=r.clone();caches.open(CACHE).then(c=>c.put(e.request,x))}return r})));
   }
 });
