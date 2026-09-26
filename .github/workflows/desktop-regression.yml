@@ -69,18 +69,19 @@ jobs:
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/ev.html -o /tmp/ev.html
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/rescue.html -o /tmp/rescue.html
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/about.html -o /tmp/about.html
+          cat /tmp/site-luxe.css /tmp/site-atelier.css > /tmp/site-theme.css
           grep -q 'floodguard-user-v47-atelier-luxury-ui' /tmp/sw.js
           grep -q 'site-atelier-v47.css' /tmp/sw.js
           grep -q 'site-atelier-v47.css' /tmp/site-pages.css
           grep -q 'FloodGuard Atelier UI v47' /tmp/site-atelier.css
           grep -q 'atelierHeroIn' /tmp/site-atelier.css
           grep -q 'wh-grid' /tmp/site-atelier.css
-          grep -q 'feature-bento' /tmp/site-atelier.css
-          grep -q 'flow-roadmap' /tmp/site-atelier.css
-          grep -q 'alert-console' /tmp/site-atelier.css
-          grep -q 'ev-console' /tmp/site-atelier.css
-          grep -q 'rescue-console' /tmp/site-atelier.css
-          grep -q 'about-story' /tmp/site-atelier.css
+          grep -q 'feature-bento' /tmp/site-theme.css
+          grep -q 'flow-roadmap' /tmp/site-theme.css
+          grep -q 'alert-console' /tmp/site-theme.css
+          grep -q 'ev-console' /tmp/site-theme.css
+          grep -q 'rescue-console' /tmp/site-theme.css
+          grep -q 'about-story' /tmp/site-theme.css
           grep -q 'installAtelierTheme' /tmp/site-nav.js
           grep -q 'FG_SITE_NAV_V4' /tmp/site-nav.js
           grep -q 'VẤN ĐỀ NGẬP ĐÔ THỊ' /tmp/problem.html
