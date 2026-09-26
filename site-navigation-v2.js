@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-if(window.__FG_SITE_NAV_V5__)return;window.__FG_SITE_NAV_V5__=true;
+if(window.__FG_SITE_NAV_V6__)return;window.__FG_SITE_NAV_V6__=true;
 function installAtelierTheme(){
  if(document.querySelector('link[data-fg-atelier-v47]')||[...document.styleSheets].some(s=>String(s.href||'').includes('site-atelier-v47.css')))return;
  const l=document.createElement('link');l.rel='stylesheet';l.href='./site-atelier-v47.css?v=47';l.dataset.fgAtelierV47='1';document.head.appendChild(l);
@@ -8,6 +8,11 @@ function installAtelierTheme(){
 function installCinematicTheme(){
  if(document.querySelector('link[data-fg-cinematic-v48]')||[...document.styleSheets].some(s=>String(s.href||'').includes('site-cinematic-v48.css')))return;
  const l=document.createElement('link');l.rel='stylesheet';l.href='./site-cinematic-v48.css?v=48';l.dataset.fgCinematicV48='1';document.head.appendChild(l);
+}
+function installEditorialTheme(){
+ document.documentElement.dataset.fgEditorial='1';
+ if(document.querySelector('link[data-fg-editorial-v49]')||[...document.styleSheets].some(s=>String(s.href||'').includes('site-editorial-v49.css')))return;
+ const l=document.createElement('link');l.rel='stylesheet';l.href='./site-editorial-v49.css?v=49';l.dataset.fgEditorialV49='1';document.head.appendChild(l);
 }
 const ROUTES={
  'trang chủ':'./',
@@ -28,10 +33,7 @@ function ensureOrderedLinks(container,home=false){
  const existing=[...container.querySelectorAll('a')];
  const map=new Map(existing.map(a=>[norm(a.textContent).replace(/→/g,'').trim(),a]));
  const frag=document.createDocumentFragment();
- if(home){
-  const h=map.get('trang chủ');
-  if(h)frag.appendChild(h);
- }
+ if(home){const h=map.get('trang chủ');if(h)frag.appendChild(h)}
  ORDER.forEach(label=>{
   const key=norm(label);let a=map.get(key);
   if(!a){a=document.createElement('a');a.textContent=label}
@@ -163,6 +165,6 @@ function pageEntrance(){
  requestAnimationFrame(()=>requestAnimationFrame(()=>h.classList.remove('fg-enter')));
  window.addEventListener('pageshow',()=>h.classList.remove('fg-page-leaving'));
 }
-function start(){installAtelierTheme();installCinematicTheme();installMotionStyles();rewriteHomeNav();normalizeSiteNav();mobileMenu();markActive();prefetchLinks();smoothNavigation();revealContent();installCinematicDepth();pageEntrance()}
+function start(){installAtelierTheme();installCinematicTheme();installEditorialTheme();installMotionStyles();rewriteHomeNav();normalizeSiteNav();mobileMenu();markActive();prefetchLinks();smoothNavigation();revealContent();installCinematicDepth();pageEntrance()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
