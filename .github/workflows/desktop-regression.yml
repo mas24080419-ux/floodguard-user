@@ -61,7 +61,7 @@ jobs:
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/ev.html -o /tmp/ev.html
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/rescue.html -o /tmp/rescue.html
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/about.html -o /tmp/about.html
-          grep -q 'floodguard-user-v41-multipage-site' /tmp/sw.js
+          grep -q 'floodguard-user-v42-multipage-site' /tmp/sw.js
           grep -q 'FG40_WATCHLIST_EMAIL' /tmp/watch.js
           grep -q 'site-navigation-v2.js' /tmp/index.html
           grep -q 'NỀN TẢNG FLOODGUARD' /tmp/features.html
