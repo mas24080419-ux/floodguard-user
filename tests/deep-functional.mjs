@@ -8,12 +8,10 @@ const failures=[],passes=[];
 const assert=(v,m)=>v?passes.push('PASS '+m):failures.push(m);
 const text=async p=>(await p.locator('body').innerText().catch(()=>''))||'';
 
-// 1. Google Login: use the same auth entry path users see, but do not complete a real Google identity consent in CI.
+// 1. Google Login: validate that the visible control initiates Supabase Google OAuth.
 const login=await ctx.newPage();
 await login.goto(BASE+'/?login=1',{waitUntil:'domcontentloaded',timeout:60000});
 await login.waitForTimeout(1200);
-const loginButtons=await login.locator('button:visible,a:visible').evaluateAll(es=>es.map(e=>(e.innerText||e.textContent||'').trim()).filter(Boolean));
-console.log('LOGIN_CONTROLS',JSON.stringify(loginButtons.slice(0,40)));
 const google=login.getByRole('button',{name:/google/i}).first();
 const googleLink=login.getByRole('link',{name:/google/i}).first();
 const googleControl=await google.isVisible().catch(()=>false)?google:googleLink;
@@ -25,49 +23,55 @@ if(await googleControl.isVisible().catch(()=>false)){await googleControl.click()
 assert(oauthSeen,'Google Login initiates Supabase Google OAuth');
 await login.close();
 
-// Open app shell. Some operational panels are intentionally session-gated; engine and map initialization can still be validated.
 const page=await ctx.newPage();
 page.on('pageerror',e=>{if(!/ResizeObserver loop|Failed to fetch|NetworkError|Load failed/i.test(e.message))failures.push('JS error: '+e.message)});
 await page.goto(BASE+'/app-core.html',{waitUntil:'domcontentloaded',timeout:60000});
 await page.waitForTimeout(6000);
-const appText=await text(page);
-console.log('APP_TEXT_HEAD',JSON.stringify(appText.slice(0,1200)));
-const visibleInputs=await page.locator('input:visible').evaluateAll(es=>es.map(e=>({id:e.id,ph:e.placeholder,aria:e.getAttribute('aria-label'),name:e.name}))).catch(()=>[]);
-const visibleButtons=await page.locator('button:visible,a:visible').evaluateAll(es=>es.map(e=>({id:e.id,text:(e.innerText||e.textContent||'').trim().slice(0,90)})).filter(x=>x.text)).catch(()=>[]);
-console.log('APP_INPUTS',JSON.stringify(visibleInputs.slice(0,30)));
-console.log('APP_CONTROLS',JSON.stringify(visibleButtons.slice(0,50)));
+let appText=await text(page);
 
 // 2. Map.
 const leaflet=page.locator('.leaflet-map-pane,.leaflet-tile-pane,.leaflet-container');
 assert((await leaflet.count().catch(()=>0))>0,'Leaflet map initialized');
 const visibleLeaflet=page.locator('.leaflet-container:visible');
-if(await visibleLeaflet.count()){const box=await visibleLeaflet.first().boundingBox();assert(!!box&&box.width>300&&box.height>200,'Visible map has usable dimensions')}else passes.push('INFO Map DOM initialized; operational view is session-gated');
+if(await visibleLeaflet.count()){const box=await visibleLeaflet.first().boundingBox();assert(!!box&&box.width>300&&box.height>200,'Visible map has usable dimensions')}else failures.push('Map DOM exists but no visible operational map');
 
-// 3. Prediction.
-const modelDiag=await page.evaluate(()=>{const m=window.FG15MultiModel;if(!m)return{available:false};const keys=Object.keys(m);const fn=typeof m.predict==='function'?String(m.predict).slice(0,500):'';const samples=[];const candidates=[];for(const k of keys){const v=m[k];if(Array.isArray(v)){for(const x of v.slice(0,20)){if(typeof x==='string')candidates.push(x);else if(x&&typeof x==='object'){for(const p of ['street','name','label','road'])if(typeof x[p]==='string')candidates.push(x[p])}}}else if(v&&typeof v==='object'){for(const kk of Object.keys(v).slice(0,30))if(typeof kk==='string')candidates.push(kk)}}for(const street of [...new Set([...candidates,'Thảo Điền','Nguyễn Hữu Cảnh','Điện Biên Phủ','Võ Văn Ngân'])].slice(0,80)){try{const low=m.predict?.(street,20,null),high=m.predict?.(street,100,null);samples.push({street,low,high});const le=Number(low?.ensemble),he=Number(high?.ensemble);if(Number.isFinite(le)&&Number.isFinite(he))return{available:true,keys,fn,street,low:le,high:he,candidates:candidates.slice(0,30)}}catch(_){}}return{available:typeof m.predict==='function',keys,fn,candidates:candidates.slice(0,30),samples:samples.slice(0,8),noResult:true}}).catch(e=>({available:false,error:String(e)}));
+// 3. Prediction: use actual governed street keys exposed by the model audit.
+const modelDiag=await page.evaluate(()=>{const m=window.FG15MultiModel;if(!m||typeof m.predict!=='function')return{available:false};const streets=Object.keys(m.AUDIT?.core_street_counts||{});const tried=[];for(const street of streets){try{const low=m.predict(street,20,null),high=m.predict(street,100,null);const le=Number(low?.ensemble),he=Number(high?.ensemble);tried.push({street,le,he,ln:low?.availableN,hn:high?.availableN});if(Number.isFinite(le)&&Number.isFinite(he))return{available:true,street,low:le,high:he,lowN:low.availableN,highN:high.availableN,streets:streets.length}}catch(_){}}return{available:true,noResult:true,streets:streets.length,tried:tried.slice(0,20)}}).catch(e=>({available:false,error:String(e)}));
 console.log('MODEL_DIAG',JSON.stringify(modelDiag));
 assert(modelDiag.available,'Prediction engine available');
-if(!modelDiag.noResult){assert(modelDiag.low>=0&&modelDiag.high>=0,'Prediction returns non-negative finite depth');passes.push(`MODEL ${modelDiag.street}: 20mm=${modelDiag.low}, 100mm=${modelDiag.high}`)}else passes.push('INFO Prediction engine loaded; no supported street could be inferred without an authenticated route state');
+assert(!modelDiag.noResult&&Number.isFinite(modelDiag.low)&&Number.isFinite(modelDiag.high),'Prediction returns finite ensemble depth for a governed street');
+if(!modelDiag.noResult){assert(modelDiag.low>=0&&modelDiag.high>=0,'Prediction returns non-negative depth');assert(modelDiag.lowN>0&&modelDiag.highN>0,'Prediction uses at least one available model');passes.push(`MODEL ${modelDiag.street}: 20mm=${modelDiag.low}, 100mm=${modelDiag.high}`)}
 
-// 4. Route.
-const routePresent=/Đường đi|Tìm đường|Điểm đi|Điểm đến|route/i.test(appText)||visibleInputs.some(x=>/(điểm đi|điểm đến|origin|destination|from|to)/i.test([x.id,x.ph,x.aria,x.name].join(' ')));
-assert(routePresent||/đăng nhập/i.test(appText),'Route module or its login gate is present');
+// 4. Route: open the actual command/search UI, discover its controls, then run a real route if the pair is available.
+const command=page.locator('#fg12Command');
+assert(await command.isVisible().catch(()=>false),'Route/search command control visible');
+if(await command.isVisible().catch(()=>false)) await command.click().catch(()=>{});
+await page.waitForTimeout(800);
+const routeInputs=await page.locator('input:visible').evaluateAll(es=>es.map((e,i)=>({i,id:e.id||'',ph:e.placeholder||'',aria:e.getAttribute('aria-label')||'',name:e.name||''}))).catch(()=>[]);
+const routeButtons=await page.locator('button:visible,a:visible').evaluateAll(es=>es.map((e,i)=>({i,id:e.id||'',text:(e.innerText||e.textContent||'').trim()})).filter(x=>x.text)).catch(()=>[]);
+console.log('ROUTE_INPUTS',JSON.stringify(routeInputs));
+console.log('ROUTE_BUTTONS',JSON.stringify(routeButtons.slice(0,80)));
+const from=routeInputs.find(x=>/(điểm đi|xuất phát|origin|from|bắt đầu)/i.test([x.id,x.ph,x.aria,x.name].join(' ')));
+const to=routeInputs.find(x=>/(điểm đến|destination|to|kết thúc)/i.test([x.id,x.ph,x.aria,x.name].join(' ')));
+const go=routeButtons.find(x=>/(đường đi|tìm đường|chỉ đường|route|tìm kiếm)/i.test(x.text));
+if(from&&to&&go){const ins=page.locator('input:visible');await ins.nth(from.i).fill('Thảo Điền, TP.HCM');await ins.nth(to.i).fill('Quận 1, TP.HCM');const btns=page.locator('button:visible,a:visible');await btns.nth(go.i).click().catch(()=>{});await page.waitForTimeout(12000);const rs=await page.evaluate(()=>{const s=window.FG70_ROUTE_STATE;return s?{from:s.from,to:s.to,n:Array.isArray(s.analyses)?s.analyses.length:0,selected:s.selectedIndex}:null}).catch(()=>null);console.log('ROUTE_STATE',JSON.stringify(rs));assert(!!rs&&rs.n>0,'Route search produces analyzed route state')}else{appText=await text(page);assert(/Thảo Điền.*Quận 1|Phân tích tuyến|Lộ trình/i.test(appText),'Route module remains available even when command panel uses non-input controls');passes.push('INFO Route panel did not expose a stable fillable origin/destination pair to headless CI')}
 
 // 5. EV.
+appText=await text(page);
 assert(/Trạm sạc|EV/i.test(appText),'EV charging capability present in app');
-assert(visibleButtons.some(x=>/EV|trạm sạc|trạm thay thế/i.test(x.text))||/trạm thay thế|trạm sạc/i.test(appText),'EV station/alternative UI exposed');
+assert((await page.locator('button:visible,a:visible').filter({hasText:/EV|trạm sạc|trạm thay thế/i}).count().catch(()=>0))>0||/trạm thay thế|trạm sạc/i.test(appText),'EV station/alternative UI exposed');
 
-// 6. Alerts / Watchlist. The implementation must be loaded, and authenticated mutation must never be attempted without a session.
+// 6. Alerts / Watchlist.
 const watchImpl=await page.evaluate(()=>!!window.__FG40_WATCHLIST_EMAIL__).catch(()=>false);
 assert(watchImpl,'Watchlist implementation loaded');
-if(await page.locator('#fg40Watch').count())passes.push('PASS Watchlist component mounted');else passes.push('INFO Watchlist panel waits for authenticated alert host');
+assert((await page.locator('#fg40Watch').count())>0,'Watchlist component mounted');
 
-// 7. SOS / Rescue — no false production incident is created.
+// 7. SOS / Rescue — validate without creating a false emergency incident.
 const rescue=await ctx.newPage(),rr=await rescue.goto(BASE+'/rescue.html',{waitUntil:'domcontentloaded',timeout:45000});
 assert(!!rr&&rr.ok(),'Rescue page loads');assert(/SOS|cứu hộ|hỗ trợ/i.test(await text(rescue)),'Rescue flow discoverable');await rescue.close();
 assert(/SOS|cứu hộ|rescue/i.test(appText),'SOS capability present in app');
 
-// 8. Admin.
+// 8. Admin — destructive operation is tested only for rejection without credentials.
 const admin=await ctx.newPage(),ar=await admin.goto(BASE+'/admin.html',{waitUntil:'domcontentloaded',timeout:45000});
 assert(!!ar&&ar.ok(),'Admin page loads');await admin.waitForTimeout(1200);assert(/đăng nhập|admin|quản trị|không có quyền|unauthorized/i.test(await text(admin)),'Admin UI has auth/authorization boundary');await admin.close();
 const api=await playwrightRequest.newContext();
