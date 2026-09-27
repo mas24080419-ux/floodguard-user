@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-if(window.__FG_SITE_NAV_V57__)return;window.__FG_SITE_NAV_V57__=true;
+if(window.__FG_SITE_NAV_V58__)return;window.__FG_SITE_NAV_V58__=true;
 
 const ROUTES={
  'trang chủ':'./',
@@ -30,7 +30,7 @@ function installThemes(){
  installStylesheet('./site-motion-v53.css?v=53','motion-v53');
  installStylesheet('./site-motion-v54.css?v=55','motion-v55');
  installStylesheet('./site-motion-v56.css?v=56','motion-v56');
- installStylesheet('./site-mona-v57.css?v=57','mona-v57');
+ installStylesheet('./site-mona-v57.css?v=58','mona-v57');
  document.documentElement.dataset.fgEditorial='1';
  document.documentElement.dataset.fgLifestyle='1';
  document.documentElement.dataset.fgMona='1';
@@ -72,8 +72,8 @@ function insertQuickBar(root){
  hero.insertAdjacentElement('afterend',wrap);
 }
 function setupHeroSlider(root){
- const hero=root?.querySelector('.wh-hero');if(!hero||hero.dataset.fg57Ready==='1')return;
- hero.dataset.fg57Ready='1';
+ const hero=root?.querySelector('.wh-hero');if(!hero||hero.dataset.fg58Ready==='1')return;
+ hero.dataset.fg58Ready='1';
  const copy=hero.children[0];if(!copy)return;copy.classList.add('fg51-hero-copy');
  const imgWidth=innerWidth<=720?1000:(innerWidth<=1024?1200:1600);
  const photo=n=>`https://commons.wikimedia.org/wiki/Special:FilePath/${n}.jpg?width=${imgWidth}`;
@@ -103,15 +103,15 @@ function setupHeroSlider(root){
   try{
    if(img.decode)await img.decode();
    else if(!img.complete)await new Promise(resolve=>{img.addEventListener('load',resolve,{once:true});img.addEventListener('error',resolve,{once:true})});
-  }catch(_){/* Keep the loaded image even if decode() rejects. */}
+  }catch(_){ }
   decoded.add(i);
  };
 
  decodeSlide(0);
  const warm=async()=>{for(let i=1;i<slides.length;i++)await decodeSlide(i)};
- if('requestIdleCallback'in window)requestIdleCallback(()=>warm(),{timeout:2200});else setTimeout(()=>warm(),500);
+ if('requestIdleCallback'in window)requestIdleCallback(()=>warm(),{timeout:1600});else setTimeout(()=>warm(),350);
 
- let index=0,timer=null,paused=false,transitioning=false,pendingIndex=null;
+ let index=0,timer=null,transitioning=false,pendingIndex=null;
  const renderCopy=s=>{copy.innerHTML=`<span class="wh-eyebrow">${s.label}</span><h1>${s.title}</h1><p>${s.body}</p><div class="wh-hero-actions"><a class="wh-btn primary" href="${s.href}">${s.cta}</a><a class="wh-btn" href="${s.secondaryHref}">${s.secondary}</a></div>`};
  const activateVisual=next=>{
   slideEls.forEach((el,i)=>el.classList.toggle('is-active',i===next));
@@ -134,8 +134,6 @@ function setupHeroSlider(root){
   if(instant||reduced()){
    activateVisual(index);renderCopy(s);copy.classList.remove('is-changing');transitioning=false;restartProgress();return;
   }
-
-  /* Start the photo crossfade first, then let the new copy rise in a fraction later. */
   copy.classList.add('is-changing');
   requestAnimationFrame(()=>requestAnimationFrame(()=>activateVisual(index)));
   setTimeout(()=>{
@@ -145,14 +143,16 @@ function setupHeroSlider(root){
   setTimeout(finishTransition,1750);
   restartProgress();
  };
- const restart=()=>{if(reduced()||paused)return;if(timer)clearInterval(timer);timer=setInterval(()=>paint(index+1),7600);restartProgress()};
+ const restart=()=>{
+  if(reduced())return;
+  if(timer)clearInterval(timer);
+  timer=setInterval(()=>paint(index+1),7600);
+  restartProgress();
+ };
  dotEls.forEach((b,i)=>b.addEventListener('click',()=>{paint(i);restart()}));
  controls.querySelector('.fg51-prev')?.addEventListener('click',()=>{paint(index-1);restart()});
  controls.querySelector('.fg51-next')?.addEventListener('click',()=>{paint(index+1);restart()});
- hero.addEventListener('mouseenter',()=>{paused=true;if(timer)clearInterval(timer);progress.classList.remove('is-running')});
- hero.addEventListener('mouseleave',()=>{paused=false;restart()});
- hero.addEventListener('focusin',()=>{paused=true;if(timer)clearInterval(timer);progress.classList.remove('is-running')});
- hero.addEventListener('focusout',()=>{paused=false;restart()});
+ /* Intentionally keep autoplay running while the pointer is over the hero, matching the reference site. */
  document.addEventListener('visibilitychange',()=>{if(document.hidden){if(timer)clearInterval(timer);progress.classList.remove('is-running')}else restart()});
  paint(0,true);restart();
 }
