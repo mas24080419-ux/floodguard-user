@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-if(window.__FG_SITE_NAV_V54__)return;window.__FG_SITE_NAV_V54__=true;
+if(window.__FG_SITE_NAV_V55__)return;window.__FG_SITE_NAV_V55__=true;
 
 const ROUTES={
  'trang chủ':'./',
@@ -28,7 +28,7 @@ function installThemes(){
  installStylesheet('./site-travel-v51.css?v=51','travel-v51');
  installStylesheet('./site-mona-v52.css?v=52','mona-v52');
  installStylesheet('./site-motion-v53.css?v=53','motion-v53');
- installStylesheet('./site-motion-v54.css?v=54','motion-v54');
+ installStylesheet('./site-motion-v54.css?v=55','motion-v55');
  document.documentElement.dataset.fgEditorial='1';
  document.documentElement.dataset.fgLifestyle='1';
  document.documentElement.dataset.fgMona='1';
@@ -47,7 +47,6 @@ function ensureOrderedLinks(container,home=false){
  existing.forEach(a=>{const k=linkKey(a);if(!ROUTES[k]&&k!=='trang chủ'&&!HIDDEN_KEYS.has(k)&&!isHiddenLink(a))frag.appendChild(a)});
  container.replaceChildren(frag);
 }
-
 function addUtilityBar(root){
  if(document.querySelector('.fg52-topbar'))return;
  const bar=document.createElement('div');bar.className='fg52-topbar';
@@ -55,21 +54,21 @@ function addUtilityBar(root){
  const nav=root?.querySelector?.('.wh-nav');
  if(root&&nav)root.insertBefore(bar,nav);else{const siteNav=document.querySelector('.site-nav');if(siteNav)siteNav.before(bar)}
 }
-
 function restoreHomepageSections(root){
  ['features','how','watchlist','ev','rescue','about'].forEach(id=>{const el=root.querySelector('#'+id);if(el)el.style.removeProperty('display')});
  document.getElementById('fgMultiPageExplore')?.remove();
 }
-
 function setupHeroSlider(root){
- const hero=root?.querySelector('.wh-hero');if(!hero||hero.dataset.fg54Ready==='1')return;
- hero.dataset.fg54Ready='1';
+ const hero=root?.querySelector('.wh-hero');if(!hero||hero.dataset.fg55Ready==='1')return;
+ hero.dataset.fg55Ready='1';
  const copy=hero.children[0];if(!copy)return;copy.classList.add('fg51-hero-copy');
+ const imgWidth=innerWidth<=1024?1200:1600;
+ const photo=n=>`https://commons.wikimedia.org/wiki/Special:FilePath/${n}.jpg?width=${imgWidth}`;
  const slides=[
-  {label:'FloodGuard HCMC',title:'Chủ động trước nguy cơ ngập đô thị.',body:'Kiểm tra khu vực, xem dự báo và đánh giá tuyến đường trước khi bắt đầu hành trình.',cta:'Dùng FloodGuard',href:'./?login=1',secondary:'Xem vấn đề ngập',secondaryHref:'./problem.html',image:'https://commons.wikimedia.org/wiki/Special:FilePath/Street_flood_in_Saigon_(10728572006).jpg?width=2000'},
-  {label:'Dự báo ngập',title:'Thử kịch bản mưa trước khi bạn lên đường.',body:'Thay đổi lượng mưa đầu vào để xem mức ngập ước tính và mức rủi ro theo dữ liệu hiện có.',cta:'Thử dự báo',href:'./?login=1',secondary:'Cách hoạt động',secondaryHref:'./how-it-works.html',image:'https://commons.wikimedia.org/wiki/Special:FilePath/Street_flood_in_Saigon_(10728890034).jpg?width=2000'},
-  {label:'Đường đi',title:'Nhìn rủi ro trên cả hành trình, không chỉ một điểm.',body:'FloodGuard hỗ trợ nhận biết đoạn cần chú ý và so sánh phương án di chuyển khi điều kiện mưa thay đổi.',cta:'Kiểm tra tuyến đường',href:'./?login=1',secondary:'Xem tính năng',secondaryHref:'./features.html',image:'https://commons.wikimedia.org/wiki/Special:FilePath/Street_flood_in_Saigon_(10729260963).jpg?width=2000'},
-  {label:'SOS Rescue',title:'Khi cần hỗ trợ, chuyển nhanh sang cứu hộ.',body:'Gửi yêu cầu SOS, chia sẻ thông tin vị trí và theo dõi trạng thái xử lý trong cùng hệ thống.',cta:'Mở cứu hộ',href:'./rescue.html',secondary:'Giới thiệu',secondaryHref:'./about.html',image:'https://commons.wikimedia.org/wiki/Special:FilePath/Street_flood_in_Saigon_(10728572006).jpg?width=2000'}
+  {label:'FloodGuard HCMC',title:'Chủ động trước nguy cơ ngập đô thị.',body:'Kiểm tra khu vực, xem dự báo và đánh giá tuyến đường trước khi bắt đầu hành trình.',cta:'Dùng FloodGuard',href:'./?login=1',secondary:'Xem vấn đề ngập',secondaryHref:'./problem.html',image:photo('Street_flood_in_Saigon_(10728572006)')},
+  {label:'Dự báo ngập',title:'Thử kịch bản mưa trước khi bạn lên đường.',body:'Thay đổi lượng mưa đầu vào để xem mức ngập ước tính và mức rủi ro theo dữ liệu hiện có.',cta:'Thử dự báo',href:'./?login=1',secondary:'Cách hoạt động',secondaryHref:'./how-it-works.html',image:photo('Street_flood_in_Saigon_(10728890034)')},
+  {label:'Đường đi',title:'Nhìn rủi ro trên cả hành trình, không chỉ một điểm.',body:'FloodGuard hỗ trợ nhận biết đoạn cần chú ý và so sánh phương án di chuyển khi điều kiện mưa thay đổi.',cta:'Kiểm tra tuyến đường',href:'./?login=1',secondary:'Xem tính năng',secondaryHref:'./features.html',image:photo('Street_flood_in_Saigon_(10729260963)')},
+  {label:'SOS Rescue',title:'Khi cần hỗ trợ, chuyển nhanh sang cứu hộ.',body:'Gửi yêu cầu SOS, chia sẻ thông tin vị trí và theo dõi trạng thái xử lý trong cùng hệ thống.',cta:'Mở cứu hộ',href:'./rescue.html',secondary:'Giới thiệu',secondaryHref:'./about.html',image:photo('Street_flood_in_Saigon_(10728572006)')}
  ];
  const media=document.createElement('div');media.className='fg51-hero-media';media.setAttribute('aria-hidden','true');
  media.innerHTML=slides.map((s,i)=>`<div class="fg51-slide${i===0?' is-active':''}" style="background-image:url('${s.image}')"></div>`).join('');
@@ -79,37 +78,45 @@ function setupHeroSlider(root){
  hero.appendChild(controls);
  const credit=document.createElement('div');credit.className='fg51-credit';credit.textContent='Ảnh tư liệu TP.HCM · Wikimedia Commons · CC BY 2.0';hero.appendChild(credit);
 
- const preload=()=>slides.forEach(s=>{const img=new Image();img.decoding='async';img.src=s.image});
- if('requestIdleCallback'in window)requestIdleCallback(preload,{timeout:1800});else setTimeout(preload,350);
+ /* Decode hero photos during idle time to avoid a decode spike at slide change. */
+ const decoded=new Set([0]);
+ const decodeSlide=i=>new Promise(resolve=>{
+  if(decoded.has(i)){resolve();return}
+  const img=new Image();img.decoding='async';img.src=slides[i].image;
+  const done=()=>{decoded.add(i);resolve()};
+  img.onload=()=>{if(img.decode)img.decode().then(done).catch(done);else done()};
+  img.onerror=done;
+ });
+ const warm=()=>{let p=Promise.resolve();for(let i=1;i<slides.length;i++)p=p.then(()=>decodeSlide(i));return p};
+ if('requestIdleCallback'in window)requestIdleCallback(()=>warm(),{timeout:2200});else setTimeout(()=>warm(),500);
 
  let index=0,timer=null,paused=false,transitioning=false,pendingIndex=null;
- const renderCopy=s=>{
-  copy.innerHTML=`<span class="wh-eyebrow">${s.label}</span><h1>${s.title}</h1><p>${s.body}</p><div class="wh-hero-actions"><a class="wh-btn primary" href="${s.href}">${s.cta}</a><a class="wh-btn" href="${s.secondaryHref}">${s.secondary}</a></div>`;
- };
+ const renderCopy=s=>{copy.innerHTML=`<span class="wh-eyebrow">${s.label}</span><h1>${s.title}</h1><p>${s.body}</p><div class="wh-hero-actions"><a class="wh-btn primary" href="${s.href}">${s.cta}</a><a class="wh-btn" href="${s.secondaryHref}">${s.secondary}</a></div>`};
  const activateVisual=next=>{
   media.querySelectorAll('.fg51-slide').forEach((el,i)=>el.classList.toggle('is-active',i===next));
   controls.querySelectorAll('.fg51-dot').forEach((el,i)=>el.classList.toggle('is-active',i===next));
  };
- const paint=(next,instant=false)=>{
+ const paint=async(next,instant=false)=>{
   const target=(next+slides.length)%slides.length;
   if(transitioning&&!instant){pendingIndex=target;return}
+  transitioning=!instant;
+  if(!instant)await decodeSlide(target);
   index=target;const s=slides[index];
   if(instant||reduced()){
-   activateVisual(index);renderCopy(s);copy.classList.remove('is-changing');return;
+   activateVisual(index);renderCopy(s);copy.classList.remove('is-changing');transitioning=false;return;
   }
-  transitioning=true;
-  activateVisual(index);
   copy.classList.add('is-changing');
+  setTimeout(()=>activateVisual(index),90);
   setTimeout(()=>{
    renderCopy(s);
    requestAnimationFrame(()=>requestAnimationFrame(()=>copy.classList.remove('is-changing')));
-   setTimeout(()=>{
-    transitioning=false;
-    if(pendingIndex!==null){const queued=pendingIndex;pendingIndex=null;paint(queued)}
-   },520);
-  },300);
+  },190);
+  setTimeout(()=>{
+   transitioning=false;
+   if(pendingIndex!==null){const queued=pendingIndex;pendingIndex=null;paint(queued)}
+  },700);
  };
- const restart=()=>{if(reduced()||paused)return;if(timer)clearInterval(timer);timer=setInterval(()=>paint(index+1),6800)};
+ const restart=()=>{if(reduced()||paused)return;if(timer)clearInterval(timer);timer=setInterval(()=>paint(index+1),7000)};
  controls.querySelectorAll('.fg51-dot').forEach((b,i)=>b.addEventListener('click',()=>{paint(i);restart()}));
  controls.querySelector('.fg51-next')?.addEventListener('click',()=>{paint(index+1);restart()});
  hero.addEventListener('mouseenter',()=>{paused=true;if(timer)clearInterval(timer)});
@@ -119,7 +126,6 @@ function setupHeroSlider(root){
  document.addEventListener('visibilitychange',()=>{if(document.hidden){if(timer)clearInterval(timer)}else restart()});
  paint(0,true);restart();
 }
-
 function rewriteHome(){
  const root=document.getElementById('fgWebsiteHome');if(!root)return;
  addUtilityBar(root);restoreHomepageSections(root);purgeHiddenLinks(root);ensureOrderedLinks(root.querySelector('.wh-links'));
@@ -143,9 +149,9 @@ function markActive(){
 function reveal(){
  const targets=[...document.querySelectorAll('.wh-card,.wh-step,.wh-panel,.wh-copy,.wh-sos,.wh-about,.info-card,.problem-stat,.cause-card,.impact-box,.station-card,.principle-card,.source-item')];
  if(reduced()||!('IntersectionObserver'in window)){targets.forEach(x=>x.classList.add('fg52-visible'));return}
- const st=document.createElement('style');st.textContent='.fg52-reveal{opacity:0;transform:translateY(16px);transition:opacity .72s cubic-bezier(.16,1,.3,1),transform .78s cubic-bezier(.16,1,.3,1)}.fg52-reveal.fg52-visible{opacity:1;transform:none}@media(prefers-reduced-motion:reduce){.fg52-reveal{opacity:1!important;transform:none!important;transition:none!important}}';document.head.appendChild(st);
+ const st=document.createElement('style');st.textContent='.fg52-reveal{opacity:0;transform:translate3d(0,12px,0);transition:opacity .54s ease-out,transform .62s cubic-bezier(.16,1,.3,1)}.fg52-reveal.fg52-visible{opacity:1;transform:none}@media(prefers-reduced-motion:reduce){.fg52-reveal{opacity:1!important;transform:none!important;transition:none!important}}';document.head.appendChild(st);
  targets.forEach(x=>x.classList.add('fg52-reveal'));
- const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('fg52-visible');io.unobserve(e.target)}}),{threshold:.1,rootMargin:'0px 0px -3%'});targets.forEach(x=>io.observe(x));
+ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('fg52-visible');io.unobserve(e.target)}}),{threshold:.06,rootMargin:'0px 0px -2%'});targets.forEach(x=>io.observe(x));
 }
 function start(){installThemes();rewriteHome();normalizeSiteNav();mobileMenu();markActive();reveal()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
