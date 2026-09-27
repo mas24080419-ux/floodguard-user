@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-if(window.__FG_SITE_NAV_V52__)return;window.__FG_SITE_NAV_V52__=true;
+if(window.__FG_SITE_NAV_V53__)return;window.__FG_SITE_NAV_V53__=true;
 
 const ROUTES={
  'trang chủ':'./',
@@ -27,6 +27,7 @@ function installThemes(){
  installStylesheet('./site-hide-ev-v50.css?v=50','hide-ev');
  installStylesheet('./site-travel-v51.css?v=51','travel-v51');
  installStylesheet('./site-mona-v52.css?v=52','mona-v52');
+ installStylesheet('./site-motion-v53.css?v=53','motion-v53');
  document.documentElement.dataset.fgEditorial='1';
  document.documentElement.dataset.fgLifestyle='1';
  document.documentElement.dataset.fgMona='1';
