@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-if(window.__FG_SITE_NAV_V60__)return;window.__FG_SITE_NAV_V60__=true;
+if(window.__FG_SITE_NAV_V61__)return;window.__FG_SITE_NAV_V61__=true;
 
 const ROUTES={
  'trang chủ':'./',
@@ -31,7 +31,7 @@ function installThemes(){
  installStylesheet('./site-motion-v54.css?v=55','motion-v55');
  installStylesheet('./site-motion-v56.css?v=56','motion-v56');
  installStylesheet('./site-mona-v57.css?v=58','mona-v57');
- installStylesheet('./site-action-v59.css?v=60','action-v60');
+ installStylesheet('./site-action-v59.css?v=61','action-v61');
  document.documentElement.dataset.fgEditorial='1';
  document.documentElement.dataset.fgLifestyle='1';
  document.documentElement.dataset.fgMona='1';
