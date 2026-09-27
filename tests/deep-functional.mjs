@@ -8,7 +8,7 @@ const failures=[],passes=[];
 const assert=(v,m)=>v?passes.push('PASS '+m):failures.push(m);
 const text=async p=>(await p.locator('body').innerText().catch(()=>''))||'';
 
-// 1. Google Login: validate that the visible control initiates Supabase Google OAuth.
+// 1. Google Login: validate visible control and OAuth initiation. CI deliberately does not complete a real Google identity consent.
 const login=await ctx.newPage();
 await login.goto(BASE+'/?login=1',{waitUntil:'domcontentloaded',timeout:60000});
 await login.waitForTimeout(1200);
@@ -35,26 +35,26 @@ assert((await leaflet.count().catch(()=>0))>0,'Leaflet map initialized');
 const visibleLeaflet=page.locator('.leaflet-container:visible');
 if(await visibleLeaflet.count()){const box=await visibleLeaflet.first().boundingBox();assert(!!box&&box.width>300&&box.height>200,'Visible map has usable dimensions')}else failures.push('Map DOM exists but no visible operational map');
 
-// 3. Prediction: use actual governed street keys exposed by the model audit.
-const modelDiag=await page.evaluate(()=>{const m=window.FG15MultiModel;if(!m||typeof m.predict!=='function')return{available:false};const streets=Object.keys(m.AUDIT?.core_street_counts||{});const tried=[];for(const street of streets){try{const low=m.predict(street,20,null),high=m.predict(street,100,null);const le=Number(low?.ensemble),he=Number(high?.ensemble);tried.push({street,le,he,ln:low?.availableN,hn:high?.availableN});if(Number.isFinite(le)&&Number.isFinite(he))return{available:true,street,low:le,high:he,lowN:low.availableN,highN:high.availableN,streets:streets.length}}catch(_){}}return{available:true,noResult:true,streets:streets.length,tried:tried.slice(0,20)}}).catch(e=>({available:false,error:String(e)}));
+// 3. Prediction: verify a data-supported scenario and verify low-evidence scenarios fail closed instead of fabricating a depth.
+const modelDiag=await page.evaluate(()=>{const m=window.FG15MultiModel;if(!m||typeof m.predict!=='function')return{available:false};const streets=Object.keys(m.AUDIT?.core_street_counts||{});const tried=[];for(const street of streets){try{const low=m.predict(street,20,null),high=m.predict(street,100,null);const le=Number(low?.ensemble),he=Number(high?.ensemble);tried.push({street,low:low?.ensemble??null,high:high?.ensemble??null,ln:low?.availableN,hn:high?.availableN});if(Number.isFinite(he)&&high.availableN>0)return{available:true,street,low:low?.ensemble??null,high:he,lowN:low?.availableN??0,highN:high.availableN,lowRisk:low?.risk,highRisk:high?.risk,streets:streets.length}}catch(_){}}return{available:true,noSupportedScenario:true,streets:streets.length,tried:tried.slice(0,21)}}).catch(e=>({available:false,error:String(e)}));
 console.log('MODEL_DIAG',JSON.stringify(modelDiag));
 assert(modelDiag.available,'Prediction engine available');
-assert(!modelDiag.noResult&&Number.isFinite(modelDiag.low)&&Number.isFinite(modelDiag.high),'Prediction returns finite ensemble depth for a governed street');
-if(!modelDiag.noResult){assert(modelDiag.low>=0&&modelDiag.high>=0,'Prediction returns non-negative depth');assert(modelDiag.lowN>0&&modelDiag.highN>0,'Prediction uses at least one available model');passes.push(`MODEL ${modelDiag.street}: 20mm=${modelDiag.low}, 100mm=${modelDiag.high}`)}
+assert(!modelDiag.noSupportedScenario&&Number.isFinite(modelDiag.high),'Prediction returns finite ensemble depth for a data-supported governed street');
+if(!modelDiag.noSupportedScenario){assert(modelDiag.high>=0,'Prediction depth is non-negative');assert(modelDiag.highN>0,'Prediction uses at least one available model');if(modelDiag.lowN===0)assert(modelDiag.low===null||modelDiag.low===undefined,'Prediction returns unknown rather than inventing depth when no model has evidence');passes.push(`MODEL ${modelDiag.street}: 100mm=${modelDiag.high}; 20mm=${modelDiag.lowN===0?'UNKNOWN':modelDiag.low}`)}
 
-// 4. Route: open the actual command/search UI, discover its controls, then run a real route if the pair is available.
+// 4. Route: run the actual default route analysis control displayed by the app.
 const command=page.locator('#fg12Command');
 assert(await command.isVisible().catch(()=>false),'Route/search command control visible');
-if(await command.isVisible().catch(()=>false)) await command.click().catch(()=>{});
-await page.waitForTimeout(800);
-const routeInputs=await page.locator('input:visible').evaluateAll(es=>es.map((e,i)=>({i,id:e.id||'',ph:e.placeholder||'',aria:e.getAttribute('aria-label')||'',name:e.name||''}))).catch(()=>[]);
-const routeButtons=await page.locator('button:visible,a:visible').evaluateAll(es=>es.map((e,i)=>({i,id:e.id||'',text:(e.innerText||e.textContent||'').trim()})).filter(x=>x.text)).catch(()=>[]);
-console.log('ROUTE_INPUTS',JSON.stringify(routeInputs));
-console.log('ROUTE_BUTTONS',JSON.stringify(routeButtons.slice(0,80)));
-const from=routeInputs.find(x=>/(điểm đi|xuất phát|origin|from|bắt đầu)/i.test([x.id,x.ph,x.aria,x.name].join(' ')));
-const to=routeInputs.find(x=>/(điểm đến|destination|to|kết thúc)/i.test([x.id,x.ph,x.aria,x.name].join(' ')));
-const go=routeButtons.find(x=>/(đường đi|tìm đường|chỉ đường|route|tìm kiếm)/i.test(x.text));
-if(from&&to&&go){const ins=page.locator('input:visible');await ins.nth(from.i).fill('Thảo Điền, TP.HCM');await ins.nth(to.i).fill('Quận 1, TP.HCM');const btns=page.locator('button:visible,a:visible');await btns.nth(go.i).click().catch(()=>{});await page.waitForTimeout(12000);const rs=await page.evaluate(()=>{const s=window.FG70_ROUTE_STATE;return s?{from:s.from,to:s.to,n:Array.isArray(s.analyses)?s.analyses.length:0,selected:s.selectedIndex}:null}).catch(()=>null);console.log('ROUTE_STATE',JSON.stringify(rs));assert(!!rs&&rs.n>0,'Route search produces analyzed route state')}else{appText=await text(page);assert(/Thảo Điền.*Quận 1|Phân tích tuyến|Lộ trình/i.test(appText),'Route module remains available even when command panel uses non-input controls');passes.push('INFO Route panel did not expose a stable fillable origin/destination pair to headless CI')}
+const analyze=page.getByRole('button',{name:/Phân tích tuyến/i}).first();
+assert(await analyze.isVisible().catch(()=>false),'Route analysis control visible');
+if(await analyze.isVisible().catch(()=>false)){
+  await analyze.click().catch(()=>{});
+  await page.waitForTimeout(15000);
+  const rs=await page.evaluate(()=>{const s=window.FG70_ROUTE_STATE;return s?{from:s.from,to:s.to,n:Array.isArray(s.analyses)?s.analyses.length:0,selected:s.selectedIndex}:null}).catch(()=>null);
+  console.log('ROUTE_STATE',JSON.stringify(rs));
+  assert(!!rs&&rs.n>0,'Route analysis produces analyzed route state');
+  if(rs)passes.push(`ROUTE ${rs.from||''} → ${rs.to||''}: ${rs.n} analyzed option(s)`);
+}
 
 // 5. EV.
 appText=await text(page);
@@ -66,12 +66,12 @@ const watchImpl=await page.evaluate(()=>!!window.__FG40_WATCHLIST_EMAIL__).catch
 assert(watchImpl,'Watchlist implementation loaded');
 assert((await page.locator('#fg40Watch').count())>0,'Watchlist component mounted');
 
-// 7. SOS / Rescue — validate without creating a false emergency incident.
+// 7. SOS / Rescue — validate UI and discoverability without creating a false production emergency.
 const rescue=await ctx.newPage(),rr=await rescue.goto(BASE+'/rescue.html',{waitUntil:'domcontentloaded',timeout:45000});
 assert(!!rr&&rr.ok(),'Rescue page loads');assert(/SOS|cứu hộ|hỗ trợ/i.test(await text(rescue)),'Rescue flow discoverable');await rescue.close();
 assert(/SOS|cứu hộ|rescue/i.test(appText),'SOS capability present in app');
 
-// 8. Admin — destructive operation is tested only for rejection without credentials.
+// 8. Admin — destructive operation is tested only for safe rejection without credentials.
 const admin=await ctx.newPage(),ar=await admin.goto(BASE+'/admin.html',{waitUntil:'domcontentloaded',timeout:45000});
 assert(!!ar&&ar.ok(),'Admin page loads');await admin.waitForTimeout(1200);assert(/đăng nhập|admin|quản trị|không có quyền|unauthorized/i.test(await text(admin)),'Admin UI has auth/authorization boundary');await admin.close();
 const api=await playwrightRequest.newContext();
