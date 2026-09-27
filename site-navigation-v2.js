@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-if(window.__FG_SITE_NAV_V56__)return;window.__FG_SITE_NAV_V56__=true;
+if(window.__FG_SITE_NAV_V57__)return;window.__FG_SITE_NAV_V57__=true;
 
 const ROUTES={
  'trang chủ':'./',
@@ -30,6 +30,7 @@ function installThemes(){
  installStylesheet('./site-motion-v53.css?v=53','motion-v53');
  installStylesheet('./site-motion-v54.css?v=55','motion-v55');
  installStylesheet('./site-motion-v56.css?v=56','motion-v56');
+ installStylesheet('./site-mona-v57.css?v=57','mona-v57');
  document.documentElement.dataset.fgEditorial='1';
  document.documentElement.dataset.fgLifestyle='1';
  document.documentElement.dataset.fgMona='1';
@@ -59,17 +60,27 @@ function restoreHomepageSections(root){
  ['features','how','watchlist','ev','rescue','about'].forEach(id=>{const el=root.querySelector('#'+id);if(el)el.style.removeProperty('display')});
  document.getElementById('fgMultiPageExplore')?.remove();
 }
+function insertQuickBar(root){
+ if(!root||root.querySelector('.fg57-quickbar-wrap'))return;
+ const hero=root.querySelector('.wh-hero');if(!hero)return;
+ const wrap=document.createElement('div');wrap.className='fg57-quickbar-wrap';
+ wrap.innerHTML=`<div class="fg57-quickbar" aria-label="Truy cập nhanh FloodGuard">
+   <a class="fg57-quickitem" href="./?login=1"><span class="fg57-quickicon">⌖</span><span><small>Kiểm tra khu vực</small><b>Mở bản đồ ngập</b><span>Xem rủi ro theo vị trí và tuyến đường.</span></span></a>
+   <a class="fg57-quickitem" href="./?login=1"><span class="fg57-quickicon">☔</span><span><small>Kịch bản lượng mưa</small><b>Thử dự báo ngập</b><span>Ước tính mức ngập theo dữ liệu hiện có.</span></span></a>
+   <a class="fg57-quickitem" href="./features.html"><span class="fg57-quickicon">↗</span><span><small>Hành trình</small><b>Kiểm tra đường đi</b><span>Tìm hiểu luồng đánh giá rủi ro trên tuyến.</span></span></a>
+  </div>`;
+ hero.insertAdjacentElement('afterend',wrap);
+}
 function setupHeroSlider(root){
- const hero=root?.querySelector('.wh-hero');if(!hero||hero.dataset.fg56Ready==='1')return;
- hero.dataset.fg56Ready='1';
+ const hero=root?.querySelector('.wh-hero');if(!hero||hero.dataset.fg57Ready==='1')return;
+ hero.dataset.fg57Ready='1';
  const copy=hero.children[0];if(!copy)return;copy.classList.add('fg51-hero-copy');
  const imgWidth=innerWidth<=720?1000:(innerWidth<=1024?1200:1600);
  const photo=n=>`https://commons.wikimedia.org/wiki/Special:FilePath/${n}.jpg?width=${imgWidth}`;
  const slides=[
-  {label:'FloodGuard HCMC',title:'Chủ động trước nguy cơ ngập đô thị.',body:'Kiểm tra khu vực, xem dự báo và đánh giá tuyến đường trước khi bắt đầu hành trình.',cta:'Dùng FloodGuard',href:'./?login=1',secondary:'Xem vấn đề ngập',secondaryHref:'./problem.html',image:photo('Street_flood_in_Saigon_(10728572006)')},
+  {label:'FloodGuard HCMC',title:'Chủ động trước nguy cơ ngập đô thị.',body:'Kiểm tra khu vực, xem dữ liệu liên quan và đánh giá rủi ro trước khi bắt đầu hành trình.',cta:'Xem FloodGuard',href:'./?login=1',secondary:'Tìm hiểu vấn đề',secondaryHref:'./problem.html',image:photo('Street_flood_in_Saigon_(10728572006)')},
   {label:'Dự báo ngập',title:'Thử kịch bản mưa trước khi bạn lên đường.',body:'Thay đổi lượng mưa đầu vào để xem mức ngập ước tính và mức rủi ro theo dữ liệu hiện có.',cta:'Thử dự báo',href:'./?login=1',secondary:'Cách hoạt động',secondaryHref:'./how-it-works.html',image:photo('Street_flood_in_Saigon_(10728890034)')},
-  {label:'Đường đi',title:'Nhìn rủi ro trên cả hành trình, không chỉ một điểm.',body:'FloodGuard hỗ trợ nhận biết đoạn cần chú ý và so sánh phương án di chuyển khi điều kiện mưa thay đổi.',cta:'Kiểm tra tuyến đường',href:'./?login=1',secondary:'Xem tính năng',secondaryHref:'./features.html',image:photo('Street_flood_in_Saigon_(10729260963)')},
-  {label:'SOS Rescue',title:'Khi cần hỗ trợ, chuyển nhanh sang cứu hộ.',body:'Gửi yêu cầu SOS, chia sẻ thông tin vị trí và theo dõi trạng thái xử lý trong cùng hệ thống.',cta:'Mở cứu hộ',href:'./rescue.html',secondary:'Giới thiệu',secondaryHref:'./about.html',image:photo('Street_flood_in_Saigon_(10728572006)')}
+  {label:'Đường đi',title:'Nhìn rủi ro trên cả hành trình, không chỉ một điểm.',body:'FloodGuard hỗ trợ nhận biết đoạn cần chú ý và so sánh phương án di chuyển khi điều kiện mưa thay đổi.',cta:'Kiểm tra tuyến đường',href:'./?login=1',secondary:'Xem tính năng',secondaryHref:'./features.html',image:photo('Street_flood_in_Saigon_(10729260963)')}
  ];
 
  const media=document.createElement('div');media.className='fg51-hero-media';media.setAttribute('aria-hidden','true');
@@ -77,11 +88,13 @@ function setupHeroSlider(root){
  hero.prepend(media);
 
  const controls=document.createElement('div');controls.className='fg51-controls';controls.setAttribute('aria-label','Điều khiển banner');
- controls.innerHTML=`<div class="fg51-dots">${slides.map((_,i)=>`<button class="fg51-dot${i===0?' is-active':''}" type="button" aria-label="Banner ${i+1}"></button>`).join('')}</div><button class="fg51-next" type="button" aria-label="Banner tiếp theo">›</button>`;
+ controls.innerHTML=`<button class="fg51-prev" type="button" aria-label="Banner trước">‹</button><div class="fg51-dots">${slides.map((_,i)=>`<button class="fg51-dot${i===0?' is-active':''}" type="button" aria-label="Banner ${i+1}"${i===0?' aria-current="true"':''}></button>`).join('')}</div><button class="fg51-next" type="button" aria-label="Banner tiếp theo">›</button>`;
  hero.appendChild(controls);
+ const progress=document.createElement('div');progress.className='fg57-progress';progress.innerHTML='<i></i>';hero.appendChild(progress);
  const credit=document.createElement('div');credit.className='fg51-credit';credit.textContent='Ảnh tư liệu TP.HCM · Wikimedia Commons · CC BY 2.0';hero.appendChild(credit);
 
  const slideEls=[...media.querySelectorAll('.fg51-slide')];
+ const dotEls=[...controls.querySelectorAll('.fg51-dot')];
  const decoded=new Set();
  const decodeSlide=async i=>{
   if(decoded.has(i))return;
@@ -94,16 +107,19 @@ function setupHeroSlider(root){
   decoded.add(i);
  };
 
- /* Decode the first frame immediately and warm later frames one by one when idle. */
  decodeSlide(0);
  const warm=async()=>{for(let i=1;i<slides.length;i++)await decodeSlide(i)};
- if('requestIdleCallback'in window)requestIdleCallback(()=>warm(),{timeout:2500});else setTimeout(()=>warm(),650);
+ if('requestIdleCallback'in window)requestIdleCallback(()=>warm(),{timeout:2200});else setTimeout(()=>warm(),500);
 
  let index=0,timer=null,paused=false,transitioning=false,pendingIndex=null;
  const renderCopy=s=>{copy.innerHTML=`<span class="wh-eyebrow">${s.label}</span><h1>${s.title}</h1><p>${s.body}</p><div class="wh-hero-actions"><a class="wh-btn primary" href="${s.href}">${s.cta}</a><a class="wh-btn" href="${s.secondaryHref}">${s.secondary}</a></div>`};
  const activateVisual=next=>{
   slideEls.forEach((el,i)=>el.classList.toggle('is-active',i===next));
-  controls.querySelectorAll('.fg51-dot').forEach((el,i)=>el.classList.toggle('is-active',i===next));
+  dotEls.forEach((el,i)=>{el.classList.toggle('is-active',i===next);if(i===next)el.setAttribute('aria-current','true');else el.removeAttribute('aria-current')});
+ };
+ const restartProgress=()=>{
+  if(reduced())return;
+  progress.classList.remove('is-running');void progress.offsetWidth;progress.classList.add('is-running');
  };
  const finishTransition=()=>{
   transitioning=false;
@@ -116,33 +132,35 @@ function setupHeroSlider(root){
   if(!instant){transitioning=true;await decodeSlide(target)}
   index=target;const s=slides[index];
   if(instant||reduced()){
-   activateVisual(index);renderCopy(s);copy.classList.remove('is-changing');transitioning=false;return;
+   activateVisual(index);renderCopy(s);copy.classList.remove('is-changing');transitioning=false;restartProgress();return;
   }
 
+  /* Start the photo crossfade first, then let the new copy rise in a fraction later. */
   copy.classList.add('is-changing');
-  /* Crossfade starts only after the incoming image is decoded. */
   requestAnimationFrame(()=>requestAnimationFrame(()=>activateVisual(index)));
   setTimeout(()=>{
    renderCopy(s);
    requestAnimationFrame(()=>requestAnimationFrame(()=>copy.classList.remove('is-changing')));
-  },260);
-  setTimeout(finishTransition,1500);
+  },420);
+  setTimeout(finishTransition,1750);
+  restartProgress();
  };
- const restart=()=>{if(reduced()||paused)return;if(timer)clearInterval(timer);timer=setInterval(()=>paint(index+1),7200)};
- controls.querySelectorAll('.fg51-dot').forEach((b,i)=>b.addEventListener('click',()=>{paint(i);restart()}));
+ const restart=()=>{if(reduced()||paused)return;if(timer)clearInterval(timer);timer=setInterval(()=>paint(index+1),7600);restartProgress()};
+ dotEls.forEach((b,i)=>b.addEventListener('click',()=>{paint(i);restart()}));
+ controls.querySelector('.fg51-prev')?.addEventListener('click',()=>{paint(index-1);restart()});
  controls.querySelector('.fg51-next')?.addEventListener('click',()=>{paint(index+1);restart()});
- hero.addEventListener('mouseenter',()=>{paused=true;if(timer)clearInterval(timer)});
+ hero.addEventListener('mouseenter',()=>{paused=true;if(timer)clearInterval(timer);progress.classList.remove('is-running')});
  hero.addEventListener('mouseleave',()=>{paused=false;restart()});
- hero.addEventListener('focusin',()=>{paused=true;if(timer)clearInterval(timer)});
+ hero.addEventListener('focusin',()=>{paused=true;if(timer)clearInterval(timer);progress.classList.remove('is-running')});
  hero.addEventListener('focusout',()=>{paused=false;restart()});
- document.addEventListener('visibilitychange',()=>{if(document.hidden){if(timer)clearInterval(timer)}else restart()});
+ document.addEventListener('visibilitychange',()=>{if(document.hidden){if(timer)clearInterval(timer);progress.classList.remove('is-running')}else restart()});
  paint(0,true);restart();
 }
 function rewriteHome(){
  const root=document.getElementById('fgWebsiteHome');if(!root)return;
  addUtilityBar(root);restoreHomepageSections(root);purgeHiddenLinks(root);ensureOrderedLinks(root.querySelector('.wh-links'));
  const foot=root.querySelector('.wh-foot-links');if(foot)ensureOrderedLinks(foot);
- setupHeroSlider(root);purgeHiddenLinks(root);
+ setupHeroSlider(root);insertQuickBar(root);purgeHiddenLinks(root);
 }
 function normalizeSiteNav(){
  addUtilityBar(null);purgeHiddenLinks(document);ensureOrderedLinks(document.querySelector('.site-links'));ensureOrderedLinks(document.querySelector('.mobile-drawer'),true);const footer=document.querySelector('.footer-links');if(footer)ensureOrderedLinks(footer);purgeHiddenLinks(document)
