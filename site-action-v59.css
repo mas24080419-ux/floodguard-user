@@ -59,3 +59,105 @@ html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide.is-active img{fi
  html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy,
  html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy *{transition:none!important;animation:none!important;transform:none!important}
 }
+
+/* Account/login background action v60.
+   Three photo layers crossfade continuously behind the existing auth controls, with a slow Ken-Burns drift.
+   This is inspired by the motion language of the Mona Tour account experience; FloodGuard assets and logic remain independent. */
+html[data-fg-mona="1"] .auth{
+  isolation:isolate!important;
+  background:#1f2a19!important;
+}
+html[data-fg-mona="1"] .auth::before,
+html[data-fg-mona="1"] .auth::after,
+html[data-fg-mona="1"] .auth .scene::before{
+  content:""!important;
+  position:fixed!important;
+  inset:-3%!important;
+  pointer-events:none!important;
+  opacity:0;
+  background-size:cover!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
+  will-change:opacity,transform;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  animation:fg60AuthFade 18s linear infinite,fg60AuthDrift 18s ease-in-out infinite alternate;
+}
+html[data-fg-mona="1"] .auth::before{
+  z-index:0!important;
+  --fg60-from-x:-.55%;--fg60-from-y:.2%;--fg60-to-x:.45%;--fg60-to-y:-.25%;
+  background-image:url("https://commons.wikimedia.org/wiki/Special:FilePath/Street_flood_in_Saigon_(10728572006).jpg?width=1800")!important;
+  animation-delay:0s,0s!important;
+}
+html[data-fg-mona="1"] .auth::after{
+  z-index:0!important;
+  --fg60-from-x:.55%;--fg60-from-y:-.2%;--fg60-to-x:-.4%;--fg60-to-y:.25%;
+  background-image:url("https://commons.wikimedia.org/wiki/Special:FilePath/Street_flood_in_Saigon_(10728890034).jpg?width=1800")!important;
+  animation-delay:-12s,-12s!important;
+}
+html[data-fg-mona="1"] .auth .scene{
+  position:fixed!important;
+  inset:0!important;
+  z-index:1!important;
+  overflow:hidden!important;
+  pointer-events:none!important;
+}
+html[data-fg-mona="1"] .auth .scene>*{display:none!important}
+html[data-fg-mona="1"] .auth .scene::before{
+  z-index:0!important;
+  --fg60-from-x:-.25%;--fg60-from-y:.5%;--fg60-to-x:.3%;--fg60-to-y:-.45%;
+  background-image:url("https://commons.wikimedia.org/wiki/Special:FilePath/Street_flood_in_Saigon_(10729260963).jpg?width=1800")!important;
+  animation-delay:-6s,-6s!important;
+}
+html[data-fg-mona="1"] .auth .scene::after{
+  content:""!important;
+  position:fixed!important;
+  inset:0!important;
+  z-index:2!important;
+  pointer-events:none!important;
+  background:linear-gradient(90deg,rgba(16,24,13,.52) 0%,rgba(16,24,13,.22) 48%,rgba(16,24,13,.43) 100%),linear-gradient(0deg,rgba(10,16,8,.31),rgba(10,16,8,.07) 52%,rgba(10,16,8,.20));
+}
+@keyframes fg60AuthFade{
+  0%,26%{opacity:1}
+  34%,92%{opacity:0}
+  100%{opacity:1}
+}
+@keyframes fg60AuthDrift{
+  0%{transform:translate3d(var(--fg60-from-x),var(--fg60-from-y),0) scale(1.055)}
+  100%{transform:translate3d(var(--fg60-to-x),var(--fg60-to-y),0) scale(1.018)}
+}
+html[data-fg-mona="1"] .auth-layout,
+html[data-fg-mona="1"] .auth .brand-copy{z-index:5!important}
+html[data-fg-mona="1"] .auth .card{
+  background:rgba(255,255,255,.95)!important;
+  border:1px solid rgba(255,255,255,.78)!important;
+  border-radius:8px!important;
+  box-shadow:0 28px 70px rgba(12,24,9,.25)!important;
+  backdrop-filter:blur(10px)!important;
+  -webkit-backdrop-filter:blur(10px)!important;
+}
+html[data-fg-mona="1"] .auth .primary{
+  background:#82b440!important;
+  box-shadow:0 10px 24px rgba(92,139,39,.25)!important;
+}
+html[data-fg-mona="1"] .auth .primary:hover{background:#6f9f34!important}
+html[data-fg-mona="1"] .auth .field input:focus{
+  border-color:#82b440!important;
+  box-shadow:0 0 0 4px rgba(130,180,64,.12)!important;
+}
+html[data-fg-mona="1"] .auth .mark,
+html[data-fg-mona="1"] .auth .hero-mark{background:linear-gradient(135deg,#91c653,#6f9f34)!important}
+html[data-fg-mona="1"] .auth .brand-copy{color:#fff!important;text-shadow:0 4px 26px rgba(5,12,4,.25)!important}
+html[data-fg-mona="1"] .auth .brand-copy h1{color:#fff!important}
+html[data-fg-mona="1"] .auth .brand-copy p{color:rgba(255,255,255,.84)!important}
+@media(max-width:720px){
+ html[data-fg-mona="1"] .auth::before,
+ html[data-fg-mona="1"] .auth::after,
+ html[data-fg-mona="1"] .auth .scene::before{inset:-2%!important}
+ html[data-fg-mona="1"] .auth .card{border-radius:6px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ html[data-fg-mona="1"] .auth::before{opacity:1!important;animation:none!important;transform:none!important}
+ html[data-fg-mona="1"] .auth::after,
+ html[data-fg-mona="1"] .auth .scene::before{display:none!important}
+}
