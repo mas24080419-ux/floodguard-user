@@ -29,6 +29,7 @@ on:
       - 'sw.js'
       - 'tests/desktop-smoke.mjs'
       - 'tests/mobile-seo-smoke.mjs'
+      - 'tests/deep-functional.mjs'
       - '.github/workflows/desktop-regression.yml'
   push:
     branches: [main]
@@ -58,6 +59,7 @@ on:
       - 'sw.js'
       - 'tests/desktop-smoke.mjs'
       - 'tests/mobile-seo-smoke.mjs'
+      - 'tests/deep-functional.mjs'
       - '.github/workflows/desktop-regression.yml'
   workflow_dispatch:
 
@@ -67,7 +69,7 @@ permissions:
 jobs:
   smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -94,6 +96,10 @@ jobs:
         env:
           LOCAL_URL: http://127.0.0.1:4173
         run: node tests/mobile-seo-smoke.mjs
+      - name: Run deep functional QA
+        env:
+          LOCAL_URL: http://127.0.0.1:4173
+        run: node tests/deep-functional.mjs
       - name: Verify production v50
         if: github.event_name == 'push'
         run: |
