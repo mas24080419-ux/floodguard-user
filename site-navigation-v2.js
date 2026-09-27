@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-if(window.__FG_SITE_NAV_V58__)return;window.__FG_SITE_NAV_V58__=true;
+if(window.__FG_SITE_NAV_V59__)return;window.__FG_SITE_NAV_V59__=true;
 
 const ROUTES={
  'trang chủ':'./',
@@ -31,6 +31,7 @@ function installThemes(){
  installStylesheet('./site-motion-v54.css?v=55','motion-v55');
  installStylesheet('./site-motion-v56.css?v=56','motion-v56');
  installStylesheet('./site-mona-v57.css?v=58','mona-v57');
+ installStylesheet('./site-action-v59.css?v=59','action-v59');
  document.documentElement.dataset.fgEditorial='1';
  document.documentElement.dataset.fgLifestyle='1';
  document.documentElement.dataset.fgMona='1';
@@ -72,8 +73,8 @@ function insertQuickBar(root){
  hero.insertAdjacentElement('afterend',wrap);
 }
 function setupHeroSlider(root){
- const hero=root?.querySelector('.wh-hero');if(!hero||hero.dataset.fg58Ready==='1')return;
- hero.dataset.fg58Ready='1';
+ const hero=root?.querySelector('.wh-hero');if(!hero||hero.dataset.fg59Ready==='1')return;
+ hero.dataset.fg59Ready='1';
  const copy=hero.children[0];if(!copy)return;copy.classList.add('fg51-hero-copy');
  const imgWidth=innerWidth<=720?1000:(innerWidth<=1024?1200:1600);
  const photo=n=>`https://commons.wikimedia.org/wiki/Special:FilePath/${n}.jpg?width=${imgWidth}`;
@@ -139,8 +140,8 @@ function setupHeroSlider(root){
   setTimeout(()=>{
    renderCopy(s);
    requestAnimationFrame(()=>requestAnimationFrame(()=>copy.classList.remove('is-changing')));
-  },420);
-  setTimeout(finishTransition,1750);
+  },240);
+  setTimeout(finishTransition,1050);
   restartProgress();
  };
  const restart=()=>{
@@ -152,7 +153,6 @@ function setupHeroSlider(root){
  dotEls.forEach((b,i)=>b.addEventListener('click',()=>{paint(i);restart()}));
  controls.querySelector('.fg51-prev')?.addEventListener('click',()=>{paint(index-1);restart()});
  controls.querySelector('.fg51-next')?.addEventListener('click',()=>{paint(index+1);restart()});
- /* Intentionally keep autoplay running while the pointer is over the hero, matching the reference site. */
  document.addEventListener('visibilitychange',()=>{if(document.hidden){if(timer)clearInterval(timer);progress.classList.remove('is-running')}else restart()});
  paint(0,true);restart();
 }
