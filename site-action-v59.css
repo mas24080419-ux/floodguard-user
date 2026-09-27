@@ -1,0 +1,61 @@
+/* FloodGuard background motion v59
+   Tuned from the user's IMG_9761 reference: slow Ken-Burns motion behind the copy,
+   a quicker soft crossfade between photos, and copy entering from the left. */
+:root{--fg59-fade:900ms;--fg59-hold:7600ms;--fg59-ease:cubic-bezier(.22,.61,.36,1)}
+
+/* Keep photo animation entirely on compositor-friendly opacity + transform. */
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide{
+  opacity:0!important;
+  transition:opacity var(--fg59-fade) cubic-bezier(.42,0,.58,1)!important;
+  will-change:opacity!important;
+  transform:translateZ(0)!important;
+}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide.is-active{opacity:1!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide img{
+  width:100%!important;height:100%!important;object-fit:cover!important;
+  backface-visibility:hidden!important;-webkit-backface-visibility:hidden!important;
+  will-change:transform!important;
+  transition:transform var(--fg59-hold) cubic-bezier(.16,.72,.25,1)!important;
+}
+/* Each slide drifts in a different direction so the background feels alive. */
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide:nth-child(1) img{transform:translate3d(-1.7%,.45%,0) scale(1.075)!important;transform-origin:52% 48%!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide:nth-child(1).is-active img{transform:translate3d(1.15%,-.35%,0) scale(1.018)!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide:nth-child(2) img{transform:translate3d(1.65%,-.35%,0) scale(1.078)!important;transform-origin:48% 51%!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide:nth-child(2).is-active img{transform:translate3d(-1.05%,.30%,0) scale(1.019)!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide:nth-child(3) img{transform:translate3d(-.25%,1.15%,0) scale(1.080)!important;transform-origin:51% 48%!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide:nth-child(3).is-active img{transform:translate3d(.45%,-.90%,0) scale(1.020)!important}
+
+/* The reference lets the new photo appear first; copy follows from the left. */
+html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy{transition:opacity .26s ease,transform .34s var(--fg59-ease)!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy.is-changing{opacity:0!important;transform:translate3d(-22px,0,0)!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy .wh-eyebrow,
+html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy h1,
+html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy p,
+html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy .wh-hero-actions{animation:fg59CopyIn .62s var(--fg59-ease) both!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy h1{animation-delay:.04s!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy p{animation-delay:.10s!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy .wh-hero-actions{animation-delay:.16s!important}
+@keyframes fg59CopyIn{from{opacity:0;transform:translate3d(-46px,0,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+
+/* A very subtle brightness lift during the active frame mimics the cinematic depth of the sample. */
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide img{filter:saturate(.88) contrast(1.025) brightness(.84)!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide.is-active img{filter:saturate(.92) contrast(1.02) brightness(.91)!important}
+
+@media(max-width:1024px){
+ :root{--fg59-fade:820ms;--fg59-hold:7200ms}
+ html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide:nth-child(n) img{transform:translate3d(-.8%,.35%,0) scale(1.045)!important}
+ html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide:nth-child(n).is-active img{transform:translate3d(.65%,-.25%,0) scale(1.012)!important}
+}
+@media(max-width:720px){
+ :root{--fg59-fade:720ms;--fg59-hold:6800ms}
+ html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide:nth-child(n) img{transform:translate3d(-.5%,.2%,0) scale(1.025)!important}
+ html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide:nth-child(n).is-active img{transform:translate3d(.35%,-.15%,0) scale(1.006)!important}
+ html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy.is-changing{transform:translate3d(-14px,0,0)!important}
+ @keyframes fg59CopyIn{from{opacity:0;transform:translate3d(-28px,0,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+}
+@media(prefers-reduced-motion:reduce){
+ html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide,
+ html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide img,
+ html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy,
+ html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy *{transition:none!important;animation:none!important;transform:none!important}
+}
