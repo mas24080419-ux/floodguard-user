@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-if(window.__FG_SITE_NAV_V55__)return;window.__FG_SITE_NAV_V55__=true;
+if(window.__FG_SITE_NAV_V56__)return;window.__FG_SITE_NAV_V56__=true;
 
 const ROUTES={
  'trang chủ':'./',
@@ -29,6 +29,7 @@ function installThemes(){
  installStylesheet('./site-mona-v52.css?v=52','mona-v52');
  installStylesheet('./site-motion-v53.css?v=53','motion-v53');
  installStylesheet('./site-motion-v54.css?v=55','motion-v55');
+ installStylesheet('./site-motion-v56.css?v=56','motion-v56');
  document.documentElement.dataset.fgEditorial='1';
  document.documentElement.dataset.fgLifestyle='1';
  document.documentElement.dataset.fgMona='1';
@@ -59,10 +60,10 @@ function restoreHomepageSections(root){
  document.getElementById('fgMultiPageExplore')?.remove();
 }
 function setupHeroSlider(root){
- const hero=root?.querySelector('.wh-hero');if(!hero||hero.dataset.fg55Ready==='1')return;
- hero.dataset.fg55Ready='1';
+ const hero=root?.querySelector('.wh-hero');if(!hero||hero.dataset.fg56Ready==='1')return;
+ hero.dataset.fg56Ready='1';
  const copy=hero.children[0];if(!copy)return;copy.classList.add('fg51-hero-copy');
- const imgWidth=innerWidth<=1024?1200:1600;
+ const imgWidth=innerWidth<=720?1000:(innerWidth<=1024?1200:1600);
  const photo=n=>`https://commons.wikimedia.org/wiki/Special:FilePath/${n}.jpg?width=${imgWidth}`;
  const slides=[
   {label:'FloodGuard HCMC',title:'Chủ động trước nguy cơ ngập đô thị.',body:'Kiểm tra khu vực, xem dự báo và đánh giá tuyến đường trước khi bắt đầu hành trình.',cta:'Dùng FloodGuard',href:'./?login=1',secondary:'Xem vấn đề ngập',secondaryHref:'./problem.html',image:photo('Street_flood_in_Saigon_(10728572006)')},
@@ -70,53 +71,64 @@ function setupHeroSlider(root){
   {label:'Đường đi',title:'Nhìn rủi ro trên cả hành trình, không chỉ một điểm.',body:'FloodGuard hỗ trợ nhận biết đoạn cần chú ý và so sánh phương án di chuyển khi điều kiện mưa thay đổi.',cta:'Kiểm tra tuyến đường',href:'./?login=1',secondary:'Xem tính năng',secondaryHref:'./features.html',image:photo('Street_flood_in_Saigon_(10729260963)')},
   {label:'SOS Rescue',title:'Khi cần hỗ trợ, chuyển nhanh sang cứu hộ.',body:'Gửi yêu cầu SOS, chia sẻ thông tin vị trí và theo dõi trạng thái xử lý trong cùng hệ thống.',cta:'Mở cứu hộ',href:'./rescue.html',secondary:'Giới thiệu',secondaryHref:'./about.html',image:photo('Street_flood_in_Saigon_(10728572006)')}
  ];
+
  const media=document.createElement('div');media.className='fg51-hero-media';media.setAttribute('aria-hidden','true');
- media.innerHTML=slides.map((s,i)=>`<div class="fg51-slide${i===0?' is-active':''}" style="background-image:url('${s.image}')"></div>`).join('');
+ media.innerHTML=slides.map((s,i)=>`<div class="fg51-slide${i===0?' is-active':''}"><img ${i===0?`src="${s.image}" fetchpriority="high"`:`data-src="${s.image}"`} alt="" decoding="async" draggable="false"></div>`).join('');
  hero.prepend(media);
+
  const controls=document.createElement('div');controls.className='fg51-controls';controls.setAttribute('aria-label','Điều khiển banner');
  controls.innerHTML=`<div class="fg51-dots">${slides.map((_,i)=>`<button class="fg51-dot${i===0?' is-active':''}" type="button" aria-label="Banner ${i+1}"></button>`).join('')}</div><button class="fg51-next" type="button" aria-label="Banner tiếp theo">›</button>`;
  hero.appendChild(controls);
  const credit=document.createElement('div');credit.className='fg51-credit';credit.textContent='Ảnh tư liệu TP.HCM · Wikimedia Commons · CC BY 2.0';hero.appendChild(credit);
 
- /* Decode hero photos during idle time to avoid a decode spike at slide change. */
- const decoded=new Set([0]);
- const decodeSlide=i=>new Promise(resolve=>{
-  if(decoded.has(i)){resolve();return}
-  const img=new Image();img.decoding='async';img.src=slides[i].image;
-  const done=()=>{decoded.add(i);resolve()};
-  img.onload=()=>{if(img.decode)img.decode().then(done).catch(done);else done()};
-  img.onerror=done;
- });
- const warm=()=>{let p=Promise.resolve();for(let i=1;i<slides.length;i++)p=p.then(()=>decodeSlide(i));return p};
- if('requestIdleCallback'in window)requestIdleCallback(()=>warm(),{timeout:2200});else setTimeout(()=>warm(),500);
+ const slideEls=[...media.querySelectorAll('.fg51-slide')];
+ const decoded=new Set();
+ const decodeSlide=async i=>{
+  if(decoded.has(i))return;
+  const img=slideEls[i]?.querySelector('img');if(!img)return;
+  if(!img.getAttribute('src'))img.src=img.dataset.src||slides[i].image;
+  try{
+   if(img.decode)await img.decode();
+   else if(!img.complete)await new Promise(resolve=>{img.addEventListener('load',resolve,{once:true});img.addEventListener('error',resolve,{once:true})});
+  }catch(_){/* Keep the loaded image even if decode() rejects. */}
+  decoded.add(i);
+ };
+
+ /* Decode the first frame immediately and warm later frames one by one when idle. */
+ decodeSlide(0);
+ const warm=async()=>{for(let i=1;i<slides.length;i++)await decodeSlide(i)};
+ if('requestIdleCallback'in window)requestIdleCallback(()=>warm(),{timeout:2500});else setTimeout(()=>warm(),650);
 
  let index=0,timer=null,paused=false,transitioning=false,pendingIndex=null;
  const renderCopy=s=>{copy.innerHTML=`<span class="wh-eyebrow">${s.label}</span><h1>${s.title}</h1><p>${s.body}</p><div class="wh-hero-actions"><a class="wh-btn primary" href="${s.href}">${s.cta}</a><a class="wh-btn" href="${s.secondaryHref}">${s.secondary}</a></div>`};
  const activateVisual=next=>{
-  media.querySelectorAll('.fg51-slide').forEach((el,i)=>el.classList.toggle('is-active',i===next));
+  slideEls.forEach((el,i)=>el.classList.toggle('is-active',i===next));
   controls.querySelectorAll('.fg51-dot').forEach((el,i)=>el.classList.toggle('is-active',i===next));
+ };
+ const finishTransition=()=>{
+  transitioning=false;
+  if(pendingIndex!==null){const queued=pendingIndex;pendingIndex=null;paint(queued)}
  };
  const paint=async(next,instant=false)=>{
   const target=(next+slides.length)%slides.length;
   if(transitioning&&!instant){pendingIndex=target;return}
-  transitioning=!instant;
-  if(!instant)await decodeSlide(target);
+  if(target===index&&!instant)return;
+  if(!instant){transitioning=true;await decodeSlide(target)}
   index=target;const s=slides[index];
   if(instant||reduced()){
    activateVisual(index);renderCopy(s);copy.classList.remove('is-changing');transitioning=false;return;
   }
+
   copy.classList.add('is-changing');
-  setTimeout(()=>activateVisual(index),90);
+  /* Crossfade starts only after the incoming image is decoded. */
+  requestAnimationFrame(()=>requestAnimationFrame(()=>activateVisual(index)));
   setTimeout(()=>{
    renderCopy(s);
    requestAnimationFrame(()=>requestAnimationFrame(()=>copy.classList.remove('is-changing')));
-  },190);
-  setTimeout(()=>{
-   transitioning=false;
-   if(pendingIndex!==null){const queued=pendingIndex;pendingIndex=null;paint(queued)}
-  },700);
+  },260);
+  setTimeout(finishTransition,1500);
  };
- const restart=()=>{if(reduced()||paused)return;if(timer)clearInterval(timer);timer=setInterval(()=>paint(index+1),7000)};
+ const restart=()=>{if(reduced()||paused)return;if(timer)clearInterval(timer);timer=setInterval(()=>paint(index+1),7200)};
  controls.querySelectorAll('.fg51-dot').forEach((b,i)=>b.addEventListener('click',()=>{paint(i);restart()}));
  controls.querySelector('.fg51-next')?.addEventListener('click',()=>{paint(index+1);restart()});
  hero.addEventListener('mouseenter',()=>{paused=true;if(timer)clearInterval(timer)});
