@@ -1,0 +1,42 @@
+/* FloodGuard step-number polish v62
+   Refines the 01 / 02 / 03 markers in the homepage "Cach hoat dong" section. */
+html[data-fg-mona="1"] body #fgWebsiteHome #how .wh-step b{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:46px!important;
+  height:46px!important;
+  min-width:46px!important;
+  min-height:46px!important;
+  padding:0!important;
+  margin:0!important;
+  border-radius:50%!important;
+  background:rgba(130,180,64,.18)!important;
+  border:1px solid rgba(170,218,108,.78)!important;
+  color:#fff!important;
+  font-family:Inter,"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Arial,sans-serif!important;
+  font-size:15px!important;
+  font-weight:850!important;
+  line-height:1!important;
+  letter-spacing:-.02em!important;
+  font-variant-numeric:tabular-nums!important;
+  text-shadow:none!important;
+  -webkit-text-stroke:0!important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.035),0 8px 24px rgba(0,0,0,.12)!important;
+  transform:none!important;
+}
+
+html[data-fg-mona="1"] body #fgWebsiteHome #how .wh-step:hover b{
+  background:var(--fg52-green,#82b440)!important;
+  border-color:var(--fg52-green,#82b440)!important;
+}
+
+@media(max-width:720px){
+  html[data-fg-mona="1"] body #fgWebsiteHome #how .wh-step b{
+    width:42px!important;
+    height:42px!important;
+    min-width:42px!important;
+    min-height:42px!important;
+    font-size:14px!important;
+  }
+}
