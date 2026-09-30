@@ -32,6 +32,7 @@ function installThemes(){
  installStylesheet('./site-motion-v56.css?v=56','motion-v56');
  installStylesheet('./site-mona-v57.css?v=58','mona-v57');
  installStylesheet('./site-action-v59.css?v=61','action-v61');
+ installStylesheet('./site-step-v62.css?v=62','step-v62');
  document.documentElement.dataset.fgEditorial='1';
  document.documentElement.dataset.fgLifestyle='1';
  document.documentElement.dataset.fgMona='1';
