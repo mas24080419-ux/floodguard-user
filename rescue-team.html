@@ -152,18 +152,17 @@ function mountDetailMap(point){
 
     const sources=[
       {
-        url:'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-        options:{
-          subdomains:'abcd',
-          maxZoom:20,
-          attribution:'© OpenStreetMap contributors © CARTO'
-        }
-      },
-      {
         url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
         options:{
           maxZoom:19,
           attribution:'Tiles © Esri'
+        }
+      },
+      {
+        url:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+        options:{
+          maxZoom:19,
+          attribution:'© OpenStreetMap contributors'
         }
       }
     ];
