@@ -71,6 +71,9 @@ html,body{max-width:100%;overflow-x:hidden}
   .actions,.workflow{grid-template-columns:1fr}
   .kpi small{font-size:9.5px}
 }
+
+.map{background:linear-gradient(135deg,#edf3f8,#f6f9fc)}
+.map .leaflet-tile-pane{filter:none}
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
@@ -120,23 +123,126 @@ function mountDetailMap(point){
   const box=$('rescueCaseMap');
   if(!box)return;
   destroyDetailMap();
+
   if(!point){
     box.innerHTML='<div class="mapEmpty">Ca này chưa có tọa độ.</div>';
     return;
   }
+
   if(!window.L){
     box.innerHTML='<div class="mapEmpty">Không tải được thư viện bản đồ. Hãy thử tải lại trang.</div>';
     return;
   }
+
   box.innerHTML='';
+
   try{
-    DETAIL_MAP=L.map(box,{zoomControl:true,attributionControl:true}).setView(point,15);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-      maxZoom:19,
-      attribution:'© OpenStreetMap contributors'
-    }).addTo(DETAIL_MAP);
-    DETAIL_MARKER=L.marker(point).addTo(DETAIL_MAP);
-    setTimeout(()=>{try{DETAIL_MAP?.invalidateSize()}catch{}},80);
+    DETAIL_MAP=
+      L.map(
+        box,
+        {
+          zoomControl:true,
+          attributionControl:true
+        }
+      )
+      .setView(
+        point,
+        15
+      );
+
+    const sources=[
+      {
+        url:'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        options:{
+          subdomains:'abcd',
+          maxZoom:20,
+          attribution:'© OpenStreetMap contributors © CARTO'
+        }
+      },
+      {
+        url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+        options:{
+          maxZoom:19,
+          attribution:'Tiles © Esri'
+        }
+      }
+    ];
+
+    let sourceIndex=0;
+    let currentLayer=null;
+    let errorCount=0;
+
+    const loadSource=()=>{
+      if(currentLayer){
+        try{
+          DETAIL_MAP.removeLayer(
+            currentLayer
+          );
+        }catch{}
+      }
+
+      errorCount=0;
+
+      const src=
+        sources[
+          sourceIndex
+        ];
+
+      currentLayer=
+        L.tileLayer(
+          src.url,
+          src.options
+        );
+
+      currentLayer.on(
+        'tileerror',
+        ()=>{
+          errorCount++;
+
+          if(
+            errorCount>=3&&
+            sourceIndex<
+              sources.length-1
+          ){
+            sourceIndex++;
+            loadSource();
+          }
+        }
+      );
+
+      currentLayer.addTo(
+        DETAIL_MAP
+      );
+    };
+
+    loadSource();
+
+    DETAIL_MARKER=
+      L.marker(point)
+      .addTo(
+        DETAIL_MAP
+      );
+
+    setTimeout(
+      ()=>{
+        try{
+          DETAIL_MAP
+          ?.invalidateSize();
+        }catch{}
+      },
+      100
+    );
+
+    setTimeout(
+      ()=>{
+        try{
+          DETAIL_MAP
+          ?.invalidateSize();
+        }catch{}
+      },
+      600
+    );
+
   }catch(e){
     destroyDetailMap();
     box.innerHTML='<div class="mapEmpty">Không hiển thị được bản đồ. Hãy thử tải lại trang.</div>';
