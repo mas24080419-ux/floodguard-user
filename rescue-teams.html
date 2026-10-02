@@ -16,6 +16,9 @@
 .region{margin-bottom:16px}.regionTitle{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px;padding:0 2px}.regionTitle b{font-size:13px;font-weight:800}.regionTitle span{font-size:10px;color:var(--muted)}.teamGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.team{border:1px solid #e7edf4;background:#fbfcfe;border-radius:18px;padding:13px;cursor:pointer;transition:.18s ease}.team:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(55,72,96,.08)}.teamTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.team h3{margin:0;font-size:13px;font-weight:800;letter-spacing:-.01em}.team p{margin:6px 0 0;color:#667990;font-size:10.5px;line-height:1.55}.chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}.chip{padding:5px 7px;border-radius:999px;font-size:9px;font-weight:700;background:#edf3fa;color:#5b6f87}.chip.available{background:#eaf8f1;color:#16825e}.chip.busy{background:#fff7e8;color:#9a6812}.chip.offline{background:#f0f2f5;color:#758194}
 .form{display:grid;gap:10px}.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}.fieldGroup label{display:block;font-size:10.5px;font-weight:700;color:#6f7f95;margin:0 0 5px 2px}.formNote{padding:10px 12px;border-radius:15px;background:#f7faff;border:1px solid #e3ebf5;color:#62758b;font-size:10.5px;line-height:1.55}.formActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}.empty{padding:38px 18px;text-align:center;color:var(--muted);font-size:11px}.overlay{position:fixed;inset:0;background:rgba(239,244,251,.94);backdrop-filter:blur(16px);z-index:99;display:grid;place-items:center;padding:18px}.gateCard{width:min(450px,100%);background:#fff;border:1px solid var(--line);border-radius:25px;box-shadow:0 30px 90px rgba(48,62,86,.18);padding:23px}.gateCard h2{margin:9px 0 5px;font-size:20px}.gateCard p{color:var(--muted);font-size:11px;line-height:1.65}.hidden{display:none!important}
 @media(max-width:1050px){.layout{grid-template-columns:1fr}.teamGrid{grid-template-columns:repeat(2,1fr)}}@media(max-width:820px){.shell{display:block}.side{display:none}.main{padding:14px 10px 30px}.top{flex-direction:column}.kpis{grid-template-columns:repeat(2,1fr)}.teamGrid{grid-template-columns:1fr}.tools,.two{grid-template-columns:1fr}.panel{margin-bottom:12px}}
+
+.membersBox{margin-top:14px;padding-top:14px;border-top:1px solid #e8edf4}.membersBox h3{margin:0 0 5px;font-size:13px;font-weight:800}.membersBox>p{margin:0 0 10px;color:#6f7f95;font-size:10.5px;line-height:1.55}.memberLink{display:grid;grid-template-columns:1fr 120px auto;gap:8px;align-items:end}.memberList{display:grid;gap:7px;margin-top:10px}.memberRow{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid #e8edf4;background:#fafcff;border-radius:14px;padding:9px 10px}.memberRow b{display:block;font-size:11px}.memberRow small{display:block;color:#718198;font-size:9.5px;margin-top:2px}.memberRow button{border:0;background:#fff0f2;color:#a33e49;border-radius:10px;padding:7px 9px;font-weight:700;font-size:10px;cursor:pointer}.memberEmpty{font-size:10.5px;color:#8491a2;padding:8px 2px}
+@media(max-width:820px){.memberLink{grid-template-columns:1fr}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -38,14 +41,14 @@
 <div class="two"><div class="fieldGroup"><label>Trạng thái</label><select class="select" id="teamStatus"><option value="available">Sẵn sàng</option><option value="busy">Đang bận</option><option value="offline">Ngoại tuyến</option></select></div><div class="fieldGroup"><label>Số ca tối đa</label><input class="field" id="capacity" type="number" min="1" max="100" value="1"></div></div>
 <div class="two"><div class="fieldGroup"><label>Vĩ độ</label><input class="field" id="lat" inputmode="decimal" placeholder="21.02850"></div><div class="fieldGroup"><label>Kinh độ</label><input class="field" id="lon" inputmode="decimal" placeholder="105.85420"></div></div>
 <div class="fieldGroup"><label>Ghi chú</label><textarea id="notes" placeholder="Ca trực, phạm vi đặc biệt, thiết bị hỗ trợ…"></textarea></div>
-<div class="formNote">FloodGuard sẽ ưu tiên đội cùng phường/xã → cùng quận/huyện → cùng tỉnh/thành; nếu có tọa độ đội và tọa độ SOS, hệ thống dùng thêm khoảng cách và số ca đang xử lý để sắp xếp gợi ý.</div>
+<div class="membersBox"><h3>Tài khoản đội cứu hộ</h3><p>Thành viên đăng ký tài khoản FloodGuard trước, sau đó Admin gắn email vào đội. Admin không biết và không lưu mật khẩu của thành viên.</p><div class="memberLink"><div class="fieldGroup"><label>Email tài khoản đã đăng ký</label><input class="field" id="memberEmail" type="email" placeholder="email@domain.com"></div><div class="fieldGroup"><label>Vai trò</label><select class="select" id="memberRole"><option value="member">Thành viên</option><option value="leader">Đội trưởng</option></select></div><button class="btn" type="button" id="linkMemberBtn">Gắn tài khoản</button></div><div class="memberList" id="memberList"><div class="memberEmpty">Lưu hoặc chọn một đội để quản lý tài khoản.</div></div></div><div class="formNote">FloodGuard sẽ ưu tiên đội cùng phường/xã → cùng quận/huyện → cùng tỉnh/thành; nếu có tọa độ đội và tọa độ SOS, hệ thống dùng thêm khoảng cách và số ca đang xử lý để sắp xếp gợi ý.</div>
 <div class="formActions"><button class="btn primary" type="submit" id="saveBtn">Lưu đội</button><button class="btn" type="button" id="resetBtn">Tạo đội mới</button><button class="btn danger hidden" type="button" id="deactivateBtn">Ngừng sử dụng đội</button></div>
 </form></div></div>
 </section>
 </main></div>
 <script>
 const API='https://floodguard-rescue-backend.onrender.com',$=id=>document.getElementById(id);
-let sb=null,session=null,TEAMS=[];
+let sb=null,session=null,TEAMS=[],MEMBERS=[];
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLowerCase();
 async function authHeaders(){const s=(await sb.auth.getSession()).data.session;session=s||null;return s?.access_token?{Authorization:'Bearer '+s.access_token}:{}}
@@ -54,6 +57,27 @@ async function verifyAdmin(){const h=await authHeaders();if(!h.Authorization)thr
 function showGate(t,m){$('gate').classList.remove('hidden');$('gateTitle').textContent=t;$('gateText').textContent=m;$('gateBtn').textContent='Về FloodGuard';$('gateBtn').onclick=()=>location.href='/'}
 function statusLabel(v){return v==='available'?'Sẵn sàng':v==='busy'?'Đang bận':'Ngoại tuyến'}
 function regionKey(t){return [t.province_city,t.district].filter(Boolean).join(' · ')}
+
+function membersForTeam(teamId){return MEMBERS.filter(m=>m.active!==false&&String(m.team_id)===String(teamId))}
+function renderMembers(teamId){
+ const box=$('memberList');if(!box)return;
+ if(!teamId){box.innerHTML='<div class="memberEmpty">Lưu hoặc chọn một đội để quản lý tài khoản.</div>';$('linkMemberBtn').disabled=true;return}
+ $('linkMemberBtn').disabled=false;
+ const rows=membersForTeam(teamId);
+ box.innerHTML=rows.length?rows.map(m=>'<div class="memberRow"><div><b>'+esc(m.user?.name||m.user?.email||'Tài khoản cứu hộ')+'</b><small>'+esc(m.user?.email||'')+' · '+(m.member_role==='leader'?'Đội trưởng':'Thành viên')+'</small></div><button type="button" data-unlink="'+esc(m.user_id)+'">Gỡ</button></div>').join(''):'<div class="memberEmpty">Đội này chưa có tài khoản cứu hộ nào.</div>';
+ box.querySelectorAll('[data-unlink]').forEach(b=>b.onclick=()=>unlinkMember(b.dataset.unlink));
+}
+async function loadMembers(){const d=await api('/api/operator/team-members');MEMBERS=Array.isArray(d.members)?d.members:[];renderMembers($('teamId').value)}
+async function linkMember(){
+ const teamId=$('teamId').value,email=$('memberEmail').value.trim(),member_role=$('memberRole').value;
+ if(!teamId){alert('Hãy lưu đội trước khi gắn tài khoản.');return}
+ if(!email){alert('Nhập email tài khoản đội cứu hộ đã đăng ký.');return}
+ try{$('linkMemberBtn').disabled=true;await api('/api/operator/team-member/link',{method:'POST',body:JSON.stringify({team_id:teamId,email,member_role})});$('memberEmail').value='';await loadMembers()}catch(e){const msg=e.message==='registered_user_not_found'?'Email này chưa đăng ký tài khoản FloodGuard. Hãy đăng ký trước rồi gắn lại.':e.message;alert('Không gắn được tài khoản: '+msg)}finally{$('linkMemberBtn').disabled=false}
+}
+async function unlinkMember(userId){
+ if(!confirm('Gỡ tài khoản này khỏi đội cứu hộ?'))return;
+ try{await api('/api/operator/team-member/unlink',{method:'POST',body:JSON.stringify({user_id:userId})});await loadMembers()}catch(e){alert(e.message)}
+}
 function render(){
  const active=TEAMS.filter(t=>t.active!==false),q=norm($('search').value),sf=$('statusFilter').value;
  $('kAll').textContent=active.length;$('kAvailable').textContent=active.filter(t=>t.status==='available').length;$('kBusy').textContent=active.filter(t=>t.status==='busy').length;$('kLoad').textContent=active.reduce((n,t)=>n+Number(t.current_load||0),0);
@@ -64,12 +88,12 @@ function render(){
  $('teams').innerHTML=html||'<div class="empty">Chưa có đội phù hợp. Hãy thêm đội cứu hộ thực tế ở biểu mẫu bên phải.</div>';
  document.querySelectorAll('.team').forEach(el=>el.onclick=()=>editTeam(el.dataset.id));
 }
-function clearForm(){$('teamForm').reset();$('teamId').value='';$('capacity').value='1';$('teamStatus').value='available';$('formTitle').textContent='Thêm đội cứu hộ';$('deactivateBtn').classList.add('hidden')}
-function editTeam(id){const t=TEAMS.find(x=>String(x.id)===String(id));if(!t)return;$('teamId').value=t.id;$('name').value=t.name||'';$('province').value=t.province_city||'';$('district').value=t.district||'';$('ward').value=t.ward||'';$('phone').value=t.phone||'';$('leader').value=t.leader_name||'';$('vehicle').value=t.vehicle_info||'';$('teamStatus').value=t.status||'available';$('capacity').value=t.capacity||1;$('lat').value=t.lat??'';$('lon').value=t.lon??'';$('notes').value=t.notes||'';$('formTitle').textContent='Chỉnh sửa '+t.name;$('deactivateBtn').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'})}
-async function load(){const d=await api('/api/operator/teams');TEAMS=Array.isArray(d.teams)?d.teams:[];$('conn').textContent='● Online';$('conn').style.background='#eaf8f1';$('conn').style.color='#16825e';render()}
+function clearForm(){$('teamForm').reset();$('teamId').value='';$('capacity').value='1';$('teamStatus').value='available';$('formTitle').textContent='Thêm đội cứu hộ';$('deactivateBtn').classList.add('hidden');renderMembers('')}
+function editTeam(id){const t=TEAMS.find(x=>String(x.id)===String(id));if(!t)return;$('teamId').value=t.id;$('name').value=t.name||'';$('province').value=t.province_city||'';$('district').value=t.district||'';$('ward').value=t.ward||'';$('phone').value=t.phone||'';$('leader').value=t.leader_name||'';$('vehicle').value=t.vehicle_info||'';$('teamStatus').value=t.status||'available';$('capacity').value=t.capacity||1;$('lat').value=t.lat??'';$('lon').value=t.lon??'';$('notes').value=t.notes||'';$('formTitle').textContent='Chỉnh sửa '+t.name;$('deactivateBtn').classList.remove('hidden');renderMembers(t.id);window.scrollTo({top:0,behavior:'smooth'})}
+async function load(){const [d,m]=await Promise.all([api('/api/operator/teams'),api('/api/operator/team-members')]);TEAMS=Array.isArray(d.teams)?d.teams:[];MEMBERS=Array.isArray(m.members)?m.members:[];$('conn').textContent='● Online';$('conn').style.background='#eaf8f1';$('conn').style.color='#16825e';render();renderMembers($('teamId').value)}
 $('teamForm').onsubmit=async e=>{e.preventDefault();const team={id:$('teamId').value||undefined,name:$('name').value.trim(),province_city:$('province').value.trim(),district:$('district').value.trim(),ward:$('ward').value.trim(),phone:$('phone').value.trim(),leader_name:$('leader').value.trim(),vehicle_info:$('vehicle').value.trim(),status:$('teamStatus').value,capacity:Number($('capacity').value)||1,lat:$('lat').value.trim()===''?null:Number($('lat').value),lon:$('lon').value.trim()===''?null:Number($('lon').value),notes:$('notes').value.trim(),active:true};try{$('saveBtn').disabled=true;await api('/api/operator/team/save',{method:'POST',body:JSON.stringify({team})});clearForm();await load()}catch(err){alert('Không lưu được đội: '+err.message)}finally{$('saveBtn').disabled=false}};
 $('deactivateBtn').onclick=async()=>{const id=$('teamId').value;if(!id)return;if(!confirm('Ngừng sử dụng đội này? Các ca lịch sử vẫn được giữ.'))return;try{await api('/api/operator/team/deactivate',{method:'POST',body:JSON.stringify({id})});clearForm();await load()}catch(err){alert(err.message)}};
-$('resetBtn').onclick=clearForm;$('search').oninput=render;$('statusFilter').onchange=render;$('refresh').onclick=()=>load().catch(e=>alert(e.message));$('logout').onclick=async()=>{try{await sb?.auth.signOut()}finally{location.href='/'}};
+$('linkMemberBtn').onclick=linkMember;$('resetBtn').onclick=clearForm;$('search').oninput=render;$('statusFilter').onchange=render;$('refresh').onclick=()=>load().catch(e=>alert(e.message));$('logout').onclick=async()=>{try{await sb?.auth.signOut()}finally{location.href='/'}};
 async function init(){try{const r=await fetch(API+'/api/public-config',{cache:'no-store'}),d=await r.json();if(!r.ok||!d.supabase?.url||!d.supabase?.anon_key)throw new Error('Backend/Supabase chưa sẵn sàng.');sb=window.supabase.createClient(d.supabase.url,d.supabase.anon_key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});session=(await sb.auth.getSession()).data.session||null;await verifyAdmin();await load();$('gate').classList.add('hidden')}catch(e){showGate('Không mở được danh sách đội',e.message)}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 </script>
