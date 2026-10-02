@@ -23,3 +23,7 @@ html body #fgWebsiteHome .fg57-quickitem b{color:#16324F!important}
 html body #authScreen{background:#16324F!important}
 html body #authScreen .scene::after{background:linear-gradient(90deg,rgba(12,35,58,.60),rgba(12,35,58,.28) 48%,rgba(12,35,58,.48)),linear-gradient(0deg,rgba(12,35,58,.30),rgba(12,35,58,.08))!important}
 html body #authScreen .field input:focus{border-color:#2878C8!important;box-shadow:0 0 0 4px rgba(40,120,200,.12)!important}
+
+html[data-fg-mona="1"] body #fgWebsiteHome{--fg57-green:#2878C8;--fg57-green-dark:#1E5E9E;--fg57-ink:#16324F;--fg57-soft:#F3F7FC;--fg57-line:#DCE7F2;background:#F3F7FC!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-logo{background:linear-gradient(135deg,#3D91DA,#2878C8)!important;box-shadow:0 8px 24px rgba(40,120,200,.18)!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-eyebrow{color:#2878C8!important}
