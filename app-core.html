@@ -196,9 +196,8 @@ body{overflow:hidden;background:#eaf1f7}
 (function(){
  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  window.FGRouteTime=function(a){
-   if(a?.travelMode==='motorbike')return 'Chưa có ETA xe máy';
-   const n=Number(a?.duration);
-   return Number.isFinite(n)&&n>=0?'~'+Math.max(1,Math.round(n))+' phút · tham khảo':'Chưa có ETA';
+   const n=a?.duration;
+   return (a?.etaType==='traffic'||a?.etaType==='walking')&&Number.isFinite(n)&&n>=0?Math.max(1,Math.round(n))+' phút':'Chưa có thời gian';
  };
  window.FGGoogleRouteURL=function(start,end,mode){
    if(!start||!end||![start.lat,start.lon,end.lat,end.lon].every(v=>v!==null&&v!==''&&Number.isFinite(Number(v))))return '';
@@ -209,14 +208,24 @@ body{overflow:hidden;background:#eaf1f7}
    u.searchParams.set('travelmode',mode==='motorbike'?'two-wheeler':mode==='walk'?'walking':'driving');
    return u.href;
  };
- window.FGRouteSourcePanel=function(start,end,mode,provider){
-   const url=window.FGGoogleRouteURL(start,end,mode);
+ window.FGRouteSourcePanel=function(start,end,mode,provider,a){
+   const url=window.FGGoogleRouteURL(start,end,mode),updated=a?.fetchedAt?new Date(a.fetchedAt).toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'}):'';
    const point=p=>esc(p?.label||'Điểm trên bản đồ')+' ('+Number(p?.lat).toFixed(5)+', '+Number(p?.lon).toFixed(5)+')';
-   return '<section class="fg-routing-source" aria-label="Nguồn tuyến và thời gian"><strong>Kiểm tra thời gian trên Google Maps</strong><p>'+
-   (mode==='motorbike'?'FloodGuard hiện dùng tuyến ô tô làm tham chiếu cho xe máy; chưa có tuyến và thời gian riêng cho xe máy.':'Thời gian OSRM chỉ là tham khảo, chưa tính giao thông hiện tại hoặc ảnh hưởng của ngập.')+
-   '</p>'+(url?'<a class="fg-google-maps-link" data-google-maps href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">Mở Google Maps · '+(mode==='motorbike'?'Xe máy':mode==='walk'?'Đi bộ':'Ô tô')+' ↗</a>':'')+
-   '<small>Google Maps tính lại tuyến từ cùng hai điểm. Tuyến và thời gian có thể khác FloodGuard; nút này không chuyển tuyến né ngập sang Google Maps.</small>'+
-   '<details><summary>Điểm đầu cuối và nguồn dữ liệu</summary><p>Điểm đi: '+point(start)+'<br>Điểm đến: '+point(end)+'<br>Nguồn tuyến trong FloodGuard: '+esc(provider||'OSRM / OpenStreetMap')+'</p><p>Tên khu vực như Thảo Điền hoặc Quận 1 có thể được định vị bằng điểm đại diện. Chọn địa chỉ cụ thể hoặc ghim trên bản đồ để so sánh đúng chuyến đi.</p></details></section>';
+   return '<section class="fg-routing-source" aria-label="Nguồn tuyến và thời gian"><strong>'+
+   (mode==='walk'?'Thời gian đi bộ dự kiến':'Thời gian dự kiến theo giao thông')+
+   '</strong><p>© TomTom'+(updated?' · Tính lúc '+esc(updated):'')+
+   (mode!=='walk'?' · Khởi hành ngay. Thông tin giao thông được tính theo dữ liệu TomTom có sẵn.':'.')+
+   '</p><small>Nguy cơ ngập do FloodGuard đánh giá riêng từ dữ liệu lịch sử. Thời gian chưa được hiệu chỉnh riêng cho độ ngập dự báo.'+
+   (mode==='motorbike'?' Chế độ xe máy của TomTom đang ở bản beta; dữ liệu hạn chế phương tiện có thể chưa đầy đủ.':'')+
+   '</small><details><summary>Điểm đầu cuối và đối chiếu Google Maps</summary><p>Điểm đi: '+point(start)+'<br>Điểm đến: '+point(end)+'</p>'+
+   (url?'<a class="fg-google-maps-link" data-google-maps href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">Đối chiếu Google Maps ↗</a>':'')+
+   '<small>Google Maps tính lại tuyến từ cùng hai điểm; không nhận tuyến né ngập đang chọn. Với tên khu vực, hãy kiểm tra ghim hoặc chọn địa chỉ cụ thể.</small></details></section>';
+ };
+ window.FGRouteTraffic=async function(start,end,mode){
+   if(typeof window.FG31RoutingAPI!=='function')throw new Error('Hệ thống tài khoản đang khởi động. Vui lòng thử lại sau.');
+   const data=await window.FG31RoutingAPI({start:{lat:Number(start.lat),lon:Number(start.lon)},end:{lat:Number(end.lat),lon:Number(end.lon)},travelMode:mode});
+   if(data.code!=='Ok'||!data.routes?.length)throw new Error('Dịch vụ chưa trả về lộ trình hợp lệ.');
+   return {data,provider:'TomTom'};
  };
 })();
 </script>
@@ -1725,7 +1734,7 @@ body.fg12-dark .fg-street-suggest{background:#10283e;border-color:#405b78}body.f
           <div class="fg3-route-field"><span class="fg3-route-dot to"></span><label>Điểm đến</label><div class="fg3-route-inputrow"><input autocomplete="off" class="fg3-route-input" id="fg3RouteTo" value="Quận 1, TP.HCM" placeholder="Tìm điểm đến"><button class="fg3-route-pick" id="fg3PickTo">⌖</button></div><div class="fg3-route-suggest" id="fg3SuggestTo"></div></div>
         </div>
         <div class="fg3-route-modebar" id="fg3RouteModebar" role="tablist" aria-label="Chọn phương tiện"><button type="button" class="fg3-route-mode active" data-route-mode="car" role="tab" aria-selected="true">🚗 Ô tô</button><button type="button" class="fg3-route-mode" data-route-mode="motorbike" role="tab" aria-selected="false">🛵 Xe máy</button><button type="button" class="fg3-route-mode" data-route-mode="walk" role="tab" aria-selected="false">🚶 Đi bộ</button></div>
-        <div class="fg62-pref"><span>Ưu tiên lộ trình</span><div class="fg62-prefbar" id="fg62Prefbar"><button type="button" class="fg62-prefbtn active" data-route-pref="safe">🛡 Ít nguy cơ ngập</button><button type="button" class="fg62-prefbtn" data-route-pref="fast">⚡ Thời gian tham khảo</button></div></div>
+        <div class="fg62-pref"><span>Ưu tiên lộ trình</span><div class="fg62-prefbar" id="fg62Prefbar"><button type="button" class="fg62-prefbtn active" data-route-pref="safe">🛡 Ít nguy cơ ngập</button><button type="button" class="fg62-prefbtn" data-route-pref="fast">⚡ Nhanh nhất</button></div></div>
         <div class="fg3-route-field"><label>Kịch bản lượng mưa (mm)</label><input class="fg3-route-input" style="padding-left:12px" id="fg3RouteRain" type="number" min="0" max="600" step="1" inputmode="decimal" value="100"><div class="fg3-route-quick"><button type="button" data-route-rain="50">50</button><button type="button" data-route-rain="100">100</button><button type="button" data-route-rain="150">150</button><button type="button" data-route-rain="200">200</button><button type="button" id="fg3UseCurrentRoad">Đi từ tuyến đang chọn</button><button type="button" id="fg80UseMyLocation">⌖ Vị trí hiện tại</button><button type="button" id="fg80ClearRoute">↺ Xóa lộ trình</button></div></div>
         <button type="button" class="fg3-route-run" id="fg3RouteRun">Đường đi</button>
       </div>
@@ -2279,9 +2288,9 @@ body.fg12-dark .fg-street-suggest{background:#10283e;border-color:#405b78}body.f
  const routeLayer=L.layerGroup().addTo(map), routePointLayer=L.layerGroup().addTo(map);
  let startPoint=null,endPoint=null,pickMode=null,lastRoutes=[],recommendedIndex=null,selectedIndex=null,travelMode='car',routePreference='safe',autoRunTimer=null,routeRequestSeq=0,routeSessionReady=false;
  const ROUTE_MODES={
-   car:{icon:'🚗',label:'Ô tô',key:'car',color:'#1a73e8',endpoints:[{name:'OSRM',url:'https://router.project-osrm.org/route/v1/driving/'},{name:'OpenStreetMap DE',url:'https://routing.openstreetmap.de/routed-car/route/v1/driving/'}],note:'Tuyến đường bộ cơ bản; thời gian do bộ định tuyến ước tính và không có traffic real-time.'},
-   motorbike:{icon:'🛵',label:'Xe máy',key:'motorbike',color:'#7c3aed',endpoints:[{name:'OSRM',url:'https://router.project-osrm.org/route/v1/driving/'},{name:'OpenStreetMap DE',url:'https://routing.openstreetmap.de/routed-car/route/v1/driving/'}],note:'Dùng mạng đường bộ chung làm tuyến tham chiếu cho xe máy. Chưa mô hình hóa đầy đủ đường cấm xe máy, làn riêng hoặc tốc độ xe máy.'},
-   walk:{icon:'🚶',label:'Đi bộ',key:'walk',color:'#059669',endpoints:[{name:'OpenStreetMap DE Foot',url:'https://routing.openstreetmap.de/routed-foot/route/v1/driving/'}],note:'Dùng mạng đường đi bộ OpenStreetMap. FloodGuard chỉ cảnh báo tiền lệ/nguy cơ ngập; không xác nhận vỉa hè hoặc đoạn đi bộ đang an toàn.'}
+   car:{icon:'🚗',label:'Ô tô',key:'car',color:'#1a73e8',endpoints:[{name:'OSRM',url:'https://router.project-osrm.org/route/v1/driving/'},{name:'OpenStreetMap DE',url:'https://routing.openstreetmap.de/routed-car/route/v1/driving/'}],note:'Tuyến ô tô và thời gian theo TomTom, có xét thông tin giao thông hiện có.'},
+   motorbike:{icon:'🛵',label:'Xe máy',key:'motorbike',color:'#7c3aed',endpoints:[{name:'OSRM',url:'https://router.project-osrm.org/route/v1/driving/'},{name:'OpenStreetMap DE',url:'https://routing.openstreetmap.de/routed-car/route/v1/driving/'}],note:'Tuyến xe máy và thời gian theo TomTom. Chế độ xe máy đang ở bản beta, hạn chế phương tiện có thể chưa đầy đủ.'},
+   walk:{icon:'🚶',label:'Đi bộ',key:'walk',color:'#059669',endpoints:[{name:'OpenStreetMap DE Foot',url:'https://routing.openstreetmap.de/routed-foot/route/v1/driving/'}],note:'Tuyến đi bộ và thời gian dự kiến theo TomTom. FloodGuard đánh giá nguy cơ ngập riêng.'}
  };
  const suggestState={from:null,to:null};
  function closeOtherPanels(){['fg3Drawer','fg3Overview','fg3StationPanel','fg3Layers'].forEach(id=>{const e=$(id);if(e)e.classList.remove('open','show')})}
@@ -2394,7 +2403,7 @@ body.fg12-dark .fg-street-suggest{background:#10283e;border-color:#405b78}body.f
    steps.forEach((step,si)=>{const street=matchStreet(step.name);if(!street)return;const hz=streetHazard(street,rain),km=Math.max(.08,(Number(step.distance)||0)/1000);riskIndex+=hz.score*km;if(hz.score>=3){highN++;highKm+=km}else if(hz.score>=2){medN++;medKm+=km}matched.push({street,hz,step,si,km})});
    const unique=[],seen=new Set();matched.sort((a,b)=>b.hz.score-a.hz.score||b.km-a.km).forEach(x=>{if(!seen.has(x.street)){seen.add(x.street);unique.push(x)}});
    const via=[];for(const st of steps){const name=String(st.name||'').trim();if(name&&!via.includes(name))via.push(name);if(via.length>=3)break}
-   return {route,index,travelMode,routingProvider:'OSRM / OpenStreetMap',riskIndex,highN,medN,highKm,medKm,exposureKm:highKm+medKm,matched,unique,distance:route.distance/1000,duration:route.duration/60,steps,via};
+   return {route,index,travelMode:route.travelMode||travelMode,routingProvider:route.routingProvider||'TomTom',etaType:route.etaType,fetchedAt:route.fetchedAt,modeBeta:route.modeBeta,riskIndex,highN,medN,highKm,medKm,exposureKm:highKm+medKm,matched,unique,distance:route.distance/1000,duration:route.duration/60,steps,via};
  }
  function riskLabel(a){if(a.highN>0)return ['Nguy cơ cao','high'];if(a.medN>0)return ['Cần chú ý','med'];if(a.unique.length)return ['Có tiền lệ ngập','low'];return ['Chưa ghép được bằng chứng','low']}
  function updateRouteSummary(analyses,recommended){
@@ -2413,7 +2422,7 @@ body.fg12-dark .fg-street-suggest{background:#10283e;border-color:#405b78}body.f
    const selected=analyses.find(a=>a.index===selectedIndex)||recommended;
    const fastest=[...analyses].sort((a,b)=>a.duration-b.duration)[0];
    const safest=[...analyses].sort((a,b)=>a.riskIndex-b.riskIndex||a.duration-b.duration)[0];
-   results.innerHTML=window.FGRouteSourcePanel(startPoint,endPoint,travelMode,selected.routingProvider)+analyses.map(a=>{
+   results.innerHTML=window.FGRouteSourcePanel(startPoint,endPoint,travelMode,selected.routingProvider,selected)+analyses.map(a=>{
      const [lab,cls]=riskLabel(a),rec=a.index===recommended.index,sel=a.index===selected.index;
      const via=a.via.length?`Qua ${a.via.map(esc).join(' → ')}`:'Theo lộ trình được đề xuất';
      const riskText=a.highN?`${a.highN} đoạn nguy cơ cao`:a.medN?`${a.medN} đoạn cần chú ý`:a.unique.length?`${a.unique.length} tuyến có tiền lệ ngập`:'Chưa phát hiện tuyến ngập đã ghép trong dataset';
@@ -2423,14 +2432,14 @@ body.fg12-dark .fg-street-suggest{background:#10283e;border-color:#405b78}body.f
      let why='';
      if(rec&&routePreference==='safe'){
        const extra=fastest&&fastest.index!==a.index?Math.max(0,a.duration-fastest.duration):0;
-       why=`Được gợi ý vì có mức phơi nhiễm với các đoạn ngập lịch sử thấp hơn trong các phương án hiện có${extra>0?`, dù thời gian OSRM tham khảo dài hơn khoảng <b>${Math.round(extra)} phút</b> so với phương án có thời gian OSRM thấp nhất`:''}.`;
+       why=`Được gợi ý vì có mức phơi nhiễm với các đoạn ngập lịch sử thấp hơn trong các phương án hiện có${extra>0?`, dù thời gian dự kiến dài hơn khoảng <b>${Math.round(extra)} phút</b> so với phương án nhanh nhất`:''}.`;
      }else if(rec){
        const riskCompare=safest&&safest.index!==a.index&&safest.exposureKm<a.exposureKm?` Phương án ít nguy cơ hơn hiện có khoảng <b>${fmt1(safest.exposureKm)} km</b> đoạn cần chú ý.`:'';
-       why=`Được gợi ý vì có thời gian OSRM tham khảo thấp nhất trong các phương án hiện có; chưa tính giao thông và ngập.${riskCompare}`;
+       why=`Được gợi ý vì có thời gian dự kiến ngắn nhất theo dữ liệu TomTom trong các phương án hiện có.${riskCompare}`;
      }
-     const recPrefix=rec?(routePreference==='safe'?'✓ Ít nguy cơ ngập hơn · ':'⚡ OSRM thấp nhất · '):'';
-     const badge=rec?(routePreference==='safe'?'ÍT NGẬP HƠN':'OSRM THẤP NHẤT'):lab;
-     return `<div class="fg3-route-card ${rec?'recommended':''} ${sel?'selected':''}" data-route-index="${a.index}"><div class="fg3-route-card-head"><div><div style="margin-bottom:5px"><span class="fg49-modepill ${travelMode==='motorbike'?'motorbike':travelMode==='walk'?'walk':''}">${cfg.icon} ${cfg.label}${travelMode==='motorbike'?' · tuyến ô tô tham chiếu':''}</span></div><div class="fg3-route-card-time">${window.FGRouteTime(a)}</div><div class="fg3-route-cardmeta"><span>${fmt1(a.distance)} km</span>${exposure}</div><div class="fg3-route-card-route">${via}</div><span class="fg3-route-riskpill ${cls}">${recPrefix}${riskText}</span>${streets?`<div class="fg62-streets">${streets}</div>`:''}</div><span class="fg3-route-badge ${rec?'best':cls}">${badge}</span></div><div class="fg62-route-extra"><button class="fg3-route-detailbtn" data-detail="${a.index}">☰ Chỉ dẫn từng chặng</button>${rec?`<button class="fg62-route-action" data-why="${a.index}">ⓘ Vì sao gợi ý?</button>`:''}<button class="fg62-route-action ev" data-ev-near="${a.index}">⚡ Trạm sạc gần điểm đến</button></div>${rec?`<div class="fg62-why" id="fg62Why${a.index}"><b>Vì sao đề xuất:</b> ${why}<div class="fg62-summary-label">Đánh giá dựa trên tuyến đường khớp được với bằng chứng lịch sử trong dataset, không phải tình trạng ngập thời gian thực.</div></div>`:''}<div class="fg3-route-steps" id="fg3Steps${a.index}">${steps}${a.steps.length>12?`<div class="fg3-route-empty">+ ${a.steps.length-12} bước khác</div>`:''}</div></div>`
+     const recPrefix=rec?(routePreference==='safe'?'✓ Ít nguy cơ ngập hơn · ':'⚡ Nhanh nhất · '):'';
+     const badge=rec?(routePreference==='safe'?'ÍT NGẬP HƠN':'NHANH NHẤT'):lab;
+     return `<div class="fg3-route-card ${rec?'recommended':''} ${sel?'selected':''}" data-route-index="${a.index}"><div class="fg3-route-card-head"><div><div style="margin-bottom:5px"><span class="fg49-modepill ${travelMode==='motorbike'?'motorbike':travelMode==='walk'?'walk':''}">${cfg.icon} ${cfg.label}${travelMode==='motorbike'?' · TomTom beta':''}</span></div><div class="fg3-route-card-time">${window.FGRouteTime(a)}</div><div class="fg3-route-cardmeta"><span>${fmt1(a.distance)} km</span>${exposure}</div><div class="fg3-route-card-route">${via}</div><span class="fg3-route-riskpill ${cls}">${recPrefix}${riskText}</span>${streets?`<div class="fg62-streets">${streets}</div>`:''}</div><span class="fg3-route-badge ${rec?'best':cls}">${badge}</span></div><div class="fg62-route-extra"><button class="fg3-route-detailbtn" data-detail="${a.index}">☰ Chỉ dẫn từng chặng</button>${rec?`<button class="fg62-route-action" data-why="${a.index}">ⓘ Vì sao gợi ý?</button>`:''}<button class="fg62-route-action ev" data-ev-near="${a.index}">⚡ Trạm sạc gần điểm đến</button></div>${rec?`<div class="fg62-why" id="fg62Why${a.index}"><b>Vì sao đề xuất:</b> ${why}<div class="fg62-summary-label">Đánh giá dựa trên tuyến đường khớp được với bằng chứng lịch sử trong dataset, không phải tình trạng ngập thời gian thực.</div></div>`:''}<div class="fg3-route-steps" id="fg3Steps${a.index}">${steps}${a.steps.length>12?`<div class="fg3-route-empty">+ ${a.steps.length-12} bước khác</div>`:''}</div></div>`
    }).join('');
    results.querySelectorAll('[data-route-index]').forEach(card=>card.onclick=e=>{if(e.target.closest('[data-detail],[data-why],[data-street-detail],[data-ev-near]'))return;selectRoute(Number(card.dataset.routeIndex))});
    results.querySelectorAll('[data-detail]').forEach(btn=>btn.onclick=e=>{e.stopPropagation();const box=$(`fg3Steps${btn.dataset.detail}`);box?.classList.toggle('show');btn.textContent=box?.classList.contains('show')?'▲ Ẩn chỉ dẫn':'☰ Chỉ dẫn từng chặng'});
@@ -2461,12 +2470,12 @@ body.fg12-dark .fg-street-suggest{background:#10283e;border-color:#405b78}body.f
  }
  async function run(isAutoModeSwitch=false){
    const seq=++routeRequestSeq,modeAtStart=travelMode,cfg=ROUTE_MODES[modeAtStart]||ROUTE_MODES.car;
-   const rain=Math.max(0,Number($('fg3RouteRain').value)||0),btn=$('fg3RouteRun');btn.disabled=true;hideSuggestions();$('fg3RouteFrom')?.classList.remove('fg80-invalid');$('fg3RouteTo')?.classList.remove('fg80-invalid');showStatus(`Đang tìm vị trí và các phương án cho <b>${cfg.icon} ${cfg.label}</b>…`);results.innerHTML='';setRouteTools(false);
+   const rain=Math.max(0,Number($('fg3RouteRain').value)||0),btn=$('fg3RouteRun');btn.disabled=true;clearRouteVisuals();fg70Publish();hideSuggestions();$('fg3RouteFrom')?.classList.remove('fg80-invalid');$('fg3RouteTo')?.classList.remove('fg80-invalid');showStatus(`Đang tìm vị trí và các phương án cho <b>${cfg.icon} ${cfg.label}</b>…`);results.innerHTML='';setRouteTools(false);
    try{
      const [a,b]=await resolvePoints();if(seq!==routeRequestSeq)return;
      showStatus(`Đã định vị điểm đi/đến. Đang tính route <b>${cfg.icon} ${cfg.label}</b> và kiểm tra nguy cơ ngập…`,'ok');
      const query=`${a.lon},${a.lat};${b.lon},${b.lat}?alternatives=true&steps=true&geometries=geojson&overview=full&continue_straight=false`;
-     const routed=await window.FG81_NET.routeOSRM(cfg.endpoints,query,cfg.label);if(seq!==routeRequestSeq)return;const data=routed.data;if(data.code!=='Ok'||!data.routes?.length)throw new Error(`Không tìm được lộ trình ${cfg.label.toLowerCase()} giữa hai điểm này.`);
+     const routed=await window.FGRouteTraffic(a,b,modeAtStart);if(seq!==routeRequestSeq)return;const data=routed.data;if(data.code!=='Ok'||!data.routes?.length)throw new Error(`Không tìm được lộ trình ${cfg.label.toLowerCase()} giữa hai điểm này.`);
      const analyses=data.routes.map((x,i)=>({...analyzeRoute(x,rain,i),routingProvider:routed.provider}));
      const recommended=recommendedFor(analyses);
      lastRoutes=analyses;recommendedIndex=recommended.index;selectedIndex=recommended.index;drawRoutes(analyses,selectedIndex,true);renderResults(analyses,recommended,rain);updateRouteSummary(analyses,recommended);
@@ -2496,7 +2505,7 @@ body.fg12-dark .fg-street-suggest{background:#10283e;border-color:#405b78}body.f
  $('fg80ClearRoute')?.addEventListener('click',()=>{resetRoute(false);window.fg51Toast?.('Đã xóa lộ trình trên bản đồ')});
 
  function selectedAnalysis(){return lastRoutes.find(a=>a.index===selectedIndex)||lastRoutes.find(a=>a.index===recommendedIndex)||lastRoutes[0]||null}
- function routeSummaryText(){const a=selectedAnalysis();if(!a)return '';const cfg=ROUTE_MODES[travelMode]||ROUTE_MODES.car;const [lab]=riskLabel(a),rain=Math.max(0,Number($('fg3RouteRain').value)||0);return `FloodGuard HCMC 9.0\n${cfg.icon} ${cfg.label}: ${$('fg3RouteFrom').value} → ${$('fg3RouteTo').value}\nKhoảng cách: ${fmt1(a.distance)} km\nThời gian ước tính: ${window.FGRouteTime(a)}\nKịch bản mưa: ${fmt1(rain)} mm\nĐánh giá theo dữ liệu lịch sử: ${lab}\nĐoạn cần chú ý: ${fmt1(a.exposureKm)} km\nLưu ý: không phải traffic hay tình trạng ngập thời gian thực.`}
+ function routeSummaryText(){const a=selectedAnalysis();if(!a)return '';const cfg=ROUTE_MODES[travelMode]||ROUTE_MODES.car;const [lab]=riskLabel(a),rain=Math.max(0,Number($('fg3RouteRain').value)||0);return `FloodGuard HCMC 9.0\n${cfg.icon} ${cfg.label}: ${$('fg3RouteFrom').value} → ${$('fg3RouteTo').value}\nKhoảng cách: ${fmt1(a.distance)} km\nThời gian ước tính: ${window.FGRouteTime(a)}\nKịch bản mưa: ${fmt1(rain)} mm\nĐánh giá theo dữ liệu lịch sử: ${lab}\nĐoạn cần chú ý: ${fmt1(a.exposureKm)} km\nLưu ý: ETA theo TomTom; nguy cơ ngập dựa trên dữ liệu lịch sử.`}
  $('fg80CopyRoute')?.addEventListener('click',async()=>{const t=routeSummaryText();if(!t)return;try{await navigator.clipboard.writeText(t);window.fg51Toast?.('Đã sao chép tóm tắt hành trình')}catch(e){window.fg51Toast?.('Trình duyệt không cho phép sao chép tự động')}});
  $('fg80ExportRoute')?.addEventListener('click',()=>{const a=selectedAnalysis();if(!a?.route?.geometry)return;const feature={type:'Feature',geometry:a.route.geometry,properties:{application:'FloodGuard HCMC 9.0',mode:travelMode,preference:routePreference,from:$('fg3RouteFrom').value,to:$('fg3RouteTo').value,rain_mm:Math.max(0,Number($('fg3RouteRain').value)||0),distance_km:Number(a.distance.toFixed(3)),duration_min:Number(a.duration.toFixed(1)),exposure_km:Number(a.exposureKm.toFixed(3)),risk_label:riskLabel(a)[0],note:'Historical flood-evidence screening; not real-time flood or traffic status.'}};const blob=new Blob([JSON.stringify(feature,null,2)],{type:'application/geo+json;charset=utf-8'}),u=URL.createObjectURL(blob),x=document.createElement('a');x.href=u;x.download='FloodGuard_route.geojson';x.click();setTimeout(()=>URL.revokeObjectURL(u),1000);window.fg51Toast?.('Đã xuất GeoJSON của lộ trình đang chọn')});
 
@@ -2821,7 +2830,7 @@ body.fg12-dark .fg-street-suggest{background:#10283e;border-color:#405b78}body.f
  ['fg3RouteFrom','fg3RouteTo'].forEach(id=>$(id)?.addEventListener('input',renderTrip));document.querySelectorAll('.fg3-route-mode').forEach(b=>b.addEventListener('click',()=>setTimeout(renderTrip,0)));
  document.addEventListener('fg70:route',e=>{window.FG90SetRain(e.detail?.rain??100,'fg3RouteRain');renderTrip();renderDecision(e.detail)});
  // Compact route decision summary
- function renderDecision(s){const box=$('fg90RouteDecision');if(!box)return;if(!s?.analyses?.length){box.hidden=true;box.innerHTML='';return}const selected=s.analyses.find(a=>a.index===s.selectedIndex)||s.analyses[0],fast=s.analyses.reduce((a,b)=>b.duration<a.duration?b:a,s.analyses[0]),safe=s.analyses.reduce((a,b)=>b.exposureKm<a.exposureKm?b:a,s.analyses[0]);box.hidden=false;box.innerHTML=`<div class="fg90-decision-card sel"><b>${window.FGRouteTime(selected)} · ${Number(selected.distance).toFixed(1)} km</b><span>Phương án đang chọn · ${Number(selected.exposureKm).toFixed(1)} km đoạn cần chú ý</span></div><div class="fg90-decision-card"><b>${window.FGRouteTime(fast)}</b><span>OSRM thấp nhất trong ${s.analyses.length} phương án · chưa tính giao thông/ngập</span></div><div class="fg90-decision-card"><b>${Number(safe.exposureKm).toFixed(1)} km</b><span>Ít phơi nhiễm lịch sử nhất trong các route hiện có</span></div>`}
+ function renderDecision(s){const box=$('fg90RouteDecision');if(!box)return;if(!s?.analyses?.length){box.hidden=true;box.innerHTML='';return}const selected=s.analyses.find(a=>a.index===s.selectedIndex)||s.analyses[0],fast=s.analyses.reduce((a,b)=>b.duration<a.duration?b:a,s.analyses[0]),safe=s.analyses.reduce((a,b)=>b.exposureKm<a.exposureKm?b:a,s.analyses[0]);box.hidden=false;box.innerHTML=`<div class="fg90-decision-card sel"><b>${window.FGRouteTime(selected)} · ${Number(selected.distance).toFixed(1)} km</b><span>Phương án đang chọn · ${Number(selected.exposureKm).toFixed(1)} km đoạn cần chú ý</span></div><div class="fg90-decision-card"><b>${window.FGRouteTime(fast)}</b><span>Nhanh nhất trong ${s.analyses.length} phương án · theo TomTom</span></div><div class="fg90-decision-card"><b>${Number(safe.exposureKm).toFixed(1)} km</b><span>Ít phơi nhiễm lịch sử nhất trong các route hiện có</span></div>`}
  // Recent trips are useful but not primary: collapsed by default.
  const recent=$('fg51Recent');if(recent){recent.classList.add('collapsed');const head=recent.querySelector('.fg51-recent-head');if(head&&!$('fg90RecentToggle')){const t=document.createElement('button');t.type='button';t.id='fg90RecentToggle';t.className='fg90-recent-toggle';t.textContent='Mở ▾';const del=$('fg51ClearRecent');head.insertBefore(t,del||null);const toggle=()=>{recent.classList.toggle('collapsed');t.textContent=recent.classList.contains('collapsed')?'Mở ▾':'Thu gọn ▴'};t.onclick=e=>{e.stopPropagation();toggle()};head.onclick=e=>{if(e.target.closest('#fg51ClearRecent,#fg90RecentToggle'))return;toggle()}}}
  // Initial cleanup / recover bad persisted values (e.g. 20000 mm from older builds)
@@ -3020,7 +3029,7 @@ body.fg12-dark .fg-street-suggest{background:#10283e;border-color:#405b78}body.f
   panelIds.forEach(id=>{const e=$(id);if(e)new MutationObserver(updatePanels).observe(e,{attributes:true,attributeFilter:['class']})});
   backdrop.onclick=()=>{[['fg3RoutePanel','fg3RouteClose'],['fg4EvPanel','fg4EvClose'],['fg3Drawer','fg3Close'],['fg10Panel','fg10Close'],['fg70Panel','fg70Close'],['fg3StationPanel','fg3StationClose']].forEach(([p,c])=>{if(panelOpen(p))$(c)?.click()})};
 
-  function enrichTrip(s){renderRain(s?.rain??currentRain());syncSaveButton();const sel=s?.analyses?.find(a=>a.index===s.selectedIndex)||s?.analyses?.[0];quick.classList.toggle('show',!!sel);const trip=$('fg90ActiveTrip');if(!trip||!sel)return;const sp=trip.querySelector('.txt span');if(sp)sp.textContent=`${s.travelMode==='walk'?'🚶 Đi bộ':s.travelMode==='motorbike'?'🛵 Xe máy':'🚗 Ô tô'} · ${window.FGRouteTime(sel)} · ${Number(sel.distance).toFixed(1)} km · ${Number(sel.exposureKm||0).toFixed(1)} km đoạn cần chú ý`}
+  function enrichTrip(s){renderRain(s?.rain??currentRain());syncSaveButton();const sel=s?.analyses?.find(a=>a.index===s.selectedIndex)||s?.analyses?.[0];quick.classList.toggle('show',!!sel);const trip=$('fg90ActiveTrip');if(!trip)return;const sp=trip.querySelector('.txt span');if(!sel){if(sp)sp.textContent='Chưa có thời gian di chuyển · tạo lộ trình để tính';return;}if(sp)sp.textContent=`${s.travelMode==='walk'?'🚶 Đi bộ':s.travelMode==='motorbike'?'🛵 Xe máy':'🚗 Ô tô'} · ${window.FGRouteTime(sel)} · ${Number(sel.distance).toFixed(1)} km · ${Number(sel.exposureKm||0).toFixed(1)} km đoạn cần chú ý`}
   document.addEventListener('fg70:route',e=>setTimeout(()=>enrichTrip(e.detail),0));
   ['fg3RouteRain','fg3Rain','fcRain'].forEach(id=>$(id)?.addEventListener('change',()=>setTimeout(()=>renderRain(),0)));
 
@@ -3879,7 +3888,8 @@ if('serviceWorker' in navigator && location.protocol !== 'file:'){window.addEven
  let fg34PresenceTimer=null;
  function setAuthControls(ready){const a=$('fg31Submit'),g=$('fg31Google');if(a){a.disabled=!ready;a.style.opacity=ready?'1':'.58';a.style.cursor=ready?'pointer':'wait'}if(g){g.disabled=!ready;g.style.opacity=ready?'1':'.58';g.style.cursor=ready?'pointer':'wait'}}
  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
- async function api(path,opt={}){const s=(await sb?.auth.getSession())?.data?.session||session;const headers=Object.assign({'Content-Type':'application/json'},opt.headers||{});if(s?.access_token)headers.Authorization='Bearer '+s.access_token;const r=await fetch(API+path,{...opt,headers,cache:'no-store'});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||d.detail||('HTTP '+r.status));return d}
+ window.FG31RoutingAPI=input=>api('/api/routes/traffic',{method:'POST',body:JSON.stringify(input),signal:typeof AbortSignal.timeout==='function'?AbortSignal.timeout(45000):undefined});
+ async function api(path,opt={}){const s=(await sb?.auth.getSession())?.data?.session||session;const headers=Object.assign({'Content-Type':'application/json'},opt.headers||{});if(s?.access_token)headers.Authorization='Bearer '+s.access_token;const r=await fetch(API+path,{...opt,headers,cache:'no-store'});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.message||d.error||d.detail||('HTTP '+r.status));return d}
  function authMsg(m,cls=''){const e=$('fg31AuthMsg');if(e){e.className='fg31-auth-msg '+cls;e.textContent=m||''}}
  function showAuth(on=true){$('fg31Auth')?.classList.toggle('show',on);document.documentElement.classList.toggle('fg31-auth-lock',on)}
  function authUI(){if($('fg31Auth'))return;document.body.insertAdjacentHTML('beforeend',`<div class="fg31-auth show" id="fg31Auth"><div class="fg31-auth-card"><div class="fg31-auth-brand"><div class="fg31-auth-logo">FG</div><div><h1>FloodGuard HCMC</h1><p>Đăng nhập để đồng bộ lịch sử, tuyến thường dùng, trạm sạc và cảnh báo ngập cá nhân hóa.</p></div></div><div class="fg31-auth-tabs"><button class="fg31-auth-tab active" data-auth="login">Đăng nhập</button><button class="fg31-auth-tab" data-auth="register">Đăng ký</button></div><div class="fg31-field" id="fg31NameField" hidden><label>Họ và tên</label><input id="fg31Name" autocomplete="name" placeholder="Nguyễn Văn A"></div><div class="fg31-field"><label>Email</label><input id="fg31Email" type="email" autocomplete="email" inputmode="email" placeholder="name@gmail.com"></div><div class="fg31-field"><label>Mật khẩu</label><input id="fg31Password" type="password" autocomplete="current-password" placeholder="Tối thiểu 6 ký tự"></div><button class="fg31-auth-primary" id="fg31Submit">Đăng nhập</button><div class="fg31-divider">hoặc</div><button class="fg31-google" id="fg31Google">G&nbsp;&nbsp;Tiếp tục với Google</button><div class="fg31-auth-msg" id="fg31AuthMsg"></div><div class="fg31-auth-note">Lịch sử cá nhân hóa chỉ được ghi khi bạn bật tính năng trong tài khoản.</div></div></div>`);
