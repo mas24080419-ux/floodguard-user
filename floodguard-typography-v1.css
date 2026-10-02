@@ -87,3 +87,9 @@ html[data-fg-mona="1"] body #fgWebsiteHome .fg-review-grid,html[data-fg-mona="1"
 html[data-fg-mona="1"] body :is(.page-section,.wh-section){padding-top:36px!important;padding-bottom:36px!important}
 html[data-fg-mona="1"] body :is(.fg-review-card,.feature-tile,.info-card,.data-card){padding:22px!important}
 }
+
+html[data-fg-mona="1"]{--fg52-green:#2878C8;--fg52-green-dark:#1E5E9E;--fg52-olive:#16324F;--fg52-ink:#16324F;--fg52-muted:#536A80;--fg52-line:#DCE7F2;--fg52-soft:#F3F7FC}
+html[data-fg-mona="1"] body #fgWebsiteHome #how.fg-review-guide{background:#fff!important;color:#16324F!important}
+html[data-fg-mona="1"] body #fgWebsiteHome #how.fg-review-guide :is(h2,h3){color:#16324F!important}
+html[data-fg-mona="1"] body #fgWebsiteHome #how.fg-review-guide .wh-kicker{color:#1E5E9E!important}
+html[data-fg-mona="1"] body #fgWebsiteHome #how.fg-review-guide .wh-step p{color:#536A80!important}
