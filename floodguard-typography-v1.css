@@ -164,3 +164,57 @@ body.fg12-dark #fg16Panel .fg16-head p { color: #c6daeb !important; }
   html body #fg16Panel .fg16-head h2 { font-size: 16px !important; }
   html body #fg16Panel .fg16-head-main { min-width: 0; }
 }
+
+/* A clear, high-contrast SOS action. */
+html body #fg16SOSFab {
+  background: linear-gradient(135deg, #d62449, #b51936) !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+  min-height: 54px !important;
+  padding: 10px 16px !important;
+  gap: 10px !important;
+  border-radius: 999px !important;
+  box-shadow: 0 8px 22px rgba(143,20,43,.28), 0 0 0 3px rgba(255,255,255,.62) !important;
+  animation: none !important;
+  opacity: 1 !important;
+  filter: none !important;
+  transition: transform .16s ease, box-shadow .16s ease !important;
+}
+html body #fg16SOSFab span {
+  color: #fff !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  letter-spacing: .025em !important;
+  text-shadow: none !important;
+}
+html body #fg16SOSFab i {
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 34px !important;
+  width: 34px !important;
+  height: 34px !important;
+  border: 1px solid rgba(255,255,255,.38) !important;
+  border-radius: 50% !important;
+  background: rgba(255,255,255,.16) !important;
+  font-size: 18px !important;
+}
+html body #fg16SOSFab:hover {
+  background: linear-gradient(135deg, #c51d40, #99132c) !important;
+  box-shadow: 0 10px 26px rgba(143,20,43,.35), 0 0 0 3px rgba(255,255,255,.8) !important;
+  transform: translateY(-2px) !important;
+}
+html body #fg16SOSFab:active { transform: translateY(0) !important; }
+html body #fg16SOSFab:focus-visible {
+  outline: 3px solid #2878c8 !important;
+  outline-offset: 5px !important;
+}
+@media (max-width: 700px) {
+  html body #fg16SOSFab {
+    width: 58px !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+  }
+}
