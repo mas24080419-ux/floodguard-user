@@ -96,3 +96,6 @@ html[data-fg-mona="1"] body #fgWebsiteHome #how.fg-review-guide .wh-step p{color
 
 html[data-fg-mona="1"] body #fgWebsiteHome #how.fg-review-guide .wh-step b{background:#E7F1FB!important;border-color:#BCD4EC!important;color:#1E5E9E!important;box-shadow:none!important}
 html[data-fg-mona="1"] body #fgWebsiteHome #how.fg-review-guide .wh-step:hover b{background:#2878C8!important;border-color:#2878C8!important;color:#fff!important}
+
+/* Hide the SOS route summary visually; preserve its DOM and data updates. */
+#fg16RouteContext { display: none !important; }
