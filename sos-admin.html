@@ -31,7 +31,7 @@
 <script>
 const API='https://floodguard-rescue-backend.onrender.com';
 const $=id=>document.getElementById(id);
-let sb=null,session=null,INCIDENTS=[],SELECTED='';
+let sb=null,session=null,INCIDENTS=[],SELECTED='',LAST_DETAIL_SIG='';
 const LABELS={new:'Mới',accepted:'Đã tiếp nhận',dispatch:'Đang điều phối',arrived:'Đã tới',resolved:'Hoàn thành',cancelled:'Đã hủy'};
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const dt=v=>{if(!v)return '—';let n=Number(v);if(Number.isFinite(n)&&n<1e12)n*=1000;const d=Number.isFinite(n)?new Date(n):new Date(v);return isNaN(d)?'—':d.toLocaleString('vi-VN',{hour12:false})};
@@ -46,10 +46,72 @@ async function verifyAdmin(){const h=await authHeaders();if(!h.Authorization)thr
 function showGate(title,txt,action='Về FloodGuard',fn=()=>location.href='/'){$('gate').classList.remove('hidden');$('gateTitle').textContent=title;$('gateText').textContent=txt;$('gateBtn').disabled=false;$('gateBtn').textContent=action;$('gateBtn').onclick=fn;$('gateErr').textContent=''}
 async function rescueFetch(path,opt={}){const h=await authHeaders();if(!h.Authorization)throw new Error('Phiên Admin đã hết hạn. Vui lòng đăng nhập lại.');const headers=Object.assign({},h,opt.body?{'Content-Type':'application/json'}:{},opt.headers||{});const r=await fetch(API+path,{...opt,headers,cache:'no-store'});const d=await r.json().catch(()=>({}));if(r.status===401||r.status===403)throw new Error(d.error==='unauthorized'?'Tài khoản hiện tại không có quyền quản lý SOS.':(d.error||'Không được phép truy cập SOS.'));if(!r.ok)throw new Error(d.error||('HTTP '+r.status));return d}
 async function sync(){ $('conn').textContent='● Đang đồng bộ…';const d=await rescueFetch('/api/operator/sync');INCIDENTS=Array.isArray(d.incidents)?d.incidents.slice():[];INCIDENTS.sort((a,b)=>Number(b.updated_at||b.created_at||0)-Number(a.updated_at||a.created_at||0));renderAll();$('conn').textContent='● Online';$('conn').style.background='#eaf8f1';$('conn').style.color='#16825e';$('updated').textContent='Đồng bộ '+dt(d.server_time||Date.now())+' · '+(session?.user?.email||'Admin');return d}
-function renderAll(){const st=x=>String(x?.status||'new');$('kAll').textContent=INCIDENTS.length;$('kNew').textContent=INCIDENTS.filter(x=>st(x)==='new').length;$('kActive').textContent=INCIDENTS.filter(x=>['accepted','dispatch'].includes(st(x))).length;$('kArrived').textContent=INCIDENTS.filter(x=>st(x)==='arrived').length;$('kDone').textContent=INCIDENTS.filter(x=>st(x)==='resolved').length;renderList();if(SELECTED){const i=INCIDENTS.find(x=>String(x.id)===String(SELECTED));if(i)renderDetail(i);else SELECTED=''}}
+function renderAll(){const st=x=>String(x?.status||'new');$('kAll').textContent=INCIDENTS.length;$('kNew').textContent=INCIDENTS.filter(x=>st(x)==='new').length;$('kActive').textContent=INCIDENTS.filter(x=>['accepted','dispatch'].includes(st(x))).length;$('kArrived').textContent=INCIDENTS.filter(x=>st(x)==='arrived').length;$('kDone').textContent=INCIDENTS.filter(x=>st(x)==='resolved').length;renderList();if(SELECTED){const i=INCIDENTS.find(x=>String(x.id)===String(SELECTED));if(i)renderDetail(i);else{SELECTED='';LAST_DETAIL_SIG=''}}}
 function renderList(){const q=$('search').value.trim().toLowerCase(),f=$('filter').value;const rows=INCIDENTS.filter(i=>{const s=String(i.status||'new');const hay=[i.id,person(i),phone(i),address(i),desc(i),i.assigned_to].join(' ').toLowerCase();return(!f||s===f)&&(!q||hay.includes(q))});$('countTag').textContent=rows.length+' ca';$('cases').innerHTML=rows.length?rows.map(i=>{const s=String(i.status||'new');return '<button class="case '+(String(i.id)===String(SELECTED)?'active':'')+'" data-id="'+esc(i.id)+'"><div class="caseTop"><b>🆘 '+esc(person(i))+'</b><span class="tag s-'+esc(s)+'">'+esc(LABELS[s]||s)+'</span></div><small>#'+esc(i.id)+' · '+esc(dt(i.updated_at||i.created_at))+'<br>'+esc(address(i))+(i.assigned_to?'<br>Đội: '+esc(i.assigned_to):'')+'</small></button>'}).join(''):'<div class="empty">Không có ca phù hợp bộ lọc.</div>';document.querySelectorAll('.case').forEach(b=>b.onclick=()=>selectCase(b.dataset.id))}
-function selectCase(id){SELECTED=id;renderList();const i=INCIDENTS.find(x=>String(x.id)===String(id));if(i)renderDetail(i)}
-function renderDetail(i){const s=String(i.status||'new'),c=coords(i);$('caseTitle').textContent='🆘 '+person(i);$('caseSub').textContent='#'+i.id+' · cập nhật '+dt(i.updated_at||i.created_at);$('caseStatus').className='tag s-'+s;$('caseStatus').textContent=LABELS[s]||s;const map=c?'<iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.openstreetmap.org/export/embed.html?bbox='+(c[1]-.006)+'%2C'+(c[0]-.004)+'%2C'+(c[1]+.006)+'%2C'+(c[0]+.004)+'&layer=mapnik&marker='+c[0]+'%2C'+c[1]+'"></iframe>':'<div class="mapEmpty">Ca SOS này chưa có tọa độ hợp lệ.</div>';$('info').innerHTML='<div class="infoGrid"><div class="infoCard"><small>Người gửi</small><b>'+esc(person(i))+'</b></div><div class="infoCard"><small>Số điện thoại</small><b>'+esc(phone(i))+'</b></div><div class="infoCard wide"><small>Vị trí / địa chỉ</small><b>'+esc(address(i))+'</b></div><div class="infoCard wide"><small>Mô tả sự cố</small><b>'+esc(desc(i))+'</b></div><div class="infoCard"><small>Tạo lúc</small><b>'+esc(dt(i.created_at))+'</b></div><div class="infoCard"><small>Phân công</small><b>'+esc(i.assigned_to||'Chưa phân công')+'</b></div></div><div class="controls"><div class="controlRow"><label>Trạng thái</label><select class="select" id="statusSel">'+Object.entries(LABELS).map(([v,l])=>'<option value="'+v+'" '+(v===s?'selected':'')+'>'+esc(l)+'</option>').join('')+'</select><button class="btn primary" id="statusBtn">Cập nhật</button></div><div class="controlRow"><label>Đội cứu hộ</label><input class="field" id="assignInput" value="'+esc(i.assigned_to||'')+'" placeholder="VD: Đội 1 / Xe 02"><button class="btn" id="assignBtn">Phân công</button></div></div><div class="mapBox">'+map+'</div>';$('statusBtn').onclick=()=>action('status',{status:$('statusSel').value});$('assignBtn').onclick=()=>action('assign',{assigned_to:$('assignInput').value.trim()});renderMessages(i);$('chatText').disabled=false;$('send').disabled=false}
+function selectCase(id){if(String(SELECTED)!==String(id))LAST_DETAIL_SIG='';SELECTED=id;renderList();const i=INCIDENTS.find(x=>String(x.id)===String(id));if(i)renderDetail(i)}
+function detailSignature(i){
+  const m=Array.isArray(i?.messages)?i.messages:[];
+  const last=m.length?m[m.length-1]:null;
+  return [
+    String(i?.id||''),
+    String(i?.updated_at||i?.created_at||''),
+    String(i?.status||'new'),
+    String(i?.assigned_to||''),
+    String(m.length),
+    String(last?.id||last?.ts||'')
+  ].join('|');
+}
+function renderDetail(i){
+  const s=String(i.status||'new'),c=coords(i),sig=detailSignature(i);
+  $('caseTitle').textContent='🆘 '+person(i);
+  $('caseSub').textContent='#'+i.id+' · cập nhật '+dt(i.updated_at||i.created_at);
+  $('caseStatus').className='tag s-'+s;
+  $('caseStatus').textContent=LABELS[s]||s;
+
+  let dynamic=$('infoDynamic'),mapBox=$('rescueMapBox');
+  if(!dynamic||!mapBox){
+    $('info').innerHTML='<div id="infoDynamic"></div><div class="mapBox" id="rescueMapBox"></div>';
+    dynamic=$('infoDynamic');
+    mapBox=$('rescueMapBox');
+    LAST_DETAIL_SIG='';
+  }
+
+  // Polling happens every 5 seconds. If the selected incident did not actually
+  // change, keep the current DOM untouched so the map and active form controls
+  // do not reload/reset.
+  if(LAST_DETAIL_SIG!==sig){
+    const statusFocused=document.activeElement?.id==='statusSel';
+    const assignFocused=document.activeElement?.id==='assignInput';
+    const draftAssign=assignFocused?$('assignInput')?.value:null;
+
+    dynamic.innerHTML='<div class="infoGrid"><div class="infoCard"><small>Người gửi</small><b>'+esc(person(i))+'</b></div><div class="infoCard"><small>Số điện thoại</small><b>'+esc(phone(i))+'</b></div><div class="infoCard wide"><small>Vị trí / địa chỉ</small><b>'+esc(address(i))+'</b></div><div class="infoCard wide"><small>Mô tả sự cố</small><b>'+esc(desc(i))+'</b></div><div class="infoCard"><small>Tạo lúc</small><b>'+esc(dt(i.created_at))+'</b></div><div class="infoCard"><small>Phân công</small><b>'+esc(i.assigned_to||'Chưa phân công')+'</b></div></div><div class="controls"><div class="controlRow"><label>Trạng thái</label><select class="select" id="statusSel">'+Object.entries(LABELS).map(([v,l])=>'<option value="'+v+'" '+(v===s?'selected':'')+'>'+esc(l)+'</option>').join('')+'</select><button class="btn primary" id="statusBtn">Cập nhật</button></div><div class="controlRow"><label>Đội cứu hộ</label><input class="field" id="assignInput" value="'+esc(i.assigned_to||'')+'" placeholder="VD: Đội 1 / Xe 02"><button class="btn" id="assignBtn">Phân công</button></div></div>';
+
+    if(assignFocused&&draftAssign!==null){
+      $('assignInput').value=draftAssign;
+      $('assignInput').focus();
+    }else if(statusFocused){
+      $('statusSel').focus();
+    }
+
+    $('statusBtn').onclick=()=>action('status',{status:$('statusSel').value});
+    $('assignBtn').onclick=()=>action('assign',{assigned_to:$('assignInput').value.trim()});
+    renderMessages(i);
+    LAST_DETAIL_SIG=sig;
+  }
+
+  const mapKey=c?c[0].toFixed(6)+','+c[1].toFixed(6):'none';
+  if(mapBox.dataset.mapKey!==mapKey){
+    mapBox.dataset.mapKey=mapKey;
+    if(c){
+      mapBox.innerHTML='<iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.openstreetmap.org/export/embed.html?bbox='+(c[1]-.006)+'%2C'+(c[0]-.004)+'%2C'+(c[1]+.006)+'%2C'+(c[0]+.004)+'&layer=mapnik&marker='+c[0]+'%2C'+c[1]+'"></iframe>';
+    }else{
+      mapBox.innerHTML='<div class="mapEmpty">Ca SOS này chưa có tọa độ hợp lệ.</div>';
+    }
+  }
+
+  $('chatText').disabled=false;
+  $('send').disabled=false;
+}
 function renderMessages(i){const m=Array.isArray(i.messages)?i.messages.slice():[];m.sort((a,b)=>Number(a.ts||0)-Number(b.ts||0));$('messages').innerHTML=m.length?m.map(x=>'<div class="msg '+esc(x.from||'bot')+'">'+esc(x.text||'')+(x.operator?'<small>'+esc(x.operator)+'</small>':'')+'<small>'+esc(dt(x.ts))+'</small></div>').join(''):'<div class="empty">Chưa có tin nhắn trong ca này.</div>';$('messages').scrollTop=$('messages').scrollHeight}
 async function action(kind,data){const i=INCIDENTS.find(x=>String(x.id)===String(SELECTED));if(!i)return;const body={id:i.id,operator:session?.user?.email||'FloodGuard Admin',...data};let path=kind==='message'?'/api/operator/message':kind==='assign'?'/api/operator/assign':'/api/operator/status';try{setBusy(true);await rescueFetch(path,{method:'POST',body:JSON.stringify(body)});if(kind==='message')$('chatText').value='';await sync();selectCase(i.id)}catch(e){alert(e.message)}finally{setBusy(false)}}
 function setBusy(v){['send','refresh'].forEach(id=>$(id).disabled=v)}
