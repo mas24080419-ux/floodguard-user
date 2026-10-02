@@ -121,13 +121,19 @@ button,input,select,textarea{font-family:"Nunito",system-ui,-apple-system,"Segoe
   .select,.field{font-size:15px}
   .btn{font-size:12.5px}
 }
+
+.teamHint{margin-top:9px;padding:10px 12px;border:1px solid #e4ebf4;border-radius:15px;background:#f8fbff;font-size:10.5px;color:#60748c;line-height:1.55}
+.teamHint b{color:#2a405c}
+.teamHint .ok{color:#16825e}.teamHint .busy{color:#a46713}.teamHint .off{color:#8b95a5}
+.teamActions{display:flex;gap:8px;align-items:center}
+.teamActions .btn{white-space:nowrap}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <div class="overlay" id="gate"><div class="card"><div class="logo">FG</div><h2 id="gateTitle">FloodGuard SOS Admin</h2><p id="gateText">Đang kiểm tra tài khoản Admin…</p><button class="btn primary" id="gateBtn" style="width:100%;margin-top:12px">Đang kiểm tra…</button><div class="error" id="gateErr"></div></div></div>
 <div class="shell">
-<aside class="side"><div class="brand"><div class="logo">FG</div><div><b>FloodGuard Admin</b><small>SOS Rescue Management</small></div></div><div class="nav"><button onclick="location.href='admin.html'">▦ Tổng quan</button><button onclick="location.href='accounts.html'">👥 Tài khoản đăng nhập</button><button class="active">🆘 Quản lý SOS</button><button onclick="location.href='admin.html#watchSec'">🔔 Watchlist</button><button onclick="location.href='admin.html#alertsSec'">✉️ Email cảnh báo</button></div><div class="sidefoot">Quản lý ca SOS, chat, phân công và trạng thái trong cùng website FloodGuard.<br><br>Quyền điều phối được xác thực bằng chính tài khoản FloodGuard Admin.</div></aside>
+<aside class="side"><div class="brand"><div class="logo">FG</div><div><b>FloodGuard Admin</b><small>SOS Rescue Management</small></div></div><div class="nav"><button onclick="location.href='admin.html'">▦ Tổng quan</button><button onclick="location.href='accounts.html'">👥 Tài khoản đăng nhập</button><button class="active">🆘 Quản lý SOS</button><button onclick="location.href='rescue-teams.html'">🚑 Đội cứu hộ</button><button onclick="location.href='admin.html#watchSec'">🔔 Watchlist</button><button onclick="location.href='admin.html#alertsSec'">✉️ Email cảnh báo</button></div><div class="sidefoot">Quản lý ca SOS, chat, phân công và trạng thái trong cùng website FloodGuard.<br><br>Quyền điều phối được xác thực bằng chính tài khoản FloodGuard Admin.</div></aside>
 <main class="main">
 <header class="top"><div class="title"><h1>Quản lý SOS / Cứu hộ</h1><p id="updated">Chưa đồng bộ dữ liệu</p></div><div class="actions"><span class="status" id="conn">● Chưa kết nối</span><button class="btn" id="refresh">↻ Đồng bộ</button><button class="btn" id="back">← Tổng quan</button><button class="btn" id="logout">Đăng xuất Admin</button></div></header>
 <section class="kpis"><div class="kpi"><small>Tổng ca</small><strong id="kAll">0</strong></div><div class="kpi"><small>Ca mới</small><strong id="kNew">0</strong></div><div class="kpi"><small>Đang xử lý</small><strong id="kActive">0</strong></div><div class="kpi"><small>Đã tới</small><strong id="kArrived">0</strong></div><div class="kpi"><small>Hoàn thành</small><strong id="kDone">0</strong></div></section>
@@ -139,7 +145,7 @@ button,input,select,textarea{font-family:"Nunito",system-ui,-apple-system,"Segoe
 <script>
 const API='https://floodguard-rescue-backend.onrender.com';
 const $=id=>document.getElementById(id);
-let sb=null,session=null,INCIDENTS=[],SELECTED='',LAST_DETAIL_SIG='';
+let sb=null,session=null,INCIDENTS=[],TEAMS=[],SELECTED='',LAST_DETAIL_SIG='';
 const LABELS={new:'Mới',accepted:'Đã tiếp nhận',dispatch:'Đang điều phối',arrived:'Đã tới',resolved:'Hoàn thành',cancelled:'Đã hủy'};
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const dt=v=>{if(!v)return '—';let n=Number(v);if(Number.isFinite(n)&&n<1e12)n*=1000;const d=Number.isFinite(n)?new Date(n):new Date(v);return isNaN(d)?'—':d.toLocaleString('vi-VN',{hour12:false})};
@@ -149,6 +155,14 @@ function person(i){return text(i?.name,i?.full_name,i?.contact?.name,i?.user_nam
 function phone(i){return text(i?.phone,i?.contact?.phone,i?.user_phone,i?.tel,'—')}
 function address(i){return text(i?.address,i?.location_name,i?.location?.address,i?.place,i?.location_text,'—')}
 function desc(i){return text(i?.description,i?.note,i?.problem,i?.issue,i?.details,'—')}
+function normText(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()}
+function km(a,b){if(!a||!b)return null;const R=6371,rad=x=>x*Math.PI/180,dLat=rad(b[0]-a[0]),dLon=rad(b[1]-a[1]),x=Math.sin(dLat/2)**2+Math.cos(rad(a[0]))*Math.cos(rad(b[0]))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(x))}
+function teamPoint(t){const a=Number(t?.lat),b=Number(t?.lon);return Number.isFinite(a)&&Number.isFinite(b)?[a,b]:null}
+function teamScore(t,i){if(!t?.active)return -9999;const a=normText(address(i)),p=normText(t.province_city),d=normText(t.district),w=normText(t.ward),status=String(t.status||'available');let s=0;if(w&&a.includes(w))s+=120;if(d&&a.includes(d))s+=80;if(p&&a.includes(p))s+=35;if(status==='available')s+=35;if(status==='busy')s-=25;if(status==='offline')s-=200;s-=Number(t.current_load||0)*15;const dist=km(coords(i),teamPoint(t));if(dist!==null)s+=Math.max(0,40-Math.min(40,dist));return s}
+function sortedTeams(i){return TEAMS.filter(t=>t.active!==false).slice().sort((a,b)=>teamScore(b,i)-teamScore(a,i)||String(a.name||'').localeCompare(String(b.name||''),'vi'))}
+function teamLabel(t,i){const dist=km(coords(i),teamPoint(t)),st=t.status==='available'?'Sẵn sàng':t.status==='busy'?'Đang bận':'Ngoại tuyến';return t.name+' · '+t.district+(t.ward?' / '+t.ward:'')+' · '+st+' · '+Number(t.current_load||0)+' ca'+(dist!==null?' · '+dist.toFixed(1)+' km':'')}
+async function loadTeams(){const d=await rescueFetch('/api/operator/teams');TEAMS=Array.isArray(d.teams)?d.teams:[];LAST_DETAIL_SIG='';if(SELECTED){const i=INCIDENTS.find(x=>String(x.id)===String(SELECTED));if(i)renderDetail(i)}return TEAMS}
+
 async function authHeaders(){const s=(await sb.auth.getSession()).data.session;session=s||null;return s?.access_token?{Authorization:'Bearer '+s.access_token}:{}}
 async function verifyAdmin(){const h=await authHeaders();if(!h.Authorization)throw new Error('Bạn chưa đăng nhập FloodGuard.');const r=await fetch(API+'/api/account/admin-status',{headers:h,cache:'no-store'}),d=await r.json().catch(()=>({}));if(!r.ok||!d.is_admin)throw new Error('Tài khoản hiện tại không có quyền Admin.');return d}
 function showGate(title,txt,action='Về FloodGuard',fn=()=>location.href='/'){$('gate').classList.remove('hidden');$('gateTitle').textContent=title;$('gateText').textContent=txt;$('gateBtn').disabled=false;$('gateBtn').textContent=action;$('gateBtn').onclick=fn;$('gateErr').textContent=''}
@@ -165,6 +179,7 @@ function detailSignature(i){
     String(i?.updated_at||i?.created_at||''),
     String(i?.status||'new'),
     String(i?.assigned_to||''),
+    String(i?.assigned_team_id||''),
     String(m.length),
     String(last?.id||last?.ts||'')
   ].join('|');
@@ -184,25 +199,33 @@ function renderDetail(i){
     LAST_DETAIL_SIG='';
   }
 
-  // Polling happens every 5 seconds. If the selected incident did not actually
-  // change, keep the current DOM untouched so the map and active form controls
-  // do not reload/reset.
   if(LAST_DETAIL_SIG!==sig){
     const statusFocused=document.activeElement?.id==='statusSel';
-    const assignFocused=document.activeElement?.id==='assignInput';
-    const draftAssign=assignFocused?$('assignInput')?.value:null;
+    const teamFocused=document.activeElement?.id==='teamSel';
+    const teams=sortedTeams(i);
+    const selectedId=String(i.assigned_team_id||'');
+    const teamOptions=teams.length
+      ?'<option value="">— Chọn đội cứu hộ theo khu vực —</option>'+teams.map((t,idx)=>'<option value="'+esc(t.id)+'" '+(String(t.id)===selectedId?'selected':'')+'>'+esc((idx===0?'★ ':'')+teamLabel(t,i))+'</option>').join('')
+      :'<option value="">Chưa có đội cứu hộ nào được khai báo</option>';
+    const best=teams[0]||null;
+    const bestDist=best?km(c,teamPoint(best)):null;
+    const hint=best
+      ?'<div class="teamHint"><b>Gợi ý điều phối:</b> '+esc(best.name)+' · '+esc(best.district)+(best.ward?' / '+esc(best.ward):'')+' · <span class="'+(best.status==='available'?'ok':best.status==='busy'?'busy':'off')+'">'+esc(best.status==='available'?'Sẵn sàng':best.status==='busy'?'Đang bận':'Ngoại tuyến')+'</span> · '+Number(best.current_load||0)+' ca đang xử lý'+(bestDist!==null?' · cách khoảng '+bestDist.toFixed(1)+' km':'')+'.</div>'
+      :'<div class="teamHint">Chưa có dữ liệu đội cứu hộ. Hãy vào <b>Đội cứu hộ</b> để khai báo các đội theo tỉnh/thành, quận/huyện và phường/xã.</div>';
 
-    dynamic.innerHTML='<div class="infoGrid"><div class="infoCard"><small>Người gửi</small><b>'+esc(person(i))+'</b></div><div class="infoCard"><small>Số điện thoại</small><b>'+esc(phone(i))+'</b></div><div class="infoCard wide"><small>Vị trí / địa chỉ</small><b>'+esc(address(i))+'</b></div><div class="infoCard wide"><small>Mô tả sự cố</small><b>'+esc(desc(i))+'</b></div><div class="infoCard"><small>Tạo lúc</small><b>'+esc(dt(i.created_at))+'</b></div><div class="infoCard"><small>Phân công</small><b>'+esc(i.assigned_to||'Chưa phân công')+'</b></div></div><div class="controls"><div class="controlRow"><label>Trạng thái</label><select class="select" id="statusSel">'+Object.entries(LABELS).map(([v,l])=>'<option value="'+v+'" '+(v===s?'selected':'')+'>'+esc(l)+'</option>').join('')+'</select><button class="btn primary" id="statusBtn">Cập nhật</button></div><div class="controlRow"><label>Đội cứu hộ</label><input class="field" id="assignInput" value="'+esc(i.assigned_to||'')+'" placeholder="VD: Đội 1 / Xe 02"><button class="btn" id="assignBtn">Phân công</button></div></div>';
+    dynamic.innerHTML='<div class="infoGrid"><div class="infoCard"><small>Người gửi</small><b>'+esc(person(i))+'</b></div><div class="infoCard"><small>Số điện thoại</small><b>'+esc(phone(i))+'</b></div><div class="infoCard wide"><small>Vị trí / địa chỉ</small><b>'+esc(address(i))+'</b></div><div class="infoCard wide"><small>Mô tả sự cố</small><b>'+esc(desc(i))+'</b></div><div class="infoCard"><small>Tạo lúc</small><b>'+esc(dt(i.created_at))+'</b></div><div class="infoCard"><small>Phân công</small><b>'+esc(i.assigned_to||'Chưa phân công')+'</b></div></div><div class="controls"><div class="controlRow"><label>Trạng thái</label><select class="select" id="statusSel">'+Object.entries(LABELS).map(([v,l])=>'<option value="'+v+'" '+(v===s?'selected':'')+'>'+esc(l)+'</option>').join('')+'</select><button class="btn primary" id="statusBtn">Cập nhật</button></div><div class="controlRow"><label>Đội cứu hộ</label><select class="select" id="teamSel">'+teamOptions+'</select><div class="teamActions"><button class="btn" id="assignBtn">Phân công</button><button class="btn" id="manageTeamsBtn">Quản lý đội</button></div></div></div>'+hint;
 
-    if(assignFocused&&draftAssign!==null){
-      $('assignInput').value=draftAssign;
-      $('assignInput').focus();
-    }else if(statusFocused){
-      $('statusSel').focus();
-    }
+    if(statusFocused)$('statusSel').focus();
+    else if(teamFocused)$('teamSel').focus();
 
     $('statusBtn').onclick=()=>action('status',{status:$('statusSel').value});
-    $('assignBtn').onclick=()=>action('assign',{assigned_to:$('assignInput').value.trim()});
+    $('assignBtn').onclick=()=>{
+      const id=$('teamSel').value;
+      const t=TEAMS.find(x=>String(x.id)===String(id));
+      if(!t){alert('Hãy chọn một đội cứu hộ trước khi phân công.');return}
+      action('assign',{assigned_to:t.name,assigned_team_id:t.id});
+    };
+    $('manageTeamsBtn').onclick=()=>location.href='rescue-teams.html';
     renderMessages(i);
     LAST_DETAIL_SIG=sig;
   }
@@ -223,8 +246,8 @@ function renderDetail(i){
 function renderMessages(i){const m=Array.isArray(i.messages)?i.messages.slice():[];m.sort((a,b)=>Number(a.ts||0)-Number(b.ts||0));$('messages').innerHTML=m.length?m.map(x=>'<div class="msg '+esc(x.from||'bot')+'">'+esc(x.text||'')+(x.operator?'<small>'+esc(x.operator)+'</small>':'')+'<small>'+esc(dt(x.ts))+'</small></div>').join(''):'<div class="empty">Chưa có tin nhắn trong ca này.</div>';$('messages').scrollTop=$('messages').scrollHeight}
 async function action(kind,data){const i=INCIDENTS.find(x=>String(x.id)===String(SELECTED));if(!i)return;const body={id:i.id,operator:session?.user?.email||'FloodGuard Admin',...data};let path=kind==='message'?'/api/operator/message':kind==='assign'?'/api/operator/assign':'/api/operator/status';try{setBusy(true);await rescueFetch(path,{method:'POST',body:JSON.stringify(body)});if(kind==='message')$('chatText').value='';await sync();selectCase(i.id)}catch(e){alert(e.message)}finally{setBusy(false)}}
 function setBusy(v){['send','refresh'].forEach(id=>$(id).disabled=v)}
-async function init(){try{$('gateBtn').disabled=true;const r=await fetch(API+'/api/public-config',{cache:'no-store'}),d=await r.json();if(!r.ok||!d.supabase?.url||!d.supabase?.anon_key)throw new Error('Backend/Supabase chưa sẵn sàng.');sb=window.supabase.createClient(d.supabase.url,d.supabase.anon_key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});session=(await sb.auth.getSession()).data.session||null;await verifyAdmin();await sync();$('gate').classList.add('hidden')}catch(e){showGate('Không mở được SOS Admin',e.message,'Về FloodGuard',()=>location.href='/')}}
-$('search').oninput=renderList;$('filter').onchange=renderList;$('refresh').onclick=()=>sync().catch(e=>alert(e.message));$('send').onclick=()=>{const t=$('chatText').value.trim();if(t)action('message',{text:t})};$('chatText').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('send').click()}});$('back').onclick=()=>location.href='admin.html';$('logout').onclick=async()=>{try{await sb?.auth.signOut()}finally{location.href='/'}};
+async function init(){try{$('gateBtn').disabled=true;const r=await fetch(API+'/api/public-config',{cache:'no-store'}),d=await r.json();if(!r.ok||!d.supabase?.url||!d.supabase?.anon_key)throw new Error('Backend/Supabase chưa sẵn sàng.');sb=window.supabase.createClient(d.supabase.url,d.supabase.anon_key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});session=(await sb.auth.getSession()).data.session||null;await verifyAdmin();await loadTeams();await sync();$('gate').classList.add('hidden')}catch(e){showGate('Không mở được SOS Admin',e.message,'Về FloodGuard',()=>location.href='/')}}
+$('search').oninput=renderList;$('filter').onchange=renderList;$('refresh').onclick=()=>Promise.all([loadTeams(),sync()]).catch(e=>alert(e.message));$('send').onclick=()=>{const t=$('chatText').value.trim();if(t)action('message',{text:t})};$('chatText').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('send').click()}});$('back').onclick=()=>location.href='admin.html';$('logout').onclick=async()=>{try{await sb?.auth.signOut()}finally{location.href='/'}};
 setInterval(()=>{if(session&&!document.hidden)sync().catch(()=>{})},5000);
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 </script>
