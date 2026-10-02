@@ -248,6 +248,8 @@ function cleanRescueInviteFromAddress(){
       location.pathname+'#app'
     );
   }catch(_){}
+  RESCUE_INVITE='';
+  RESCUE_EMAIL='';
 }
 
 async function showApp(session=null){
