@@ -102,3 +102,65 @@ html[data-fg-mona="1"] body #fgWebsiteHome #how.fg-review-guide .wh-step:hover b
 
 /* Hide the user-facing rescue priority banner; keep scoring and dispatch data. */
 #fg16Priority { display: none !important; }
+
+/* Improve rescue header contrast and the close button's visible target. */
+html body #fg16Panel .fg16-head {
+  background: #eff5fc !important;
+  color: #16324f !important;
+  border-bottom: 1px solid #c3d3e3 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+}
+html body #fg16Panel .fg16-head h2 {
+  color: #16324f !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+html body #fg16Panel .fg16-head p {
+  color: #425a72 !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1.5 !important;
+  opacity: 1 !important;
+}
+html body #fg16Panel #fg16Close {
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 44px !important;
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+  padding: 0 !important;
+  border: 1px solid #8ca9c4 !important;
+  border-radius: 12px !important;
+  background: #fff !important;
+  color: #16324f !important;
+  font-size: 30px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  text-shadow: none !important;
+  box-shadow: 0 2px 6px rgba(22,50,79,.12) !important;
+  cursor: pointer;
+}
+html body #fg16Panel #fg16Close:hover {
+  background: #dbeafe !important;
+  border-color: #2878c8 !important;
+}
+html body #fg16Panel #fg16Close:focus-visible {
+  outline: 3px solid #2878c8 !important;
+  outline-offset: 3px !important;
+}
+body.fg12-dark #fg16Panel .fg16-head { background: #16324f !important; }
+body.fg12-dark #fg16Panel .fg16-head h2 { color: #edf5ff !important; }
+body.fg12-dark #fg16Panel .fg16-head p { color: #c6daeb !important; }
+@media (max-width: 640px) {
+  html body #fg16Panel .fg16-head h2 { font-size: 16px !important; }
+  html body #fg16Panel .fg16-head-main { min-width: 0; }
+}
