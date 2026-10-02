@@ -5,6 +5,20 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#102c56">
 <title>FloodGuard HCMC</title>
+<script>
+(()=>{
+  const q=new URLSearchParams(location.search);
+  const h=new URLSearchParams(location.hash.slice(1));
+  if(h.has('access_token')||h.has('error')||q.has('code')||q.has('error')){
+    document.documentElement.classList.add('fg-auth-return');
+  }
+})();
+</script>
+<style id="fg-oauth-loading">
+html.fg-auth-return #fgWebsiteHome{display:none!important}
+html.fg-auth-return::before{content:"Đang mở FloodGuard…";position:fixed;inset:0;z-index:10000;display:grid;place-items:center;background:#f5f8f0;color:#294326;font:600 18px system-ui,sans-serif}
+</style>
+
 <link rel="manifest" href="./manifest.webmanifest">
 <style>
 :root{--navy:#0d2444;--navy2:#173c69;--blue:#4d83ff;--violet:#7c7cf2;--cyan:#4fc6db;--card:rgba(255,255,255,.94);--text:#142846;--muted:#6d7d93;--line:#dce6f1;--danger:#bc2f3d;--ok:#12815f;--shadow:0 26px 80px rgba(5,25,55,.30)}
@@ -270,6 +284,8 @@ async function showApp(session=null){
   }catch(e){
     ui.auth.classList.remove('hidden');
     ui.app.classList.add('hidden');
+    document.getElementById('fgWebsiteHome')?.classList.add('hidden');
+    finishOAuthLoading();
     setStatus('Chưa xác định được quyền tài khoản');
     setMessage('Không thể kiểm tra vai trò tài khoản. Hãy thử lại sau vài giây.','error');
     throw e;
@@ -312,7 +328,12 @@ async function showApp(session=null){
   }
 }
 
+function finishOAuthLoading(){document.documentElement.classList.remove('fg-auth-return')}
+ui.frame.addEventListener('load',()=>{if(ui.frame.getAttribute('src'))finishOAuthLoading()});
+
 function showLogin(){
+  if(document.documentElement.classList.contains('fg-auth-return'))document.getElementById('fgWebsiteHome')?.classList.add('hidden');
+  finishOAuthLoading();
   currentAppMode='';
   ui.app.classList.add('hidden');
   ui.auth.classList.remove('hidden');
@@ -437,6 +458,8 @@ async function init(){
       );
 
   }catch(e){
+    if(document.documentElement.classList.contains('fg-auth-return'))document.getElementById('fgWebsiteHome')?.classList.add('hidden');
+    finishOAuthLoading();
     setStatus(
       'Không kết nối được hệ thống tài khoản'
     );
