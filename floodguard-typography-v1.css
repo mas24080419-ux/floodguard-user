@@ -99,3 +99,6 @@ html[data-fg-mona="1"] body #fgWebsiteHome #how.fg-review-guide .wh-step:hover b
 
 /* Hide the SOS route summary visually; preserve its DOM and data updates. */
 #fg16RouteContext { display: none !important; }
+
+/* Hide the user-facing rescue priority banner; keep scoring and dispatch data. */
+#fg16Priority { display: none !important; }
