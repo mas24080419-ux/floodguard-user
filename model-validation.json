@@ -1,0 +1,24 @@
+{
+  "core_pairs": 48,
+  "independent_dates": 8,
+  "streets": 21,
+  "group_by_date": {
+    "n": 13,
+    "mae": 14.442406440951089,
+    "rmse": 23.39695591451959,
+    "baseline_mae": 13.015897317109644,
+    "tested": 48,
+    "coverage": 0.2708333333333333,
+    "dates": 5
+  },
+  "forward_time": {
+    "n": 1,
+    "mae": 70.08140251007097,
+    "rmse": 70.08140251007097,
+    "baseline_mae": 76.87878787878788,
+    "tested": 35,
+    "coverage": 0.02857142857142857,
+    "dates": 1
+  },
+  "note": "Baseline = mean training depth evaluated on the same predicted events. Ensemble re-fitted with internal CV per fold; samples with no eligible ensemble are counted in coverage, never imputed. Event group exclusion is shared across all streets. Internal source audit metadata predates one core row change; counts computed from running code."
+}
