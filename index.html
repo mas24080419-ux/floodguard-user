@@ -192,26 +192,25 @@ function setStatus(text,ok=false){ui.statusText.textContent=text;ui.statusDot.cl
 function setBusy(on,label){busy=on;[ui.loginBtn,ui.signupBtn,ui.googleBtn].forEach(b=>b.disabled=on);if(label&&on)ui.loginBtn.innerHTML='<span class="spinner"></span>'+label;else ui.loginBtn.textContent='Đăng nhập'}
 function friendlyError(error){const m=String(error?.message||error||'').toLowerCase();if(m.includes('invalid login credentials'))return 'Sai email hoặc mật khẩu. Vui lòng kiểm tra lại.';if(m.includes('email not confirmed'))return 'Email chưa được xác minh. Hãy kiểm tra hộp thư của bạn.';if(m.includes('user already registered'))return 'Email này đã được đăng ký.';if(m.includes('provider')&&(m.includes('disabled')||m.includes('not enabled')||m.includes('unsupported')))return 'Đăng nhập Google chưa được bật trong Supabase. Cần bật Google Provider một lần trong cấu hình dự án.';if(m.includes('network')||m.includes('fetch'))return 'Không thể kết nối máy chủ tài khoản. Hãy kiểm tra mạng và thử lại.';return error?.message||'Đã xảy ra lỗi. Vui lòng thử lại.'}
 async function accountContext(session){
-  if(!session?.access_token)return {account_type:'user',rescue:{enabled:false}};
-  try{
-    const r=await fetch(
-      API+'/api/account/context',
-      {
-        headers:{
-          Authorization:
-            'Bearer '+
-            session.access_token
-        },
-        cache:'no-store'
-      }
-    );
-    const d=await r.json().catch(()=>({}));
-    if(r.ok)return d;
-  }catch(_){}
-  return {
-    account_type:'user',
-    rescue:{enabled:false}
-  };
+  if(!session?.access_token)throw new Error('missing_session');
+  const r=await fetch(
+    API+'/api/account/context',
+    {
+      headers:{
+        Authorization:
+          'Bearer '+
+          session.access_token
+      },
+      cache:'no-store'
+    }
+  );
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok){
+    const e=new Error(d.error||('HTTP '+r.status));
+    e.status=r.status;
+    throw e;
+  }
+  return d;
 }
 
 function rescueModuleUrl(){
@@ -264,8 +263,17 @@ async function showApp(session=null){
     return showLogin();
   }
 
-  const ctx=
-    await accountContext(s);
+  setStatus('Đang xác định quyền tài khoản…',true);
+  let ctx;
+  try{
+    ctx=await accountContext(s);
+  }catch(e){
+    ui.auth.classList.remove('hidden');
+    ui.app.classList.add('hidden');
+    setStatus('Chưa xác định được quyền tài khoản');
+    setMessage('Không thể kiểm tra vai trò tài khoản. Hãy thử lại sau vài giây.','error');
+    throw e;
+  }
 
   const rescueMode=
     !!RESCUE_INVITE||
