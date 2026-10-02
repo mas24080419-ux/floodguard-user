@@ -289,6 +289,9 @@ async function showApp(session=null){
     ?rescueModuleUrl()
     :'./app-core.html';
 
+  // Open the application once Supabase has restored the session and roles.
+  // Wait until here so homepage navigation cannot remove OAuth callback data early.
+  window.FGOpenFloodGuard?.();
   ui.auth.classList.add('hidden');
   ui.app.classList.remove('hidden');
 
