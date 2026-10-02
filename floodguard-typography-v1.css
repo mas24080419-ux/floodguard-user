@@ -27,3 +27,10 @@ html body #authScreen .field input:focus{border-color:#2878C8!important;box-shad
 html[data-fg-mona="1"] body #fgWebsiteHome{--fg57-green:#2878C8;--fg57-green-dark:#1E5E9E;--fg57-ink:#16324F;--fg57-soft:#F3F7FC;--fg57-line:#DCE7F2;background:#F3F7FC!important}
 html[data-fg-mona="1"] body #fgWebsiteHome .wh-logo{background:linear-gradient(135deg,#3D91DA,#2878C8)!important;box-shadow:0 8px 24px rgba(40,120,200,.18)!important}
 html[data-fg-mona="1"] body #fgWebsiteHome .wh-eyebrow{color:#2878C8!important}
+
+/* Readable ocean footer */
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-footer{background:#16324F!important;color:#E6EEF7!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-footer :is(.wh-brand,.wh-brand span,.wh-foot-links a){color:#FFFFFF!important;opacity:1!important;text-shadow:none!important;filter:none!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-footer .wh-foot>span{color:#DCE7F2!important;opacity:1!important;font-size:14px!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-footer .wh-foot-links a{font-size:14px!important;font-weight:500!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-footer .wh-foot-links a:is(:hover,:focus-visible){color:#FFFFFF!important;text-decoration:underline!important;text-underline-offset:5px}
