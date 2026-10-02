@@ -116,7 +116,7 @@ html,body{max-width:100%;overflow-x:hidden}
 <div class="panel"><div class="detailHead"><div><h2 id="caseTitle">Chọn một ca SOS</h2><p id="caseSub">Thông tin điều phối sẽ hiển thị tại đây.</p></div><span class="tag s-new hidden" id="caseStatus"></span></div><div class="detailBody"><div class="info" id="info"><div class="empty">Chọn một ca ở danh sách bên trái.</div></div><div class="chat"><div class="messages" id="messages"><div class="empty">Chưa chọn cuộc trò chuyện.</div></div><div class="composer"><textarea id="chatText" disabled placeholder="Nhắn cho người gửi SOS…"></textarea><button class="btn primary" id="send" disabled>Gửi</button></div></div></div></div></section></main></section>
 <script>
 const API='https://floodguard-rescue-backend.onrender.com',$=id=>document.getElementById(id);
-const INVITE_PARAMS=new URLSearchParams(location.search);let INVITE_TOKEN=INVITE_PARAMS.get('invite')||'',INVITE_EMAIL=(INVITE_PARAMS.get('email')||'').trim().toLowerCase();let sb=null,session=null,DATA=null,INCIDENTS=[],SELECTED='',FIRST_SYNC=true,KNOWN=new Set(),EDITING_PROFILE=false,LAST_DETAIL_SIG='';
+const INVITE_PARAMS=new URLSearchParams(location.search);let INVITE_TOKEN=INVITE_PARAMS.get('invite')||'',INVITE_EMAIL=(INVITE_PARAMS.get('email')||'').trim().toLowerCase();const EMBEDDED=INVITE_PARAMS.get('embedded')==='1'||window.top!==window.self;let sb=null,session=null,DATA=null,INCIDENTS=[],SELECTED='',FIRST_SYNC=true,KNOWN=new Set(),EDITING_PROFILE=false,LAST_DETAIL_SIG='';
 let DETAIL_MAP=null,DETAIL_MARKER=null;
 function destroyDetailMap(){try{if(DETAIL_MAP){DETAIL_MAP.remove()}}catch{}DETAIL_MAP=null;DETAIL_MARKER=null}
 function mountDetailMap(point){
@@ -258,7 +258,7 @@ function desc(i){return text(i?.note,i?.description,i?.problem,i?.issue,'—')}
 function coords(i){const pairs=[[i?.location?.lat,i?.location?.lon],[i?.location?.lat,i?.location?.lng],[i?.lat,i?.lon],[i?.lat,i?.lng],[i?.latitude,i?.longitude]];for(const [a,b] of pairs){const x=Number(a),y=Number(b);if(Number.isFinite(x)&&Number.isFinite(y)&&Math.abs(x)<=90&&Math.abs(y)<=180)return[x,y]}return null}
 function setAuthMsg(t='',kind=''){$('authMsg').textContent=t;$('authMsg').className='authMsg'+(kind?' '+kind:'')}
 function hideAll(){['auth','waiting','onboarding','app'].forEach(id=>$(id).classList.add('hidden'))}
-function showLogin(){destroyDetailMap();hideAll();$('auth').classList.remove('hidden');EDITING_PROFILE=false}
+function showLogin(){destroyDetailMap();hideAll();EDITING_PROFILE=false;if(EMBEDDED){try{parent.postMessage('floodguard:need-login',location.origin)}catch{}return}$('auth').classList.remove('hidden')}
 function showWaiting(email){hideAll();$('waiting').classList.remove('hidden');EDITING_PROFILE=false;$('waitingTitle').textContent='Email chưa được cấp quyền cứu hộ';$('waitingText').innerHTML='Tài khoản <b>'+esc(email||'')+'</b> đã đăng nhập nhưng Admin chưa cấp quyền cứu hộ cho email này. Sau khi Admin thêm email trong mục <b>🚑 Đội cứu hộ</b>, bấm “Kiểm tra lại quyền”.'}
 function showConfirmWaiting(email,expires){hideAll();$('waiting').classList.remove('hidden');EDITING_PROFILE=false;$('waitingTitle').textContent='Cần xác nhận lời mời cứu hộ';$('waitingText').innerHTML='Admin đã cấp quyền cho <b>'+esc(email||'')+'</b>, nhưng bạn cần bấm nút <b>“Xác nhận & hoàn thiện hồ sơ”</b> trong email FloodGuard trước khi khai báo thông tin đội.'+(expires?'<br><br>Liên kết hiện tại có hạn đến: '+esc(dt(expires)):'' )}
 function showApp(){hideAll();$('app').classList.remove('hidden');EDITING_PROFILE=false}
@@ -323,7 +323,7 @@ function renderDetail(i){
   LAST_DETAIL_SIG=detailSig(i);
 }
 function renderMessages(i){const rows=Array.isArray(i.messages)?i.messages.slice().sort((a,b)=>Number(a.ts||0)-Number(b.ts||0)):[];$('messages').innerHTML=rows.length?rows.map(m=>'<div class="msg '+esc(m.from||'bot')+'">'+esc(m.text||'')+(m.operator?'<small>'+esc(m.operator)+'</small>':'')+'<small>'+esc(dt(m.ts))+'</small></div>').join(''):'<div class="empty">Chưa có tin nhắn.</div>';$('messages').scrollTop=$('messages').scrollHeight}
-async function saveProfile(e){e.preventDefault();const team={name:$('profileName').value.trim(),province_city:$('profileProvince').value.trim(),district:$('profileDistrict').value.trim(),ward:$('profileWard').value.trim(),phone:$('profilePhone').value.trim(),leader_name:$('profileLeader').value.trim(),vehicle_info:$('profileVehicle').value.trim(),status:$('profileStatus').value,capacity:Number($('profileCapacity').value)||1,lat:$('profileLat').value.trim()===''?null:Number($('profileLat').value),lon:$('profileLon').value.trim()===''?null:Number($('profileLon').value),notes:$('profileNotes').value.trim(),active:true};try{$('saveProfileBtn').disabled=true;await api('/api/rescue-team/profile',{method:'POST',body:JSON.stringify({team})});clearProfileDraft();await sync()}catch(err){alert('Không lưu được hồ sơ: '+err.message)}finally{$('saveProfileBtn').disabled=false}}
+async function saveProfile(e){e.preventDefault();const team={name:$('profileName').value.trim(),province_city:$('profileProvince').value.trim(),district:$('profileDistrict').value.trim(),ward:$('profileWard').value.trim(),phone:$('profilePhone').value.trim(),leader_name:$('profileLeader').value.trim(),vehicle_info:$('profileVehicle').value.trim(),status:$('profileStatus').value,capacity:Number($('profileCapacity').value)||1,lat:$('profileLat').value.trim()===''?null:Number($('profileLat').value),lon:$('profileLon').value.trim()===''?null:Number($('profileLon').value),notes:$('profileNotes').value.trim(),active:true};try{$('saveProfileBtn').disabled=true;await api('/api/rescue-team/profile',{method:'POST',body:JSON.stringify({team})});clearProfileDraft();try{parent.postMessage('floodguard:account-updated',location.origin)}catch{}await sync()}catch(err){alert('Không lưu được hồ sơ: '+err.message)}finally{$('saveProfileBtn').disabled=false}}
 async function updateStatus(status){if(!SELECTED)return;try{await api('/api/rescue-team/status',{method:'POST',body:JSON.stringify({id:SELECTED,status})});await sync()}catch(e){alert(e.message)}}
 async function sendMessage(){const v=$('chatText').value.trim();if(!v||!SELECTED)return;try{$('send').disabled=true;await api('/api/rescue-team/message',{method:'POST',body:JSON.stringify({id:SELECTED,text:v})});$('chatText').value='';await sync()}catch(e){alert(e.message)}finally{$('send').disabled=false}}
 $('loginTab').onclick=()=>{$('loginTab').classList.add('active');$('signupTab').classList.remove('active');$('loginForm').classList.remove('hidden');$('signupForm').classList.add('hidden');setAuthMsg()};
@@ -334,7 +334,42 @@ PROFILE_FIELDS.forEach(id=>{$(id)?.addEventListener('input',saveProfileDraft);$(
 $('teamStatus').onchange=async()=>{try{await api('/api/rescue-team/team-status',{method:'POST',body:JSON.stringify({status:$('teamStatus').value})});await sync()}catch(e){alert(e.message)}};
 $('notifyBtn').onclick=async()=>{if(!('Notification'in window)){alert('Trình duyệt này không hỗ trợ thông báo.');return}const p=await Notification.requestPermission();$('notifyBtn').textContent=p==='granted'?'🔔 Đã bật thông báo':'🔕 Chưa được cấp quyền'};
 $('search').oninput=renderList;$('filter').onchange=renderList;$('refresh').onclick=()=>sync().catch(e=>alert(e.message));$('send').onclick=sendMessage;$('chatText').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}});$('retryAccess').onclick=()=>sync().catch(e=>alert(e.message));async function doLogout(){try{await sb.auth.signOut()}finally{session=null;DATA=null;INCIDENTS=[];SELECTED='';FIRST_SYNC=true;KNOWN=new Set();LAST_DETAIL_SIG='';showLogin()}}$('logout').onclick=doLogout;$('waitingLogout').onclick=doLogout;$('onboardLogout').onclick=doLogout;
-async function init(){try{const r=await fetch(API+'/api/public-config',{cache:'no-store'}),d=await r.json();if(!r.ok||!d.supabase?.url||!d.supabase?.anon_key)throw new Error('Backend/Supabase chưa sẵn sàng.');sb=window.supabase.createClient(d.supabase.url,d.supabase.anon_key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});if(INVITE_EMAIL){$('loginEmail').value=INVITE_EMAIL;$('signupEmail').value=INVITE_EMAIL;setAuthMsg('Bạn đang mở lời mời cứu hộ cho '+INVITE_EMAIL+'. Hãy đăng nhập hoặc đăng ký bằng đúng email này.','ok')}session=(await sb.auth.getSession()).data.session||null;if(session)await sync();else showLogin();setInterval(()=>{if(session&&!document.hidden&&!EDITING_PROFILE)sync().catch(()=>{})},5000)}catch(e){showLogin();setAuthMsg(e.message,'err')}}
+async function init(){
+  try{
+    if(!EMBEDDED){
+      const u=new URL('/',location.origin);
+      if(INVITE_TOKEN)u.searchParams.set('rescue_invite',INVITE_TOKEN);
+      if(INVITE_EMAIL)u.searchParams.set('rescue_email',INVITE_EMAIL);
+      u.searchParams.set('app','1');
+      location.replace(u.href);
+      return;
+    }
+
+    const r=await fetch(API+'/api/public-config',{cache:'no-store'}),d=await r.json();
+    if(!r.ok||!d.supabase?.url||!d.supabase?.anon_key)throw new Error('Backend/Supabase chưa sẵn sàng.');
+
+    sb=window.supabase.createClient(
+      d.supabase.url,
+      d.supabase.anon_key,
+      {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}
+    );
+
+    session=(await sb.auth.getSession()).data.session||null;
+
+    if(session){
+      await sync();
+    }else{
+      showLogin();
+    }
+
+    setInterval(()=>{
+      if(session&&!document.hidden&&!EDITING_PROFILE)sync().catch(()=>{})
+    },5000);
+  }catch(e){
+    showLogin();
+    setAuthMsg(e.message,'err');
+  }
+}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 </script>
 </body></html>
