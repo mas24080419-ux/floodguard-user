@@ -69,7 +69,7 @@ function insertQuickBar(root){
  wrap.innerHTML=`<div class="fg57-quickbar" aria-label="Truy cập nhanh FloodGuard">
    <a class="fg57-quickitem" href="./?login=1"><span class="fg57-quickicon">⌖</span><span><small>Kiểm tra khu vực</small><b>Mở bản đồ ngập</b><span>Xem rủi ro theo vị trí và tuyến đường.</span></span></a>
    <a class="fg57-quickitem" href="./?login=1"><span class="fg57-quickicon">☔</span><span><small>Kịch bản lượng mưa</small><b>Thử dự báo ngập</b><span>Ước tính mức ngập theo dữ liệu hiện có.</span></span></a>
-   <a class="fg57-quickitem" href="./features.html"><span class="fg57-quickicon">↗</span><span><small>Hành trình</small><b>Kiểm tra đường đi</b><span>Tìm hiểu luồng đánh giá rủi ro trên tuyến.</span></span></a>
+   <a class="fg57-quickitem" href="./how-it-works.html"><span class="fg57-quickicon">↗</span><span><small>Hành trình</small><b>Hướng dẫn sử dụng</b><span>Ba bước để bắt đầu kiểm tra tuyến.</span></span></a>
   </div>`;
  hero.insertAdjacentElement('afterend',wrap);
 }
@@ -80,7 +80,7 @@ function setupHeroSlider(root){
  const imgWidth=innerWidth<=720?1000:(innerWidth<=1024?1200:1600);
  const photo=n=>`https://commons.wikimedia.org/wiki/Special:FilePath/${n}.jpg?width=${imgWidth}`;
  const slides=[
-  {label:'FloodGuard HCMC',title:'Chủ động trước nguy cơ ngập đô thị.',body:'Kiểm tra khu vực, xem dữ liệu liên quan và đánh giá rủi ro trước khi bắt đầu hành trình.',cta:'Xem FloodGuard',href:'./?login=1',secondary:'Tìm hiểu vấn đề',secondaryHref:'./problem.html',image:photo('Street_flood_in_Saigon_(10728572006)')},
+  {label:'FloodGuard HCMC',title:'Kiểm tra nguy cơ ngập trên hành trình của bạn.',body:'Kiểm tra khu vực, xem dữ liệu liên quan và đánh giá rủi ro trước khi bắt đầu hành trình.',cta:'Mở bản đồ',href:'./?login=1',secondary:'Cách sử dụng',secondaryHref:'./how-it-works.html',image:photo('Street_flood_in_Saigon_(10728572006)')},
   {label:'Dự báo ngập',title:'Thử kịch bản mưa trước khi bạn lên đường.',body:'Thay đổi lượng mưa đầu vào để xem mức ngập ước tính và mức rủi ro theo dữ liệu hiện có.',cta:'Thử dự báo',href:'./?login=1',secondary:'Cách hoạt động',secondaryHref:'./how-it-works.html',image:photo('Street_flood_in_Saigon_(10728890034)')},
   {label:'Đường đi',title:'Nhìn rủi ro trên cả hành trình, không chỉ một điểm.',body:'FloodGuard hỗ trợ nhận biết đoạn cần chú ý và so sánh phương án di chuyển khi điều kiện mưa thay đổi.',cta:'Kiểm tra tuyến đường',href:'./?login=1',secondary:'Xem tính năng',secondaryHref:'./features.html',image:photo('Street_flood_in_Saigon_(10729260963)')}
  ];
@@ -146,10 +146,9 @@ function setupHeroSlider(root){
   restartProgress();
  };
  const restart=()=>{
-  if(reduced())return;
   if(timer)clearInterval(timer);
-  timer=setInterval(()=>paint(index+1),7600);
-  restartProgress();
+  progress.classList.remove('is-running');
+  /* Keep the headline stable; banners remain manually selectable. */
  };
  dotEls.forEach((b,i)=>b.addEventListener('click',()=>{paint(i);restart()}));
  controls.querySelector('.fg51-prev')?.addEventListener('click',()=>{paint(index-1);restart()});
@@ -184,6 +183,7 @@ function reveal(){
  targets.forEach(x=>x.classList.add('fg52-reveal'));
  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('fg52-visible');io.unobserve(e.target)}}),{threshold:.06,rootMargin:'0px 0px -2%'});targets.forEach(x=>io.observe(x));
 }
-function start(){installThemes();rewriteHome();normalizeSiteNav();mobileMenu();markActive();reveal()}
+function addFooterResources(){document.querySelectorAll('.wh-foot-links,.footer-links').forEach(foot=>{[['Dữ liệu','./data.html'],['Hướng dẫn','./how-it-works.html'],['Liên hệ','./contact.html']].forEach(([label,href])=>{if(!foot.querySelector(`a[href="${href}"]`)){const a=document.createElement('a');a.textContent=label;a.href=href;foot.appendChild(a)}})});document.querySelectorAll('.site-actions .primary').forEach(a=>a.textContent='Mở bản đồ →')}
+function start(){installThemes();rewriteHome();normalizeSiteNav();mobileMenu();markActive();addFooterResources();reveal()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
