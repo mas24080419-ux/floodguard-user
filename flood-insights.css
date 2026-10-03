@@ -2,3 +2,25 @@
 
 /* Keep chart labels readable inside narrow mobile drawers. */
 .fg-insights svg{min-width:420px}#fgDaily{overflow-x:auto}
+
+/* Interactive observation and usage charts. */
+.fg-insights .fg-chart{margin:12px 0;padding:16px 12px;background:#20252d;border:1px solid #394452;border-radius:14px;color:#eef4fc;overflow:hidden}
+.fg-chart figcaption{font-size:15px;font-weight:700;line-height:1.5}
+.fg-chart-legend{display:flex;gap:8px 16px;flex-wrap:wrap;margin:10px 0;color:#d0dbe8;font-size:12px}
+.fg-chart i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px}
+.fg-insights .fg-chart svg{min-width:0;max-height:none;width:100%;height:auto;touch-action:pan-y}
+.fg-chart-axis{fill:#c0ccda;font-size:11px;font-family:inherit}
+.fg-chart-grid{stroke:#39414d;stroke-width:1}
+.fg-chart-cursor line{stroke:#c3d0dc;stroke-width:1;stroke-dasharray:4 4}
+.fg-chart-cursor circle{stroke:#20252d;stroke-width:2}
+.fg-chart-controls{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#c0ccda;font-size:11px}
+.fg-chart-controls button{display:grid;place-items:center;min-width:44px;min-height:44px;background:#303b49;color:#f4f8fc;border:1px solid #54657a;border-radius:10px;font-size:24px;cursor:pointer}
+.fg-chart-controls button:hover{background:#425269}
+.fg-chart-controls button:focus-visible{outline:2px solid #6ee7c7;outline-offset:2px}
+.fg-chart-readout{margin-top:10px;padding:12px;background:#151b23;border:1px solid #465464;border-radius:10px;font-size:12px}
+.fg-chart-readout>b{display:block;color:#fff;margin-bottom:5px}
+.fg-chart-readout>div{display:flex;flex-wrap:wrap;gap:6px 18px}
+.fg-chart-readout strong{color:#fff}.fg-chart-readout a{display:inline-block;color:#8dc0ff;margin-top:7px}
+.fg-chart-readout small{display:block;color:#c0ccda;margin-top:5px}
+.fg-insights .fg-chart .fg-chart-note{color:#c0ccda;font-size:11px;margin:10px 0 0;line-height:1.65}
+@media(max-width:480px){.fg-insights .fg-chart{padding:12px 8px}.fg-chart figcaption{font-size:14px}.fg-chart-legend{font-size:11px}.fg-chart-readout{padding:10px}}
