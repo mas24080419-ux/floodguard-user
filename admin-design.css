@@ -1,0 +1,74 @@
+/* Shared visual system for every FloodGuard Admin page. */
+html body.fg-admin-ui{--bg:#f4f7fb;--card:#fff;--text:#16324f;--muted:#71869d;--line:#e3ebf4;--blue:#2878c8;--blue2:#2878c8;--shadow:0 3px 12px #16324f04;background:#f4f7fb!important;color:#16324f!important}
+html body.fg-admin-ui .shell{display:block!important;min-height:100dvh}
+html body.fg-admin-ui .shell>.side{position:relative!important;top:auto!important;height:auto!important;padding:12px 24px!important;display:flex!important;flex-direction:row!important;align-items:center!important;gap:26px!important;overflow:visible!important;background:#fff!important;color:#16324f!important;border:0!important;border-bottom:1px solid #e3ebf4!important;box-shadow:none!important}
+html body.fg-admin-ui .side .brand{margin:0!important;padding:0!important;border:0!important;flex-shrink:0;gap:12px!important}
+html body.fg-admin-ui .side .brand b{font-size:15px!important;line-height:1.5!important;font-weight:600!important;color:#16324f!important}
+html body.fg-admin-ui .side .brand small{color:#71869d!important;font-size:10px!important;line-height:1.6!important;margin-top:2px!important}
+html body.fg-admin-ui .side .logo{width:38px!important;height:38px!important;border-radius:11px!important;background:#e8f2fc!important;color:#2878c8!important;border:1px solid #d7e8f8!important;box-shadow:none!important;font-size:17px!important}
+html body.fg-admin-ui .side .nav{display:flex!important;flex:1;gap:4px!important;overflow-x:auto!important;scrollbar-width:none!important;padding:0!important;min-width:0}
+html body.fg-admin-ui .side .nav button{display:flex!important;align-items:center;gap:8px!important;flex:0 0 auto;min-height:40px!important;padding:8px 12px!important;font-size:12px!important;font-weight:500!important;line-height:1.5!important;white-space:nowrap;border:0!important;border-radius:9px!important;color:#61768b!important;background:transparent!important;box-shadow:none!important}
+html body.fg-admin-ui .side .nav button:is(.active,:hover){background:#edf5fe!important;color:#216db8!important}
+html body.fg-admin-ui .side .nav button.active::before{display:none!important}
+html body.fg-admin-ui .side .fg-nav-icon{width:18px!important;height:18px!important;flex:0 0 18px!important;color:#829bb5!important}
+html body.fg-admin-ui .side .nav button.active .fg-nav-icon{color:#2878c8!important}
+html body.fg-admin-ui .side :is(.sidefoot,.fg-mobile-nav-hint){display:none!important}
+html body.fg-admin-ui .main{padding:16px 24px 24px!important;min-width:0}
+html body.fg-admin-ui .top{display:flex;align-items:center!important;flex-direction:row!important;justify-content:space-between;gap:16px!important;margin-bottom:12px!important}
+html body.fg-admin-ui .title h1{font-size:22px!important;font-weight:600!important;line-height:1.4!important;letter-spacing:-.025em!important;margin:0!important;color:#16324f!important}
+html body.fg-admin-ui .title p{font-size:11px!important;line-height:1.6!important;color:#71869d!important;margin:3px 0 0!important;overflow-wrap:anywhere}
+html body.fg-admin-ui .actions{display:flex!important;align-items:center;flex-wrap:wrap;gap:8px!important}
+html body.fg-admin-ui .btn{min-height:42px!important;padding:9px 13px!important;border:1px solid #dce6f0!important;border-radius:10px!important;background:#fff!important;color:#405b76!important;font-size:12px!important;line-height:1.5!important;font-weight:600!important;box-shadow:none!important}
+html body.fg-admin-ui .btn:hover{background:#f3f8fd!important}
+html body.fg-admin-ui .btn.primary{background:#2878c8!important;border-color:#2878c8!important;color:#fff!important}
+html body.fg-admin-ui .btn.primary:hover{background:#216bb3!important}
+html body.fg-admin-ui .btn.danger{background:#fff5f6!important;color:#b42331!important;border-color:#f3d4d9!important}
+html body.fg-admin-ui .btn:disabled{opacity:.5!important;cursor:not-allowed}
+html body.fg-admin-ui :is(button,input,select,textarea):focus-visible{outline:2px solid #2878c8!important;outline-offset:3px}
+html body.fg-admin-ui .status{font-size:11px!important;font-weight:600!important;padding:6px 10px!important;border-radius:999px!important}
+html body.fg-admin-ui .main>.grid,html body.fg-admin-ui .main>.kpis{display:flex!important;flex-wrap:wrap;gap:10px!important;margin-bottom:14px!important}
+html body.fg-admin-ui .kpi{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:4px 12px!important;padding:10px 14px!important;flex:1;min-width:110px!important;min-height:0!important;border:1px solid #e3ebf4!important;border-radius:10px!important;box-shadow:none!important;background:#fff!important}
+html body.fg-admin-ui .kpi small{font-size:11px!important;line-height:1.5!important;color:#71869d!important;font-weight:500!important}
+html body.fg-admin-ui .kpi strong{font-size:20px!important;line-height:1.3!important;margin:0!important;color:#16324f!important;font-weight:600!important;letter-spacing:0!important}
+html body.fg-admin-ui .kpi em{grid-column:1/-1;font-size:10px!important;color:#8296ac!important;font-style:normal}
+html body.fg-admin-ui :is(.panel,.section){background:#fff!important;border:1px solid #e3ebf4!important;border-radius:16px!important;box-shadow:0 3px 12px #16324f04!important}
+html body.fg-admin-ui :is(.panelHead,.sectionHead){padding:16px 18px!important;border-bottom:1px solid #e3ebf4!important}
+html body.fg-admin-ui :is(.panelHead,.sectionHead) h2{font-size:16px!important;font-weight:600!important;line-height:1.5!important;color:#16324f!important}
+html body.fg-admin-ui .sectionHead span{font-size:11px!important;color:#71869d!important}
+html body.fg-admin-ui :is(.search,input.field,select.select,.form input,.form select,.grantForm input){font-size:14px!important;min-height:42px!important;line-height:1.5!important;border-radius:10px!important;border:1px solid #dce6f0!important;background:#fff!important;color:#16324f!important}
+html body.fg-admin-ui .table :is(th,td){font-size:12px!important;line-height:1.6!important;padding:12px 14px!important;border-color:#e9eff6!important}
+html body.fg-admin-ui .table th{font-size:10px!important;font-weight:600!important;color:#61768b!important;background:#f9fbfd!important}
+html body.fg-admin-ui .usercell b{font-size:13px!important;font-weight:600!important;color:#16324f!important}
+html body.fg-admin-ui .usercell small{font-size:11px!important;color:#71869d!important}
+html body.fg-admin-ui .avatar{background:#eaf3fd!important;color:#2878c8!important;border-radius:10px!important}
+html body.fg-admin-ui .delete{font-size:11px!important;border-radius:9px!important;min-height:34px!important}
+html body.fg-admin-ui .team{border-radius:12px!important;box-shadow:none!important;border-color:#e3ebf4!important;background:#f9fbfd!important}
+html body.fg-admin-ui .team.active{background:#edf5fe!important;border-color:#bcd7f2!important}
+html body.fg-admin-ui .team h3{font-size:14px!important;font-weight:600!important;color:#16324f!important}
+html body.fg-admin-ui .team p{font-size:12px!important;line-height:1.7!important;color:#61768b!important}
+@media(min-width:701px) and (max-width:1250px){
+ html body.fg-admin-ui .shell>.side{padding:10px 14px!important;gap:14px!important}
+ html body.fg-admin-ui .side .brand small{display:none!important}
+ html body.fg-admin-ui .side .nav button{padding:8px!important;font-size:11px!important}
+ html body.fg-admin-ui .main{padding:16px 14px 24px!important}
+ html body.fg-admin-ui .kpi{flex:1 1 calc(33.333% - 10px)}
+}
+@media(max-width:700px){
+ html body.fg-admin-ui .shell>.side{display:block!important;padding:12px!important}
+ html body.fg-admin-ui .side .brand{margin-bottom:10px!important}
+ html body.fg-admin-ui .side .nav{display:flex!important;width:100%;gap:4px!important}
+ html body.fg-admin-ui .side .nav button{min-height:44px!important;padding:8px 10px!important;font-size:12px!important}
+ html body.fg-admin-ui .main{padding:12px 10px 24px!important}
+ html body.fg-admin-ui .top{flex-direction:column!important;align-items:stretch!important;gap:10px!important}
+ html body.fg-admin-ui .title h1{font-size:21px!important}
+ html body.fg-admin-ui .actions{width:100%;gap:6px!important}
+ html body.fg-admin-ui .actions .btn{min-height:44px!important;flex:1 1 auto}
+ html body.fg-admin-ui .main>.grid,html body.fg-admin-ui .main>.kpis{gap:8px!important}
+ html body.fg-admin-ui .kpi{flex:1 1 calc(50% - 8px);min-width:0!important;padding:10px 12px!important}
+ html body.fg-admin-ui .kpi strong{font-size:20px!important}
+ html body.fg-admin-ui :is(.search,input.field,select.select,.form input,.form select,.grantForm input){font-size:16px!important;min-height:44px!important;max-width:100%}
+ html body.fg-admin-ui :is(.panelHead,.sectionHead){padding:14px!important;flex-wrap:wrap}
+ html body.fg-admin-ui .tableTools{width:100%}
+ html body.fg-admin-ui .tableTools .search{width:100%!important}
+}
+@media(prefers-reduced-motion:reduce){html body.fg-admin-ui .side .nav button{transition:none!important}}
