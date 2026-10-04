@@ -218,3 +218,63 @@ html body #fg16SOSFab:focus-visible {
     border-radius: 50% !important;
   }
 }
+
+/* App header refinement: calm surfaces, readable navigation, consistent controls. */
+html body #fg3App .fg3-header{
+ background:#ffffff!important;border:1px solid #dce6f0!important;
+ border-radius:20px!important;box-shadow:0 8px 28px rgba(22,50,79,.10)!important;
+ gap:18px!important;padding:0 18px!important;backdrop-filter:blur(16px)!important;
+}
+html body #fg3App .fg3-header::before,html body #fg3App .fg3-header::after{display:none!important}
+html body #fg3App .fg3-brand{gap:12px!important;min-width:0!important;flex:1 1 auto!important}
+html body #fg3App .fg3-brand>div:last-child{min-width:0!important}
+html body #fg3App .fg3-logo{width:44px!important;height:44px!important;flex:0 0 44px!important;border-radius:14px!important;background:#2878c8!important;box-shadow:0 4px 12px #2878c822!important;font-size:17px!important}
+html body #fg3App .fg3-brand h1{font-size:18px!important;font-weight:700!important;line-height:1.5!important;letter-spacing:-.035em!important;color:#16324f!important}
+html body #fg3App .fg3-brand p{font-size:10px!important;line-height:1.6!important;color:#6b7e93!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;margin-top:2px!important}
+html body #fg3App .fg12-version{font-size:9px!important;background:#edf4fc!important;border:0!important;color:#547492!important;vertical-align:middle!important;padding:3px 6px!important;box-shadow:none!important}
+html body #fg3App .fg3-live{font-size:9px!important;padding:4px 8px!important;border:0!important;background:#edf8f3!important;color:#2b8063!important;box-shadow:none!important;vertical-align:middle!important}
+html body #fg3App .fg3-nav{flex:0 0 auto!important;border:1px solid #e1e9f2!important;background:#f3f6fa!important;border-radius:15px!important;padding:4px!important;gap:3px!important;box-shadow:none!important;overflow:visible!important}
+html body #fg3App .fg3-nav .fg136-shell,html body #fg3App .fg136-compact-strip{display:none!important}
+html body #fg3App .fg3-nav .fg3-btn{height:40px!important;min-height:40px!important;width:auto!important;min-width:0!important;padding:0 12px!important;gap:7px!important;background:transparent!important;color:#61768b!important;border:0!important;border-radius:11px!important;font-size:11px!important;font-weight:600!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important;transform:none!important;box-shadow:none!important;transition:background .15s,color .15s!important}
+html body #fg3App .fg3-nav .fg14-nav-label{max-width:none!important;opacity:1!important;transform:none!important;margin:0!important}
+html body #fg3App .fg3-nav .fg14-nav-ico{background:transparent!important;color:inherit!important;box-shadow:none!important;width:19px!important;height:19px!important;flex:0 0 19px!important}
+html body #fg3App .fg3-nav .fg3-btn:hover{background:#e7eef6!important;color:#2878c8!important}
+html body #fg3App .fg3-nav .fg3-btn:is(.primary,.active){background:#fff!important;color:#216ab2!important;box-shadow:0 2px 7px #16324f12!important}
+html body #fg3App .fg12-tools{flex:0 0 auto!important;gap:6px!important;border-left:1px solid #e2eaf2!important;padding-left:14px!important;margin-left:0!important}
+html body #fg3App .fg12-tool{width:36px!important;height:36px!important;min-height:36px!important;border-radius:11px!important;border:1px solid transparent!important;background:#f4f7fb!important;color:#4d6681!important;box-shadow:none!important;font-size:16px!important}
+html body #fg3App .fg12-tool:hover{background:#eaf2fb!important;color:#2878c8!important;border-color:#d5e4f4!important}
+html body #fg3App .fg12-net{font-size:9px!important;background:transparent!important;border:0!important;padding:0 5px!important;box-shadow:none!important;color:#58758a!important}
+html body #fg3App #fg31AccountBtn{background:#edf4fc!important;border-color:#dce8f6!important}
+html body #fg3App .fg3-header button:focus-visible{outline:2px solid #2878c8!important;outline-offset:3px!important}
+html body.fg12-dark #fg3App .fg3-header{background:#132b43!important;border-color:#2c455e!important;box-shadow:0 8px 28px #0003!important}
+html body.fg12-dark #fg3App .fg3-brand h1{color:#edf4fc!important}
+html body.fg12-dark #fg3App .fg3-brand p{color:#a6bad0!important}
+html body.fg12-dark #fg3App .fg3-nav{background:#10253b!important;border-color:#2c455e!important}
+html body.fg12-dark #fg3App .fg3-nav .fg3-btn{color:#b4c5d7!important}
+html body.fg12-dark #fg3App .fg3-nav .fg3-btn:is(:hover,.active,.primary){background:#244462!important;color:#e9f4ff!important}
+html body.fg12-dark #fg3App .fg12-tool{background:#1b3650!important;color:#c9daec!important}
+html body.fg12-dark #fg3App .fg12-tools{border-color:#345069!important}
+@media(min-width:701px) and (max-width:1450px){
+ html body #fg3App .fg3-header{gap:12px!important;padding:0 12px!important}
+ html body #fg3App .fg3-brand h1{font-size:16px!important}
+ html body #fg3App .fg3-live,html body #fg3App .fg12-version{display:none!important}
+ html body #fg3App .fg3-nav .fg3-btn{padding:0 9px!important}
+ html body #fg3App .fg12-tools{gap:4px!important;padding-left:10px!important}
+ html body #fg3App .fg12-net{display:none!important}
+}
+@media(min-width:701px) and (max-width:1100px){
+ html body #fg3App .fg3-brand p{display:none!important}
+ html body #fg3App .fg3-nav .fg14-nav-label{display:none!important}
+ html body #fg3App .fg3-nav .fg3-btn{width:38px!important;padding:0!important;justify-content:center!important}
+}
+@media(max-width:700px){
+ html body #fg3App .fg3-header{gap:8px!important;padding:0 10px!important;border-radius:16px!important}
+ html body #fg3App .fg3-brand{gap:8px!important;max-width:none!important}
+ html body #fg3App .fg3-logo{width:32px!important;height:32px!important;flex-basis:32px!important;font-size:12px!important;border-radius:10px!important}
+ html body #fg3App .fg3-brand h1{font-size:13px!important;line-height:1.4!important}
+ html body #fg3App .fg3-brand p,html body #fg3App .fg3-nav,html body #fg3App .fg3-live,html body #fg3App .fg12-version{display:none!important}
+ html body #fg3App .fg12-tools{gap:4px!important;padding-left:0!important;border:0!important}
+ html body #fg3App .fg12-tool{width:34px!important;height:40px!important;min-height:40px!important;border-radius:10px!important;font-size:15px!important}
+ html body #fg3App .fg12-net{display:none!important}
+}
+@media(prefers-reduced-motion:reduce){html body #fg3App .fg3-header button{transition:none!important}}
