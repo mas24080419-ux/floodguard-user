@@ -1,0 +1,111 @@
+/* FloodGuard rescue workspace — approved desktop/mobile design. */
+html body{--bg:#f4f7fb;--text:#16324f;--muted:#71869d;--line:#e3ebf4;--blue:#2878c8;--blue2:#2878c8;background:#f4f7fb!important;color:#16324f!important}
+html body .main{padding:22px 24px 32px}
+html body .title h1{font-size:25px;letter-spacing:-.025em}
+html body .title p,html body .detailHead p{font-size:12px;line-height:1.6;color:#71869d;overflow-wrap:anywhere}
+html body .btn{min-height:42px;padding:9px 13px;border-radius:10px;font-size:12px;font-weight:600;box-shadow:none}
+html body .btn.primary{background:#2878c8!important;border:1px solid #2878c8!important;color:white!important}
+html body .btn.primary:hover{background:#216bb3!important}
+html body .btn:disabled{opacity:.5}
+html body :is(button,input,select,textarea):focus-visible{outline:2px solid #2878c8;outline-offset:3px}
+html body .kpis{gap:10px;margin-bottom:18px}
+html body .kpi{padding:14px 16px;border-radius:13px;box-shadow:none;background:#fff;border:1px solid #e3ebf4}
+html body .kpi small{font-size:12px;color:#71869d;font-weight:500}
+html body .kpi strong{font-size:26px;margin-top:4px;color:#16324f}
+html body .work,html body .grid{display:grid;grid-template-columns:290px minmax(0,1fr);gap:16px;align-items:stretch;min-height:600px}
+html body .panel{border-radius:16px;border:1px solid #e3ebf4;background:#fff;box-shadow:0 3px 12px #16324f04;margin-bottom:0;min-width:0}
+html body .panelHead{padding:18px 16px;border-bottom:1px solid #e3ebf4}
+html body .panelHead h2{font-size:16px;line-height:1.5;color:#16324f}
+html body .status{font-size:11px;font-weight:600;background:#edf3f9;color:#526c85}
+html body .listTools{grid-template-columns:minmax(0,1fr);padding:14px;gap:9px;background:#fff}
+html body :is(.search,.select,.field,.input,textarea){font-size:14px;border-radius:10px;min-height:42px;border:1px solid #dce6f0;color:#16324f;background:#fff;line-height:1.5;min-width:0}
+html body .listTools :is(input,select){width:100%;padding:10px 12px}
+html body .cases{padding:10px;max-height:680px;scrollbar-width:thin;scrollbar-color:#cbd8e6 transparent}
+html body .case{border-radius:12px;padding:14px;margin-bottom:8px;border:1px solid transparent;box-shadow:none}
+html body .case.active{background:#edf5fe;border-color:#bcd7f2}
+html body .case:hover{background:#f3f8fd}
+html body .caseTop{align-items:flex-start;flex-wrap:wrap;gap:6px}
+html body .case b{font-size:14px;line-height:1.5;color:#16324f;font-weight:600}
+html body .case small{font-size:12px;line-height:1.65;margin-top:8px;color:#61768b;overflow-wrap:anywhere}
+html body .tag{font-size:10px;line-height:1.5;font-weight:600;padding:4px 8px;white-space:nowrap;border-radius:8px;text-transform:none}
+html body .detailHead{padding:20px;align-items:center;border-bottom:1px solid #e3ebf4;flex-direction:row}
+html body .detailHead h2{font-size:20px;font-weight:600;color:#16324f;line-height:1.5}
+html body .detailHead p{margin:4px 0 0}
+html body .detailBody{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);min-height:600px}
+html body .info{padding:18px;border-right:1px solid #e3ebf4;border-bottom:0;min-width:0}
+html body .infoGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:0;margin-bottom:16px;border:1px solid #e3ebf4;border-radius:13px;overflow:hidden;background:#f9fbfd}
+html body .infoCard{background:transparent;border:0;border-bottom:1px solid #e3ebf4;border-radius:0;padding:13px 14px}
+html body .infoCard:nth-last-child(-n+2){border-bottom:0}
+html body .infoCard.wide{grid-column:1/-1}
+html body .infoCard small{font-size:11px;color:#71869d;font-weight:500;letter-spacing:0;text-transform:none}
+html body .infoCard b{font-size:14px;line-height:1.6;margin-top:4px;color:#16324f;font-weight:600;overflow-wrap:anywhere}
+html body .controls{padding:16px;background:#f5f9fe;border:1px solid #dfeaf7;border-radius:13px;margin-top:16px;gap:12px}
+html body .controls::before{content:'Điều phối';display:block;font-size:15px;line-height:1.5;font-weight:600;color:#16324f;margin-bottom:2px}
+html body .controlRow{grid-template-columns:1fr auto;gap:8px}
+html body .controlRow label{grid-column:1/-1;font-size:12px;font-weight:500;color:#61768b}
+html body .controlRow .select{width:100%;text-overflow:ellipsis;padding:10px}
+html body .teamActions{display:flex;gap:6px;flex-wrap:wrap}
+html body .teamHint,html body .dispatchNote{font-size:12px;line-height:1.7;padding:12px 14px;margin-top:10px;border-radius:10px;background:#f4f8fd;border:1px solid #e3ebf4;color:#61768b;overflow-wrap:anywhere}
+html body .teamHint b,html body .dispatchNote b{font-weight:600;color:#405b76}
+html body .workflow{gap:8px}
+html body :is(.mapBox,.map){height:230px;margin-top:16px;border:1px solid #e3ebf4;background:#f0f4f9;border-radius:13px}
+html body .mapEmpty{font-size:13px;line-height:1.7;color:#71869d}
+html body .chat{min-height:0;background:#fff;border-left:0;min-width:0}
+html body .fg-rescue-chat-title{margin:0;padding:17px 18px;font-size:15px;font-weight:600;border-bottom:1px solid #e3ebf4;color:#16324f}
+html body .messages{background:#fff;padding:16px;min-height:360px;max-height:620px;scrollbar-width:thin;scrollbar-color:#cbd8e6 transparent}
+html body .msg{font-size:13px;line-height:1.7;padding:12px 14px;border-radius:12px;max-width:94%;border:1px solid #e3ebf4;color:#405b76;margin:12px 0}
+html body .msg.operator{background:#eaf3ff;border-color:#d8e7f8;margin-left:auto}
+html body .msg.user{background:#f8fafc}
+html body .msg.bot{position:relative;margin:0 0 10px 8px;padding:10px 8px 12px 18px;border:0;border-left:2px solid #e3ebf4;border-radius:0;background:transparent;color:#61768b;max-width:100%;font-size:12px}
+html body .msg.bot::before{content:'';position:absolute;left:-5px;top:17px;width:8px;height:8px;border-radius:50%;background:#c3d5e8;box-shadow:0 0 0 3px #fff}
+html body .msg small{font-size:10px;line-height:1.6;color:#8296ac;margin-top:5px}
+html body .composer{padding:14px;border-top:1px solid #e3ebf4;grid-template-columns:minmax(0,1fr) auto;gap:8px;background:#fff}
+html body .composer textarea{font-size:14px;min-height:48px;padding:12px;resize:vertical}
+html body .composer .btn{min-width:48px}
+html body .empty{font-size:13px;line-height:1.7;color:#71869d;padding:32px 18px}
+html body .fg-rescue-tabs,html body .fg-rescue-back{display:none}
+@media(min-width:701px) and (max-width:1250px){
+ html body .shell{grid-template-columns:200px minmax(0,1fr)}
+ html body .main{padding:18px 14px}
+ html body .work,html body .grid{grid-template-columns:245px minmax(0,1fr);gap:12px}
+ html body .detailBody{grid-template-columns:minmax(0,1fr)}
+ html body .info{border-right:0;border-bottom:1px solid #e3ebf4}
+ html body .messages{max-height:420px}
+}
+@media(max-width:700px){
+ html body .main{padding:12px 10px 24px}
+ html body .title h1{font-size:22px}
+ html body .work,html body .grid{display:block;min-height:0}
+ html body .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ html body .kpi{padding:10px 12px}
+ html body .kpi strong{font-size:22px}
+ html body .listTools{grid-template-columns:minmax(0,1fr) 110px}
+ html body .cases{max-height:none}
+ html body .fg-rescue-workspace>.panel:last-child{display:none}
+ html body .fg-rescue-workspace.fg-rescue-selected>.panel:first-child{display:none}
+ html body .fg-rescue-workspace.fg-rescue-selected>.panel:last-child{display:block}
+ html body .fg-rescue-back{display:block;background:transparent;border:0;color:#2878c8;padding:14px 16px 0;font-size:13px;min-height:44px;font-weight:600}
+ html body .detailHead{padding:14px 16px;flex-wrap:wrap;gap:8px}
+ html body .detailHead h2{font-size:18px}
+ html body .detailHead p{font-size:11px}
+ html body .fg-rescue-tabs{display:flex;padding:0 16px;gap:16px;border-bottom:1px solid #e3ebf4}
+ html body .fg-rescue-tabs button{flex:1;min-height:46px;border:0;border-bottom:2px solid transparent;border-radius:0;background:#fff;color:#71869d;font-size:14px;font-weight:600}
+ html body .fg-rescue-tabs button[aria-selected=true]{border-bottom-color:#2878c8;color:#2878c8}
+ html body .detailBody{display:block;min-height:0}
+ html body .info{padding:14px;border:0}
+ html body .infoGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ html body .infoCard{padding:12px}
+ html body .infoCard b{font-size:13px}
+ html body .controlRow{grid-template-columns:minmax(0,1fr) auto}
+ html body .controlRow .teamActions{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ html body .controlRow:has(.teamActions) .select{grid-column:1/-1}
+ html body :is(.search,.select,.field,.input,textarea){font-size:16px;min-height:44px}
+ html body .fg-rescue-workspace[data-rescue-tab=info] .chat{display:none}
+ html body .fg-rescue-workspace[data-rescue-tab=chat] .info{display:none}
+ html body .chat{min-height:480px}
+ html body .messages{min-height:320px;max-height:60dvh}
+ html body .composer textarea{font-size:16px}
+ html body .composer{position:sticky;bottom:0;padding-bottom:calc(14px + env(safe-area-inset-bottom))}
+ html body .workflow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(prefers-reduced-motion:reduce){html body .case,html body .btn{transition:none}}
