@@ -285,3 +285,41 @@ html body #fg3App .fg80-netbadge.off{background:#fff0ee!important;color:#ab453b!
 
 /* Hide the Auto caption visually; retain its accessible name and mode menu. */
 html[data-fg-display-mode="auto"] body #fgModeSwitch .fg-mode-btn>span:nth-child(2){position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
+
+/* Quick search palette: clear input, consistent symbols, readable results. */
+html body #fg70CmdBack{background:rgba(17,39,63,.30)!important;backdrop-filter:blur(6px)!important;padding:clamp(24px,11vh,100px) 16px 24px!important}
+html body #fg70CmdBack .fg70-cmd{width:min(660px,100%)!important;max-height:calc(100dvh - 48px)!important;display:flex!important;flex-direction:column!important;border:1px solid #dce6f0!important;border-radius:22px!important;background:#fff!important;box-shadow:0 24px 72px #10223933!important;overflow:hidden!important}
+html body #fg70CmdBack .fg70-cmdhead{padding:20px!important;gap:12px!important;border-bottom:1px solid #e7edf5!important;flex-shrink:0!important;background:#fff!important}
+html body #fg70CmdBack .fg-cmd-search-icon{width:23px!important;height:23px!important;display:flex!important;flex:0 0 23px!important;color:#2878c8!important}
+html body #fg70CmdBack .fg-cmd-search-icon svg{width:100%;height:100%}
+html body #fg70CmdBack .fg70-cmdinput{width:100%!important;min-width:0!important;font-size:16px!important;line-height:1.6!important;color:#16324f!important;background:transparent!important;border:0!important;padding:3px 0!important;box-shadow:none!important}
+html body #fg70CmdBack .fg70-cmdinput::placeholder{color:#8899ac!important}
+html body #fg70CmdBack .fg70-cmdhead .fg70-kbd{font-size:10px!important;font-weight:500!important;line-height:1.4!important;padding:5px 7px!important;border:1px solid #dae4ee!important;border-radius:7px!important;color:#7a8da3!important;background:#f8fafd!important;flex-shrink:0!important}
+html body #fg70CmdBack .fg70-cmdresults{padding:10px!important;overflow-y:auto!important;min-height:0!important;max-height:55dvh!important;scrollbar-width:thin!important}
+html body #fg70CmdBack .fg70-cmditem{grid-template-columns:42px minmax(0,1fr) auto!important;gap:12px!important;padding:12px!important;min-height:68px!important;border:1px solid transparent!important;border-radius:13px!important;color:#16324f!important;transition:background .15s,border-color .15s!important}
+html body #fg70CmdBack .fg70-cmditem:is(:hover,.active){background:#edf4fc!important;border-color:#d9e8f8!important}
+html body #fg70CmdBack .fg70-cmditem:focus-visible{outline:2px solid #2878c8!important;outline-offset:-2px!important}
+html body #fg70CmdBack .fg70-cmdicon{width:42px!important;height:42px!important;background:#f0f5fb!important;border:1px solid #e4edf7!important;color:#49759d!important;border-radius:12px!important}
+html body #fg70CmdBack .fg70-cmdicon svg{width:21px;height:21px}
+html body #fg70CmdBack .fg70-cmditem.active .fg70-cmdicon{background:#fff!important;color:#2878c8!important;border-color:#d0e2f5!important}
+html body #fg70CmdBack .fg70-cmditem b{font-size:13px!important;font-weight:600!important;line-height:1.5!important;color:#16324f!important;overflow-wrap:anywhere!important}
+html body #fg70CmdBack .fg70-cmditem small{font-size:11px!important;line-height:1.6!important;margin-top:3px!important;color:#71869d!important;overflow-wrap:anywhere!important}
+html body #fg70CmdBack .fg70-cmdtype{font-size:10px!important;font-weight:500!important;color:#607b98!important;border:1px solid #dbe6f2!important;background:#f5f8fc!important;padding:4px 7px!important;border-radius:7px!important;white-space:nowrap!important}
+html body #fg70CmdBack .fg-cmd-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 20px;border-top:1px solid #e7edf5;background:#f9fbfd;color:#8b9bb0;font-size:10px;line-height:1.7;flex-shrink:0}
+html body #fg70CmdBack .fg-cmd-footer kbd{display:inline-block;min-width:18px;margin:0 3px;padding:0 4px;border:1px solid #dce5ef;border-radius:4px;background:#fff;color:#73879e;font-size:10px}
+html body.fg12-dark #fg70CmdBack .fg70-cmd,html body.fg12-dark #fg70CmdBack .fg70-cmdhead{background:#152c43!important;border-color:#345069!important}
+html body.fg12-dark #fg70CmdBack .fg70-cmdinput,html body.fg12-dark #fg70CmdBack .fg70-cmditem b{color:#e5effa!important}
+html body.fg12-dark #fg70CmdBack .fg70-cmditem:is(:hover,.active){background:#203f5d!important;border-color:#3c5a77!important}
+html body.fg12-dark #fg70CmdBack .fg70-cmdicon,html body.fg12-dark #fg70CmdBack .fg70-cmditem.active .fg70-cmdicon{background:#203c58!important;color:#a4cff7!important;border-color:#3a5875!important}
+html body.fg12-dark #fg70CmdBack .fg-cmd-footer{background:#11263b;border-color:#345069}
+@media(max-width:650px){
+ html body #fg70CmdBack{padding:calc(16px + env(safe-area-inset-top)) 10px 16px!important}
+ html body #fg70CmdBack .fg70-cmd{border-radius:18px!important;max-height:calc(100dvh - 32px - env(safe-area-inset-top))!important}
+ html body #fg70CmdBack .fg70-cmdhead{padding:16px 14px!important;gap:10px!important}
+ html body #fg70CmdBack .fg70-cmdinput{font-size:16px!important}
+ html body #fg70CmdBack .fg70-cmdresults{max-height:60dvh!important;padding:7px!important}
+ html body #fg70CmdBack .fg70-cmditem{gap:10px!important;padding:10px!important;grid-template-columns:36px minmax(0,1fr) auto!important}
+ html body #fg70CmdBack .fg70-cmdicon{width:36px!important;height:36px!important;border-radius:10px!important}
+ html body #fg70CmdBack .fg-cmd-footer{display:none}
+}
+@media(prefers-reduced-motion:reduce){html body #fg70CmdBack .fg70-cmditem{transition:none!important}}
