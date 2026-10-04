@@ -416,3 +416,14 @@ html body.fg12-dark #fg31Account #fg31TestEmail{background:#203c58!important;col
 html body.fg12-dark #fg31Account :is(#fg31ClearHistory,#fg31Logout){background:#203c58!important;color:#f5b0b6!important;border-color:#4e5265!important}
 @media(max-width:700px){html body #fg31Account{left:12px!important;right:12px!important;width:auto!important;top:76px!important;padding:18px!important;border-radius:20px!important}}
 @media(prefers-reduced-motion:reduce){html body #fg31Account input::before,html body #fg31Account input,html body #fg31Account button{transition:none!important}}
+
+/* Hide only the Active Trip description; retain its DOM and state updates. */
+html body #fg3App #fg90ActiveTrip > .txt > span {
+  display: none !important;
+  margin: 0 !important;
+}
+html body #fg3App #fg90ActiveTrip {
+  min-height: 0 !important;
+  padding-top: 7px !important;
+  padding-bottom: 7px !important;
+}
