@@ -282,3 +282,6 @@ html body #fg3App .fg12-tools #fg12Net{display:none!important}
 html body #fg3App .fg80-netbadge{font-size:9px!important;border:0!important;background:#edf8f3!important;color:#2b8063!important;padding:4px 7px!important;box-shadow:none!important;vertical-align:middle!important}
 html body #fg3App .fg80-netbadge.off{background:#fff0ee!important;color:#ab453b!important}
 @media(max-width:1100px){html body #fg3App .fg80-netbadge{display:none!important}}
+
+/* Hide the Auto caption visually; retain its accessible name and mode menu. */
+html[data-fg-display-mode="auto"] body #fgModeSwitch .fg-mode-btn>span:nth-child(2){position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
