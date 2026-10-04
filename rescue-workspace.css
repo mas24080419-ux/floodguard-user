@@ -112,7 +112,7 @@ html body .fg-rescue-tabs,html body .fg-rescue-back{display:none}
 
 /* Match the approved preview: compact navigation and a viewport-sized workspace. */
 html body .shell{display:block}
-html body .shell>.side{position:relative;top:auto;height:auto;padding:12px 24px;background:#fff!important;color:#16324f!important;border:0;border-bottom:1px solid #e3ebf4;display:flex;align-items:center;gap:26px;box-shadow:none}
+html body .shell>.side{position:relative;top:auto;height:auto;padding:12px 24px;background:#fff!important;color:#16324f!important;border:0;border-bottom:1px solid #e3ebf4;display:flex;flex-direction:row;align-items:center;gap:26px;box-shadow:none}
 html body .side .brand{margin:0;padding:0;border:0;flex-shrink:0}
 html body .side .brand b{font-size:15px;color:#16324f}
 html body .side .brand small{color:#71869d;font-size:10px}
