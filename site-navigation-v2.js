@@ -166,7 +166,7 @@ function rewriteHome(){
  setupHeroSlider(root);insertQuickBar(root);purgeHiddenLinks(root);
 }
 function normalizeSiteNav(){
- addUtilityBar(null);purgeHiddenLinks(document);ensureOrderedLinks(document.querySelector('.site-links'));ensureOrderedLinks(document.querySelector('.mobile-drawer'),true);const footer=document.querySelector('.footer-links');if(footer)ensureOrderedLinks(footer);purgeHiddenLinks(document)
+ addUtilityBar(null);purgeHiddenLinks(document);ensureOrderedLinks(document.querySelector('.site-links'));document.querySelectorAll('.site-links a').forEach(a=>{if(!ROUTES[linkKey(a)])a.remove()});ensureOrderedLinks(document.querySelector('.mobile-drawer'),true);const footer=document.querySelector('.footer-links');if(footer)ensureOrderedLinks(footer);purgeHiddenLinks(document)
 }
 function homepageMenu(){
  const root=document.getElementById('fgWebsiteHome'),nav=root?.querySelector('.wh-nav-in');if(!nav||nav.querySelector('[data-site-menu]'))return;
@@ -181,7 +181,7 @@ function mobileMenu(){
  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>setOpen(false)));
  document.addEventListener('click',e=>{if(drawer.classList.contains('open')&&!drawer.contains(e.target)&&!btn.contains(e.target))setOpen(false)});
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&drawer.classList.contains('open')){setOpen(false);btn.focus()}});
- matchMedia('(min-width: 721px)').addEventListener('change',e=>{if(e.matches)setOpen(false)});
+ matchMedia(document.querySelector('.site-nav')?'(min-width: 1001px)':'(min-width: 721px)').addEventListener('change',e=>{if(e.matches)setOpen(false)});
 }
 function markActive(){
  const page=(location.pathname.split('/').pop()||'index.html').toLowerCase();
