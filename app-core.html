@@ -3818,73 +3818,12 @@ if('serviceWorker' in navigator && location.protocol !== 'file:'){window.addEven
   document.addEventListener('visibilitychange',()=>{if(!document.hidden){setTimeout(()=>{try{map.invalidateSize({pan:false});baseStreet.redraw()}catch(_){ }},180)}});
 })();
 </script>
-<style id="fg-adaptive-mode-1-style">
-/* ===== FloodGuard Adaptive Display Mode 1.1 ===== */
-.fg-mode-switch{position:fixed;right:14px;top:82px;z-index:2250;font-family:Inter,Segoe UI,Arial,sans-serif;pointer-events:auto}
-.fg-mode-btn{display:flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.9);background:rgba(15,23,42,.9);color:#fff;border-radius:999px;padding:7px 10px;box-shadow:0 9px 25px rgba(15,23,42,.22);backdrop-filter:blur(14px);font-size:10px;font-weight:850;cursor:pointer}
-.fg-mode-btn .ico{font-size:14px}.fg-mode-btn .chev{opacity:.65;font-size:9px}
-.fg-mode-menu{position:absolute;right:0;top:calc(100% + 7px);width:190px;padding:7px;background:rgba(255,255,255,.98);border:1px solid #dce6ef;border-radius:14px;box-shadow:0 18px 44px rgba(15,23,42,.2);display:none}
-.fg-mode-switch.open .fg-mode-menu{display:block}
-.fg-mode-option{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;border:0;background:transparent;border-radius:10px;padding:9px 10px;color:#334e68;font-size:10px;font-weight:800;cursor:pointer;text-align:left}
-.fg-mode-option:hover{background:#f1f5f9}.fg-mode-option.active{background:#e8f1ff;color:#1557b0}.fg-mode-option small{font-size:8px;color:#8294a6;font-weight:650}.fg-mode-option.active small{color:#3974b8}
-.fg-mode-preview{position:fixed;inset:0;z-index:999990;background:radial-gradient(circle at 50% 10%,#213b55,#081522 62%);display:grid;grid-template-rows:auto 1fr;font-family:Inter,Segoe UI,Arial,sans-serif;color:#fff}
-.fg-mode-previewbar{min-height:54px;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid rgba(255,255,255,.1);background:rgba(7,20,33,.92);backdrop-filter:blur(16px)}
-.fg-mode-previewbar .title{min-width:0}.fg-mode-previewbar b{display:block;font-size:12px}.fg-mode-previewbar span{display:block;font-size:9px;color:#a9c2d8;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.fg-mode-preview-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.fg-mode-preview-actions button{border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#d8e8f7;border-radius:9px;padding:7px 9px;font-size:9px;font-weight:800;cursor:pointer}.fg-mode-preview-actions button.active{background:#1677ff;color:#fff;border-color:#4d98ff}
-.fg-mode-stage{position:relative;min-height:0;overflow:auto;display:grid;place-items:start center;padding:12px}
-.fg-mode-phone{width:min(430px,calc(100vw - 24px));height:calc(100vh - 78px);max-height:900px;border-radius:28px;overflow:hidden;border:8px solid #0a1420;box-shadow:0 26px 80px rgba(0,0,0,.45);background:#fff}
-.fg-mode-phone iframe{width:100%;height:100%;border:0;background:#fff;display:block}
-.fg-mode-desktop-wrap{position:relative;margin:0 auto;overflow:hidden;border-radius:16px;border:6px solid #0a1420;box-shadow:0 24px 70px rgba(0,0,0,.45);background:#fff}
-.fg-mode-desktop-wrap iframe{position:absolute;left:0;top:0;border:0;background:#fff;transform-origin:0 0}
-@media(max-width:700px){
- .fg-mode-switch{right:12px;top:auto;bottom:calc(151px + env(safe-area-inset-bottom,0px))}
- .fg-mode-btn{padding:6px 8px;font-size:9px;background:rgba(15,23,42,.86)}
- .fg-mode-menu{width:180px;bottom:calc(100% + 7px);top:auto}
- .fg-mode-previewbar{align-items:flex-start}.fg-mode-previewbar .title span{max-width:43vw}.fg-mode-preview-actions button{padding:6px 7px}
- .fg-mode-stage{padding:8px}
-}
-</style>
 <script id="fg-adaptive-mode-1-js">
+/* Responsive layout follows the current screen; legacy manual overrides are retired. */
 (function(){
-  if(window.FG_ADAPTIVE_MODE_1)return;window.FG_ADAPTIVE_MODE_1=true;
-  const KEY='fg_display_mode_v1';
-  const q=new URLSearchParams(location.search);const preview=q.get('fg_preview_mode');
-  const getMode=()=>{const m=localStorage.getItem(KEY);return ['auto','mobile','desktop'].includes(m)?m:'auto'};
-  const setMode=(m)=>{if(!['auto','mobile','desktop'].includes(m))m='auto';localStorage.setItem(KEY,m);location.reload()};
-  const modeLabel=m=>m==='mobile'?'Mobile':m==='desktop'?'Desktop':'Auto';
-  const modeIcon=m=>m==='mobile'?'📱':m==='desktop'?'🖥️':'↔';
-  const cleanUrl=(previewMode)=>{const u=new URL(location.href);u.searchParams.set('fg_preview_mode',previewMode);return u.toString()};
-  const isMobileViewport=()=>window.innerWidth<=700;
-  function previewShell(mode){
-    const shell=document.createElement('div');shell.className='fg-mode-preview';shell.id='fgModePreview';
-    shell.innerHTML='<div class="fg-mode-previewbar"><div class="title"><b>FloodGuard · Chế độ xem '+modeLabel(mode)+'</b><span>'+ (mode==='mobile'?'Mô phỏng giao diện điện thoại trên màn hình lớn.':'Mô phỏng giao diện máy tính trên màn hình nhỏ.') +'</span></div><div class="fg-mode-preview-actions"><button data-m="auto">↔ Auto</button><button data-m="mobile">📱 Mobile</button><button data-m="desktop">🖥️ Desktop</button></div></div><div class="fg-mode-stage" id="fgModeStage"></div>';
-    document.body.appendChild(shell);
-    shell.querySelectorAll('[data-m]').forEach(b=>{b.classList.toggle('active',b.dataset.m===mode);b.onclick=()=>setMode(b.dataset.m)});
-    const stage=shell.querySelector('#fgModeStage');
-    if(mode==='mobile'){
-      const phone=document.createElement('div');phone.className='fg-mode-phone';
-      const fr=document.createElement('iframe');fr.src=cleanUrl('mobile');fr.title='FloodGuard Mobile Preview';phone.appendChild(fr);stage.appendChild(phone);
-    }else{
-      const W=1280;const availW=Math.max(280,window.innerWidth-16);const availH=Math.max(420,window.innerHeight-70);const scale=Math.min(1,availW/W);const H=Math.max(820,Math.floor(availH/scale));
-      const wrap=document.createElement('div');wrap.className='fg-mode-desktop-wrap';wrap.style.width=(W*scale)+'px';wrap.style.height=availH+'px';
-      const fr=document.createElement('iframe');fr.src=cleanUrl('desktop');fr.title='FloodGuard Desktop Preview';fr.style.width=W+'px';fr.style.height=H+'px';fr.style.transform='scale('+scale+')';wrap.appendChild(fr);stage.appendChild(wrap);
-    }
-  }
-  function normalControl(mode){
-    const root=document.createElement('div');root.className='fg-mode-switch';root.id='fgModeSwitch';
-    root.innerHTML='<button class="fg-mode-btn" type="button" aria-expanded="false"><span class="ico">'+modeIcon(mode)+'</span><span>'+modeLabel(mode)+'</span><span class="chev">▾</span></button><div class="fg-mode-menu"><button class="fg-mode-option" data-m="auto"><span>↔ Auto</span><small>Tự nhận thiết bị</small></button><button class="fg-mode-option" data-m="mobile"><span>📱 Mobile</span><small>Ép giao diện điện thoại</small></button><button class="fg-mode-option" data-m="desktop"><span>🖥️ Desktop</span><small>Ép giao diện máy tính</small></button></div>';
-    document.body.appendChild(root);const btn=root.querySelector('.fg-mode-btn');
-    btn.onclick=e=>{e.stopPropagation();root.classList.toggle('open');btn.setAttribute('aria-expanded',root.classList.contains('open')?'true':'false')};
-    root.querySelectorAll('[data-m]').forEach(b=>{b.classList.toggle('active',b.dataset.m===mode);b.onclick=()=>setMode(b.dataset.m)});
-    document.addEventListener('click',e=>{if(!root.contains(e.target)){root.classList.remove('open');btn.setAttribute('aria-expanded','false')}});
-  }
-  function init(){
-    if(preview){ document.documentElement.dataset.fgPreviewMode=preview; return; }
-    const mode=getMode();document.documentElement.dataset.fgDisplayMode=mode;
-    const mismatch=(mode==='mobile'&&!isMobileViewport())||(mode==='desktop'&&isMobileViewport());
-    if(mismatch) previewShell(mode); else normalControl(mode);
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+  document.documentElement.dataset.fgDisplayMode='auto';
+  delete document.documentElement.dataset.fgPreviewMode;
+  try{localStorage.removeItem('fg_display_mode_v1');}catch(e){}
 })();
 </script>
 
