@@ -33,6 +33,7 @@ function installThemes(){
  installStylesheet('./site-mona-v57.css?v=58','mona-v57');
  installStylesheet('./site-action-v59.css?v=61','action-v61');
  installStylesheet('./site-step-v62.css?v=62','step-v62');
+ installStylesheet('./home-design-v66.css?v=66','home-v66');
  document.documentElement.dataset.fgEditorial='1';
  document.documentElement.dataset.fgLifestyle='1';
  document.documentElement.dataset.fgMona='1';
@@ -67,9 +68,9 @@ function insertQuickBar(root){
  const hero=root.querySelector('.wh-hero');if(!hero)return;
  const wrap=document.createElement('div');wrap.className='fg57-quickbar-wrap';
  wrap.innerHTML=`<div class="fg57-quickbar" aria-label="Truy cập nhanh FloodGuard">
-   <a class="fg57-quickitem" href="./?login=1"><span class="fg57-quickicon">⌖</span><span><small>Kiểm tra khu vực</small><b>Mở bản đồ ngập</b><span>Xem rủi ro theo vị trí và tuyến đường.</span></span></a>
-   <a class="fg57-quickitem" href="./?login=1"><span class="fg57-quickicon">☔</span><span><small>Kịch bản lượng mưa</small><b>Thử dự báo ngập</b><span>Ước tính mức ngập theo dữ liệu hiện có.</span></span></a>
-   <a class="fg57-quickitem" href="./how-it-works.html"><span class="fg57-quickicon">↗</span><span><small>Hành trình</small><b>Hướng dẫn sử dụng</b><span>Ba bước để bắt đầu kiểm tra tuyến.</span></span></a>
+   <a class="fg57-quickitem" href="./?login=1"><span class="fg57-quickicon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6Z"/><path d="M9 3v15m6-12v15"/></svg></span><span><small>Kiểm tra khu vực</small><b>Mở bản đồ ngập</b><span>Xem rủi ro theo vị trí và tuyến đường.</span></span></a>
+   <a class="fg57-quickitem" href="./?login=1"><span class="fg57-quickicon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15a4 4 0 0 1 0-8 6 6 0 0 1 11-2 5 5 0 1 1 4 10"/><path d="m7 18-1 3m6-3-1 3m6-3-1 3"/></svg></span><span><small>Kịch bản lượng mưa</small><b>Thử dự báo ngập</b><span>Ước tính mức ngập theo dữ liệu hiện có.</span></span></a>
+   <a class="fg57-quickitem" href="./how-it-works.html"><span class="fg57-quickicon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h10M4 10h7M4 15h5m6-1 5 3-5 3v-6Z"/></svg></span><span><small>Hành trình</small><b>Hướng dẫn sử dụng</b><span>Ba bước để bắt đầu kiểm tra tuyến.</span></span></a>
   </div>`;
  hero.insertAdjacentElement('afterend',wrap);
 }
