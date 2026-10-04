@@ -185,3 +185,9 @@
  html:root body .site-footer{background:#edf2f8!important;color:#637b92!important;border-top:1px solid #dfe8f2!important}
  html:root body .site-footer :is(p,a,small){font-size:13px!important;line-height:1.7!important;color:#526d88!important}
 }
+@media(max-width:720px){
+ html:root body #fgWebsiteHome .wh-hero .fg51-credit{display:block!important}
+ html:root body #fgWebsiteHome .fg51-hero-copy,html:root body #fgWebsiteHome .fg51-hero-copy :is(.wh-eyebrow,h1,p,.wh-hero-actions){animation:none!important;filter:none!important;transform:none!important}
+ html:root body .page-hero :is(.hero-grid,.hero-grid>div,h1,p,.hero-actions,.feature-strip){animation:none!important;filter:none!important;transform:none!important;opacity:1!important}
+ html:root body::before{display:none!important}
+}
