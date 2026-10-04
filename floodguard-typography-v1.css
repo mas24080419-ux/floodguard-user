@@ -323,3 +323,57 @@ html body.fg12-dark #fg70CmdBack .fg-cmd-footer{background:#11263b;border-color:
  html body #fg70CmdBack .fg-cmd-footer{display:none}
 }
 @media(prefers-reduced-motion:reduce){html body #fg70CmdBack .fg70-cmditem{transition:none!important}}
+
+/* Route planner: readable fields, distinct choices and uncluttered actions. */
+html body #fg3App #fg3RoutePanel{background:#f5f8fc!important;color:#16324f!important;border:1px solid #dce6f0!important;border-radius:22px!important;box-shadow:0 18px 48px #16324f1f!important}
+html body #fg3App #fg3RoutePanel .fg3-route-head{height:90px!important;box-sizing:border-box!important;padding:18px 20px!important;background:#fff!important;border-bottom:1px solid #e4ebf3!important;border-left:0!important}
+html body #fg3App #fg3RoutePanel .fg3-eyebrow{font-size:10px!important;line-height:1.6!important;letter-spacing:.08em!important;color:#6c8198!important}
+html body #fg3App #fg3RoutePanel .fg3-route-head h2{font-size:22px!important;line-height:1.5!important;color:#16324f!important;margin:2px 0 0!important}
+html body #fg3App #fg3RoutePanel .fg3-route-close{width:40px!important;height:40px!important;min-height:40px!important;border-radius:12px!important;background:#f2f6fa!important;color:#61768b!important;font-size:22px!important;border:1px solid #e5ecf3!important}
+html body #fg3App #fg3RoutePanel .fg3-route-scroll{height:calc(100% - 90px)!important;padding:16px 16px 88px!important;box-sizing:border-box!important;scrollbar-width:thin!important;scrollbar-color:#c8d5e3 transparent!important}
+html body #fg3App #fg3RoutePanel .fg3-route-form{padding:18px!important;border:1px solid #e4ebf3!important;border-radius:18px!important;background:#fff!important;box-shadow:0 4px 16px #16324f06!important}
+html body #fg3App #fg3RoutePanel .fg3-route-field{margin-bottom:14px!important}
+html body #fg3App #fg3RoutePanel .fg3-route-field label{font-size:12px!important;line-height:18px!important;text-transform:none!important;letter-spacing:0!important;font-weight:600!important;color:#526c85!important;margin-bottom:7px!important}
+html body #fg3App #fg3RoutePanel .fg3-route-inputrow{grid-template-columns:minmax(0,1fr) 46px!important;gap:8px!important}
+html body #fg3App #fg3RoutePanel .fg3-route-input{height:50px!important;min-width:0!important;font-size:16px!important;font-weight:500!important;line-height:1.5!important;border:1px solid #dce6f0!important;background:#f9fbfd!important;color:#16324f!important;border-radius:12px!important;padding:12px 14px 12px 34px!important;box-shadow:none!important;box-sizing:border-box!important}
+html body #fg3App #fg3RoutePanel #fg3RouteRain{padding-left:14px!important;font-variant-numeric:tabular-nums!important}
+html body #fg3App #fg3RoutePanel .fg3-route-input:focus{border-color:#2878c8!important;background:#fff!important;box-shadow:0 0 0 3px #2878c814!important}
+html body #fg3App #fg3RoutePanel .fg3-route-pick{width:46px!important;min-height:46px!important;padding:0!important;font-size:20px!important;border-radius:12px!important;border:1px solid #dce6f0!important;background:#f3f8fd!important;color:#2878c8!important}
+html body #fg3App #fg3RoutePanel .fg3-route-dot{left:14px!important;top:45px!important;width:10px!important;height:10px!important}
+html body #fg3App #fg3RoutePanel .fg3-route-connector{display:none!important}
+html body #fg3App #fg3RoutePanel .fg3-route-swap{top:73px!important;right:59px!important;width:32px!important;height:32px!important;font-size:17px!important;background:#fff!important;color:#2878c8!important;border:1px solid #d6e5f4!important;box-shadow:0 2px 7px #16324f12!important}
+html body #fg3App #fg3RoutePanel .fg3-route-modebar{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important;padding:5px!important;background:#f1f5fa!important;border:0!important;border-radius:13px!important;margin:18px 0!important}
+html body #fg3App #fg3RoutePanel .fg3-route-mode{min-height:46px!important;padding:8px 4px!important;font-size:13px!important;font-weight:600!important;border:1px solid transparent!important;border-radius:10px!important;background:transparent!important;color:#61768b!important;white-space:nowrap!important}
+html body #fg3App #fg3RoutePanel .fg3-route-mode.active{background:#fff!important;color:#216db8!important;border-color:#cfe0f2!important;box-shadow:0 2px 6px #16324f0a!important}
+html body #fg3App #fg3RoutePanel .fg62-pref{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:8px!important;padding:0!important;border:0!important;background:transparent!important;margin:0 0 18px!important}
+html body #fg3App #fg3RoutePanel .fg62-pref>span{font-size:12px!important;line-height:18px!important;text-transform:none!important;letter-spacing:0!important;font-weight:600!important;color:#526c85!important}
+html body #fg3App #fg3RoutePanel .fg62-prefbar{display:grid!important;grid-template-columns:1.2fr 1fr!important;gap:8px!important;width:100%!important}
+html body #fg3App #fg3RoutePanel .fg62-prefbtn{min-height:44px!important;padding:8px!important;font-size:12px!important;line-height:1.5!important;font-weight:600!important;border-radius:11px!important;background:#fff!important;color:#61768b!important;border:1px solid #dce6f0!important;box-shadow:none!important}
+html body #fg3App #fg3RoutePanel .fg62-prefbtn.active{background:#edf5fe!important;color:#216db8!important;border-color:#a8c9eb!important}
+html body #fg3App #fg3RoutePanel .fg3-route-quick{gap:8px!important;margin-top:10px!important}
+html body #fg3App #fg3RoutePanel .fg3-route-quick button{min-height:40px!important;padding:8px 10px!important;font-size:12px!important;font-weight:600!important;border-radius:10px!important;color:#526c85!important;background:#fff!important;border:1px solid #dce6f0!important}
+html body #fg3App #fg3RoutePanel .fg3-route-quick button[data-route-rain]{flex:1 1 calc(25% - 8px)!important}
+html body #fg3App #fg3RoutePanel .fg3-route-quick button.active{background:#edf5fe!important;color:#216db8!important;border-color:#a8c9eb!important}
+html body #fg3App #fg3RoutePanel .fg3-route-quick :is(#fg80UseMyLocation,#fg80ClearRoute){flex:1 1 calc(50% - 8px)!important;margin-top:2px!important;background:#f6f9fc!important}
+html body #fg3App #fg3RoutePanel .fg3-route-run{min-height:50px!important;margin-top:8px!important;font-size:16px!important;font-weight:600!important;border-radius:12px!important;background:#2878c8!important;color:#fff!important;box-shadow:0 5px 12px #2878c81a!important}
+html body #fg3App #fg3RoutePanel .fg3-route-run:hover{background:#216bb3!important}
+html body #fg3App #fg3RoutePanel button:focus-visible{outline:2px solid #2878c8!important;outline-offset:3px!important}
+html body #fg3App #fg3RoutePanel .fg51-recent{margin-top:14px!important;border:1px solid #e4ebf3!important;border-radius:14px!important;padding:14px!important;background:#fff!important;box-shadow:none!important}
+html body #fg3App #fg3RoutePanel .fg51-recent-head b{font-size:14px!important;color:#16324f!important}
+html body #fg3App #fg3RoutePanel :is(.fg51-recent-head span,.fg51-recent-empty){font-size:12px!important;line-height:1.6!important;color:#71869d!important}
+html body #fg3App #fg3RoutePanel .fg3-route-legend{gap:10px 16px!important;font-size:11px!important;line-height:1.6!important;margin:16px 0!important;color:#61768b!important}
+html body #fg3App #fg16SOSFab{animation:none!important;font-size:12px!important;box-shadow:0 4px 14px #b91c1c26!important}
+@media(max-width:700px){
+ html body #fg3App #fg3RoutePanel .fg3-route-head{padding:16px!important}
+ html body #fg3App #fg3RoutePanel .fg3-route-scroll{padding:12px 12px 92px!important}
+ html body #fg3App #fg3RoutePanel .fg3-route-form{padding:16px!important}
+ html body #fg3App #fg16SOSFab{width:50px!important;height:50px!important;min-height:50px!important;padding:0!important;right:14px!important;border-radius:50%!important;justify-content:center!important}
+ html body #fg3App #fg16SOSFab span{display:none!important}
+ html body #fg3App #fg16SOSFab i{width:auto!important;height:auto!important;background:transparent!important;font-size:19px!important}
+}
+html body.fg12-dark #fg3App #fg3RoutePanel{background:#10263b!important;color:#e5effa!important;border-color:#345069!important}
+html body.fg12-dark #fg3App #fg3RoutePanel :is(.fg3-route-head,.fg3-route-form,.fg51-recent){background:#152e46!important;border-color:#345069!important}
+html body.fg12-dark #fg3App #fg3RoutePanel :is(.fg3-route-head h2,.fg51-recent-head b,.fg3-route-input){color:#e5effa!important}
+html body.fg12-dark #fg3App #fg3RoutePanel :is(.fg3-route-field label,.fg62-pref>span){color:#a6bad0!important}
+html body.fg12-dark #fg3App #fg3RoutePanel :is(.fg3-route-input,.fg3-route-pick,.fg3-route-close,.fg3-route-modebar,.fg62-prefbtn,.fg3-route-quick button){background:#203c58!important;border-color:#3a5875!important;color:#bfd2e6!important}
+html body.fg12-dark #fg3App #fg3RoutePanel :is(.fg3-route-mode.active,.fg62-prefbtn.active,.fg3-route-quick button.active){background:#294e70!important;border-color:#5282af!important;color:#e5effa!important}
