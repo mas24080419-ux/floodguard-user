@@ -377,3 +377,41 @@ html body.fg12-dark #fg3App #fg3RoutePanel :is(.fg3-route-head h2,.fg51-recent-h
 html body.fg12-dark #fg3App #fg3RoutePanel :is(.fg3-route-field label,.fg62-pref>span){color:#a6bad0!important}
 html body.fg12-dark #fg3App #fg3RoutePanel :is(.fg3-route-input,.fg3-route-pick,.fg3-route-close,.fg3-route-modebar,.fg62-prefbtn,.fg3-route-quick button){background:#203c58!important;border-color:#3a5875!important;color:#bfd2e6!important}
 html body.fg12-dark #fg3App #fg3RoutePanel :is(.fg3-route-mode.active,.fg62-prefbtn.active,.fg3-route-quick button.active){background:#294e70!important;border-color:#5282af!important;color:#e5effa!important}
+
+/* Account settings: readable identity, clear toggles and action hierarchy. */
+html body #fg31Account{width:min(400px,calc(100vw - 32px))!important;box-sizing:border-box!important;padding:20px!important;border:1px solid #dce6f0!important;border-radius:22px!important;background:#fff!important;box-shadow:0 18px 60px #16324f26!important;max-height:calc(100dvh - 96px - env(safe-area-inset-bottom))!important;overflow:auto!important;scrollbar-width:thin!important;color:#16324f!important}
+html body #fg31Account .fg31-account-head{gap:12px!important;padding-bottom:18px!important;border-bottom:1px solid #e6edf5!important;margin-bottom:8px!important}
+html body #fg31Account .fg31-user{gap:12px!important;flex:1!important;min-width:0!important}
+html body #fg31Account .fg31-user>div:last-child{min-width:0!important}
+html body #fg31Account .fg31-avatar{width:48px!important;height:48px!important;flex:0 0 48px!important;border-radius:15px!important;background:#e8f2fc!important;color:#2878c8!important;font-size:22px!important;font-weight:600!important;border:1px solid #d7e8f8!important}
+html body #fg31Account #fg31UserName{font-size:16px!important;font-weight:600!important;line-height:1.5!important;color:#16324f!important}
+html body #fg31Account #fg31UserEmail{font-size:12px!important;line-height:1.6!important;color:#71869d!important;margin-top:2px!important}
+html body #fg31Account .fg31-x{width:36px!important;height:36px!important;flex:0 0 36px!important;border-radius:11px!important;font-size:20px!important;line-height:1!important;background:#f3f7fc!important;color:#71869d!important;border:1px solid #e6edf5!important}
+html body #fg31Account .fg31-profile-row{gap:16px!important;min-height:64px!important;box-sizing:border-box!important;padding:15px 0!important;border-top:0!important;border-bottom:1px solid #edf2f7!important;margin:0!important}
+html body #fg31Account .fg31-profile-row span{font-size:13px!important;line-height:1.6!important;font-weight:500!important;color:#405b76!important}
+html body #fg31Account .fg31-profile-row input[type=checkbox]{appearance:none!important;-webkit-appearance:none!important;position:relative!important;width:44px!important;height:26px!important;min-height:26px!important;flex:0 0 44px!important;margin:0!important;padding:0!important;border:1px solid #cbd7e4!important;border-radius:999px!important;background:#dce5ef!important;box-shadow:none!important;cursor:pointer!important;transition:background .15s,border-color .15s!important}
+html body #fg31Account .fg31-profile-row input[type=checkbox]::before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #16324f26;transition:transform .15s}
+html body #fg31Account .fg31-profile-row input[type=checkbox]:checked{background:#2878c8!important;border-color:#2878c8!important}
+html body #fg31Account .fg31-profile-row input[type=checkbox]:checked::before{transform:translateX(18px)}
+html body #fg31Account .fg31-profile-row input[type=checkbox]:disabled{opacity:.5!important;cursor:default!important}
+html body #fg31Account .fg31-account-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;margin-top:20px!important}
+html body #fg31Account .fg31-account-actions button{min-height:44px!important;padding:11px 8px!important;border:1px solid #dce6f0!important;border-radius:11px!important;font-size:12px!important;line-height:1.5!important;font-weight:600!important;background:#fff!important;color:#405b76!important;box-shadow:none!important;transition:background .15s!important}
+html body #fg31Account .fg31-account-actions button:hover{background:#f3f7fc!important}
+html body #fg31Account #fg31SavePrefs{background:#2878c8!important;color:#fff!important;border-color:#2878c8!important;box-shadow:0 3px 8px #2878c81a!important}
+html body #fg31Account #fg31SavePrefs:hover{background:#216bb3!important}
+html body #fg31Account #fg31TestEmail{color:#216db8!important;border-color:#bfd6ed!important;background:#f8fbff!important}
+html body #fg31Account #fg31ClearHistory{color:#b64a50!important;border-color:#eed8db!important;background:#fffafb!important}
+html body #fg31Account #fg31Logout{grid-column:1 / -1!important;margin-top:4px!important;border-top:1px solid #e6edf5!important;border-color:#e6edf5!important;background:#f8fafc!important;color:#a84951!important;font-weight:600!important}
+html body #fg31Account #fg31Logout:hover{background:#fff1f2!important}
+html body #fg31Account .fg31-account-note{font-size:12px!important;line-height:1.7!important;margin-top:16px!important;padding:12px 14px!important;border-radius:11px!important;background:#f4f8fc!important;border:1px solid #e7eef6!important;overflow-wrap:anywhere!important}
+html body #fg31Account :is(button,input):focus-visible{outline:2px solid #2878c8!important;outline-offset:3px!important}
+html body.fg12-dark #fg31Account{background:#152e46!important;border-color:#345069!important;color:#e5effa!important}
+html body.fg12-dark #fg31Account .fg31-account-head,html body.fg12-dark #fg31Account .fg31-profile-row{border-color:#345069!important}
+html body.fg12-dark #fg31Account #fg31UserName{color:#e5effa!important}
+html body.fg12-dark #fg31Account :is(#fg31UserEmail,.fg31-profile-row span){color:#afc3d8!important}
+html body.fg12-dark #fg31Account :is(.fg31-avatar,.fg31-x,.fg31-account-note,.fg31-account-actions button){background:#203c58!important;border-color:#3a5875!important;color:#bfd2e6!important}
+html body.fg12-dark #fg31Account #fg31SavePrefs{background:#2878c8!important;color:#fff!important;border-color:#2878c8!important}
+html body.fg12-dark #fg31Account #fg31TestEmail{background:#203c58!important;color:#b8dcff!important;border-color:#497299!important}
+html body.fg12-dark #fg31Account :is(#fg31ClearHistory,#fg31Logout){background:#203c58!important;color:#f5b0b6!important;border-color:#4e5265!important}
+@media(max-width:700px){html body #fg31Account{left:12px!important;right:12px!important;width:auto!important;top:76px!important;padding:18px!important;border-radius:20px!important}}
+@media(prefers-reduced-motion:reduce){html body #fg31Account input::before,html body #fg31Account input,html body #fg31Account button{transition:none!important}}
