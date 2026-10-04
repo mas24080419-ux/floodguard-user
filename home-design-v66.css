@@ -62,3 +62,6 @@ html[data-fg-mona="1"] body #fgWebsiteHome :is(a,button):focus-visible{outline:2
  html[data-fg-mona="1"] body #fgWebsiteHome .fg57-quickitem{padding:16px!important;border-radius:14px!important}
 }
 @media(prefers-reduced-motion:reduce){html[data-fg-mona="1"] body #fgWebsiteHome .fg57-quickitem{transition:none!important}}
+html[data-fg-mona="1"] body #fgWebsiteHome>main{background:#f4f7fb!important;padding-top:1px!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .wh-hero-actions .wh-btn,html[data-fg-mona="1"] body #fgWebsiteHome .wh-nav .wh-actions .wh-btn{border-radius:11px!important;min-height:48px!important;padding:13px 22px!important;box-shadow:none!important}
+@media(max-width:720px){html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .wh-hero-actions .wh-btn{min-height:46px!important;padding:11px 15px!important}html[data-fg-mona="1"] body #fgWebsiteHome .wh-nav .wh-actions .wh-btn{min-height:42px!important;padding:10px 12px!important}}
