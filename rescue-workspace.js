@@ -17,7 +17,7 @@
  tabs.innerHTML='<button type="button" role="tab" id="fgRescueInfoTab" aria-controls="info" aria-selected="true">Thông tin</button><button type="button" role="tab" id="fgRescueChatTab" aria-controls="fgRescueChat" aria-selected="false" tabindex="-1">Trao đổi</button>';
  panel.querySelector('.detailHead').after(tabs);
  const chat=detail.querySelector('.chat');chat.id='fgRescueChat';
- const heading=document.createElement('h3');heading.className='fg-rescue-chat-title';heading.textContent='Trao đổi cứu hộ';chat.prepend(heading);
+ const heading=document.createElement('h3');heading.className='fg-rescue-chat-title';heading.innerHTML='<svg class="fg-rescue-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 4h16v12H9l-5 4V4Z"/></svg>Trao đổi cứu hộ';chat.prepend(heading);
  function selectTab(tab){
   workspace.dataset.rescueTab=tab;
   const buttons=tabs.querySelectorAll('button');

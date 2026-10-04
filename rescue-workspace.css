@@ -109,3 +109,87 @@ html body .fg-rescue-tabs,html body .fg-rescue-back{display:none}
  html body .workflow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(prefers-reduced-motion:reduce){html body .case,html body .btn{transition:none}}
+
+/* Match the approved preview: compact navigation and a viewport-sized workspace. */
+html body .shell{display:block}
+html body .shell>.side{position:relative;top:auto;height:auto;padding:12px 24px;background:#fff!important;color:#16324f!important;border:0;border-bottom:1px solid #e3ebf4;display:flex;align-items:center;gap:26px;box-shadow:none}
+html body .side .brand{margin:0;padding:0;border:0;flex-shrink:0}
+html body .side .brand b{font-size:15px;color:#16324f}
+html body .side .brand small{color:#71869d;font-size:10px}
+html body .side .logo{width:38px;height:38px;border-radius:11px;background:#e8f2fc!important;color:#2878c8;border:1px solid #d7e8f8;box-shadow:none;font-size:17px}
+html body .side .nav{display:flex;gap:4px;flex:1;overflow:auto;scrollbar-width:none;padding:0}
+html body .side .nav button{flex:0 0 auto;min-height:40px;padding:8px 12px;font-size:12px;font-weight:500;white-space:nowrap;border:0;border-radius:9px;color:#61768b!important;background:transparent!important;box-shadow:none}
+html body .side .nav button.active,html body .side .nav button:hover{background:#edf5fe!important;color:#216db8!important}
+html body .side .nav button.active::before{display:none}
+html body .side .sidefoot,html body .side .fg-mobile-nav-hint{display:none}
+html body .main{padding:16px 24px 20px}
+html body .top{margin-bottom:12px;align-items:center}
+html body .title h1{font-size:22px}
+html body .title p{font-size:11px;margin:3px 0 0}
+html body .kpis{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+html body .kpi{display:flex;align-items:center;gap:12px;padding:8px 14px;flex:1;min-width:110px;border-radius:10px}
+html body .kpi small{font-size:11px;white-space:nowrap}
+html body .kpi strong{font-size:19px;margin:0 0 0 auto;line-height:1.3}
+html body .work,html body .grid{grid-template-columns:290px minmax(0,1fr)}
+html body .detailHead{padding:16px 20px}
+html body .detailHead h2{display:flex;align-items:center;gap:9px;font-size:19px}
+html body .detailHead h2::before{content:'SOS';display:grid;place-items:center;font-size:7px;font-weight:600;flex:0 0 23px;height:23px;border-radius:5px;background:#ef476f;color:#fff;letter-spacing:0}
+html body .fg-sos-mark{display:inline-grid;place-items:center;width:20px;height:20px;font-size:6px;vertical-align:middle;border-radius:4px;background:#ef476f;color:#fff;margin-right:4px}
+html body .fg-rescue-icon{width:17px;height:17px;flex:0 0 17px;color:#526f90;vertical-align:middle}
+html body .infoCard small{display:flex;align-items:center;gap:7px}
+html body .infoCard b{padding-left:24px;font-size:13px}
+html body .infoCard:nth-last-child(-n+2){border-bottom:1px solid #e3ebf4}
+html body .infoCard:last-child{border-bottom:0}
+html body .controls{padding:14px}
+html body .controls::before{padding-bottom:5px}
+html body .controlRow{grid-template-columns:84px minmax(0,1fr) auto;gap:8px}
+html body .controlRow label{grid-column:auto;font-size:11px}
+html body .teamActions{flex-wrap:nowrap}
+html body #manageTeamsBtn{background:transparent;color:#2878c8;border-color:transparent;padding:8px;font-size:11px}
+html body .msg.bot{font-size:12px;padding-bottom:10px}
+html body .msg details summary{cursor:pointer;line-height:1.7;color:#526c85}
+html body .msg details p{margin:8px 0 0;line-height:1.7;color:#61768b;font-size:12px}
+html body .msg details[open] summary{color:#2878c8}
+html body .fg-rescue-chat-title{display:flex;align-items:center;gap:9px;padding:17px;font-size:14px}
+html body .composer textarea{min-height:46px;resize:none;font-size:13px}
+html body .composer .btn{align-self:end;min-height:46px}
+@media(min-width:1251px){
+ html body .work,html body .grid{height:calc(100dvh - 218px);min-height:520px}
+ html body .work>.panel:first-child,html body .grid>.panel:first-child{display:flex;flex-direction:column}
+ html body .cases{flex:1;min-height:0;max-height:none}
+ html body .work>.panel:last-child,html body .grid>.panel:last-child{display:grid;grid-template-rows:auto minmax(0,1fr);overflow:hidden}
+ html body .detailBody{grid-template-columns:minmax(0,1.1fr) minmax(310px,.9fr);min-height:0;overflow:hidden}
+ html body .info{overflow:auto;scrollbar-width:thin}
+ html body .chat{min-height:0;overflow:hidden}
+ html body .messages{flex:1;min-height:0;max-height:none;overflow:auto}
+ html body .composer{flex-shrink:0}
+ html body .fg-rescue-chat-title{flex-shrink:0}
+ html body .controlRow:has(.teamActions){grid-template-columns:84px minmax(0,1fr)}
+ html body .controlRow .teamActions{grid-column:2/-1}
+}
+@media(min-width:701px) and (max-width:1250px){
+ html body .shell>.side{padding:10px 14px;gap:14px}
+ html body .side .brand small{display:none}
+ html body .side .nav button{padding:8px;font-size:11px}
+ html body .work,html body .grid{grid-template-columns:260px minmax(0,1fr)}
+}
+@media(max-width:700px){
+ html body .shell>.side{display:block;padding:12px}
+ html body .side .brand{margin-bottom:10px}
+ html body .side .nav{display:flex;gap:4px;width:100%}
+ html body .main{padding:12px 10px 24px}
+ html body .kpis{gap:6px}
+ html body .kpi{flex:1 1 calc(50% - 6px);padding:8px 10px;min-width:0}
+ html body .kpi strong{font-size:18px}
+ html body .controlRow{grid-template-columns:minmax(0,1fr) auto}
+ html body .controlRow label{grid-column:1/-1}
+ html body .controlRow .teamActions{grid-column:1/-1}
+ html body .detailHead{padding:14px 16px}
+ html body .infoCard b{font-size:13px}
+ html body .infoCard small{font-size:10px}
+ html body .composer textarea{font-size:16px;resize:vertical}
+ html body .fg-rescue-workspace>.panel:last-child{display:none}
+ html body .fg-rescue-workspace.fg-rescue-selected>.panel:last-child{display:block}
+}
+@media(min-width:1251px){html body :is(.mapBox,.map){height:180px}html body .infoCard{padding:11px 14px}html body .teamHint{font-size:11px;padding:9px 12px}}
+@media(min-width:1600px){html body .controlRow:has(.teamActions){grid-template-columns:84px minmax(0,1fr) auto}html body .controlRow .teamActions{grid-column:auto}}

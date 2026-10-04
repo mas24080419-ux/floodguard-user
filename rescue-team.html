@@ -81,8 +81,8 @@ html,body{max-width:100%;overflow-x:hidden}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="./floodguard-typography-v1.css?v=1">
-<link rel="stylesheet" href="./rescue-workspace.css?v=62">
-<script defer src="./rescue-workspace.js?v=62"></script>
+<link rel="stylesheet" href="./rescue-workspace.css?v=63">
+<script defer src="./rescue-workspace.js?v=63"></script>
 </head>
 <body>
 <section class="auth" id="auth">
@@ -296,11 +296,11 @@ function notifyNew(rows){if(FIRST_SYNC){rows.forEach(i=>KNOWN.add(String(i.id)))
 async function sync(){try{let d=await api('/api/rescue-team/me');DATA=d;if(d.confirmation_required){if(INVITE_TOKEN){await confirmInviteIfPresent();d=await api('/api/rescue-team/me');DATA=d}else{showConfirmWaiting(d.account?.email||session?.user?.email||'',d.grant?.invite_expires_at);return d}}if(d.onboarding_required){showOnboarding(d,false);return d}INCIDENTS=Array.isArray(d.incidents)?d.incidents:[];notifyNew(INCIDENTS);$('teamName').textContent=d.team?.name||'Đội cứu hộ FloodGuard';$('accountText').textContent=(d.account?.email||'')+' · '+(d.membership?.member_role==='leader'?'Đội trưởng':'Thành viên');$('teamStatus').value=d.team?.status||'available';showApp();renderAll();if(SELECTED){const i=INCIDENTS.find(x=>String(x.id)===String(SELECTED));if(i&&detailSig(i)!==LAST_DETAIL_SIG)renderDetail(i)}return d}catch(e){if(e.code==='invite_email_mismatch'){showLogin();setAuthMsg(e.message,'err');return null}if(e.status===403&&e.message==='rescue_access_not_granted'){showWaiting(session?.user?.email||'');return null}if(e.status===400&&['invalid_rescue_invite','rescue_invite_expired'].includes(e.message)){showLogin();setAuthMsg(e.message==='rescue_invite_expired'?'Link xác nhận đã hết hạn. Hãy liên hệ Admin để được gửi lời mời mới.':'Link xác nhận không hợp lệ hoặc đã được thay thế.','err');return null}if(e.status===401){showLogin();return null}throw e}}
 function detailSig(i){const m=Array.isArray(i?.messages)?i.messages:[];const last=m.length?m[m.length-1]:null;return [String(i?.id||''),String(i?.updated_at||i?.created_at||''),String(i?.status||''),String(m.length),String(last?.id||last?.ts||'')].join('|')}
 function renderAll(){const st=i=>String(i.status||'new');$('kAll').textContent=INCIDENTS.length;$('kNew').textContent=INCIDENTS.filter(i=>st(i)==='new').length;$('kActive').textContent=INCIDENTS.filter(i=>['accepted','dispatch','arrived'].includes(st(i))).length;$('kDone').textContent=INCIDENTS.filter(i=>st(i)==='resolved').length;renderList()}
-function renderList(){const q=$('search').value.trim().toLowerCase(),f=$('filter').value;const rows=INCIDENTS.filter(i=>{const s=String(i.status||'new'),open=!['resolved','cancelled'].includes(s),hay=[i.id,address(i),person(i),phone(i)].join(' ').toLowerCase();return(f==='open'?open:(!f||s===f))&&(!q||hay.includes(q))});$('count').textContent=rows.length+' ca';$('cases').innerHTML=rows.length?rows.map(i=>{const s=String(i.status||'new');return '<button class="case '+(String(i.id)===String(SELECTED)?'active':'')+'" data-id="'+esc(i.id)+'"><div class="caseTop"><b>🆘 '+esc(person(i))+'</b><span class="tag s-'+esc(s)+'">'+esc(LABELS[s]||s)+'</span></div><small>#'+esc(i.id)+' · '+esc(dt(i.updated_at||i.created_at))+'<br>'+esc(address(i))+'<br>'+(i.dispatch_mode==='auto'?'⚡ Tự động phân công':'👤 Admin phân công')+'</small></button>'}).join(''):'<div class="empty">Không có ca phù hợp.</div>';document.querySelectorAll('.case').forEach(b=>b.onclick=()=>{if(String(SELECTED)!==String(b.dataset.id))LAST_DETAIL_SIG='';SELECTED=b.dataset.id;renderList();const i=INCIDENTS.find(x=>String(x.id)===String(SELECTED));if(i)renderDetail(i)})}
+function renderList(){const q=$('search').value.trim().toLowerCase(),f=$('filter').value;const rows=INCIDENTS.filter(i=>{const s=String(i.status||'new'),open=!['resolved','cancelled'].includes(s),hay=[i.id,address(i),person(i),phone(i)].join(' ').toLowerCase();return(f==='open'?open:(!f||s===f))&&(!q||hay.includes(q))});$('count').textContent=rows.length+' ca';$('cases').innerHTML=rows.length?rows.map(i=>{const s=String(i.status||'new');return '<button class="case '+(String(i.id)===String(SELECTED)?'active':'')+'" data-id="'+esc(i.id)+'"><div class="caseTop"><b><span class="fg-sos-mark" aria-hidden="true">SOS</span> '+esc(person(i))+'</b><span class="tag s-'+esc(s)+'">'+esc(LABELS[s]||s)+'</span></div><small>#'+esc(i.id)+' · '+esc(dt(i.updated_at||i.created_at))+'<br>'+esc(address(i))+'<br>'+(i.dispatch_mode==='auto'?'⚡ Tự động phân công':'👤 Admin phân công')+'</small></button>'}).join(''):'<div class="empty">Không có ca phù hợp.</div>';document.querySelectorAll('.case').forEach(b=>b.onclick=()=>{if(String(SELECTED)!==String(b.dataset.id))LAST_DETAIL_SIG='';SELECTED=b.dataset.id;renderList();const i=INCIDENTS.find(x=>String(x.id)===String(SELECTED));if(i)renderDetail(i)})}
 function workflowHtml(i){const s=String(i.status||'new'),steps=[['accepted','Tiếp nhận'],['dispatch','Xuất phát'],['arrived','Đã tới'],['resolved','Hoàn thành']];return steps.map(([v,l])=>'<button class="btn '+(s===v?'current':'')+'" data-status="'+v+'" '+(s==='resolved'?'disabled':'')+'>'+l+'</button>').join('')}
 function renderDetail(i){
   const s=String(i.status||'new'),point=coords(i);
-  $('caseTitle').textContent='🆘 '+person(i);
+  $('caseTitle').textContent=person(i);
   $('caseSub').textContent='#'+i.id+' · '+dt(i.updated_at||i.created_at);
   $('caseStatus').className='tag s-'+s;
   $('caseStatus').textContent=LABELS[s]||s;
@@ -309,12 +309,12 @@ function renderDetail(i){
 
   $('info').innerHTML=
     '<div class="infoGrid">'+
-      '<div class="infoCard"><small>Người gửi</small><b>'+esc(person(i))+'</b></div>'+
-      '<div class="infoCard"><small>Số điện thoại</small><b>'+esc(phone(i))+'</b></div>'+
-      '<div class="infoCard wide"><small>Vị trí / địa chỉ</small><b>'+esc(address(i))+'</b></div>'+
-      '<div class="infoCard wide"><small>Mô tả sự cố</small><b>'+esc(desc(i))+'</b></div>'+
-      '<div class="infoCard"><small>Tạo lúc</small><b>'+esc(dt(i.created_at))+'</b></div>'+
-      '<div class="infoCard"><small>Phân công</small><b>'+(i.dispatch_mode==='auto'?'Tự động':'Admin')+'</b></div>'+
+      ''+
+      '<div class="infoCard"><small><svg class="fg-rescue-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3H4a1 1 0 0 0-1 1c0 9.4 7.6 17 17 17a1 1 0 0 0 1-1v-3l-5-2-2 2a14 14 0 0 1-7-7l2-2-2-5Z"/></svg>Số điện thoại</small><b>'+esc(phone(i)==='—'?'Chưa cung cấp':phone(i))+'</b></div><div class="infoCard"><small><svg class="fg-rescue-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Tạo lúc</small><b>'+esc(dt(i.created_at))+'</b></div>'+
+      '<div class="infoCard wide"><small><svg class="fg-rescue-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>Vị trí / địa chỉ</small><b>'+esc(address(i))+'</b></div>'+
+      '<div class="infoCard wide"><small><svg class="fg-rescue-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H5v18h14V8l-5-5Z"/><path d="M14 3v5h5M8 12h8M8 16h6"/></svg>Mô tả sự cố</small><b>'+esc(desc(i)==='—'?'Chưa có mô tả':desc(i))+'</b></div>'+
+      ''+
+      ''+
     '</div>'+
     '<div class="dispatchNote"><b>Lý do điều phối:</b> '+esc(i.dispatch_reason||'Đội được Admin phân công cho ca này.')+'</div>'+
     '<div class="workflow">'+workflowHtml(i)+'</div>'+
@@ -327,7 +327,8 @@ function renderDetail(i){
   $('send').disabled=$('chatText').disabled;
   LAST_DETAIL_SIG=detailSig(i);
 }
-function renderMessages(i){const rows=Array.isArray(i.messages)?i.messages.slice().sort((a,b)=>Number(a.ts||0)-Number(b.ts||0)):[];$('messages').innerHTML=rows.length?rows.map(m=>'<div class="msg '+esc(m.from||'bot')+'">'+esc(m.text||'')+(m.operator?'<small>'+esc(m.operator)+'</small>':'')+'<small>'+esc(dt(m.ts))+'</small></div>').join(''):'<div class="empty">Chưa có tin nhắn.</div>';$('messages').scrollTop=$('messages').scrollHeight}
+function rescueMessageBody(m){const t=String(m.text||'');if((m.from||'bot')==='bot'&&t.length>160)return '<details><summary>'+esc(t.slice(0,88))+'…</summary><p>'+esc(t)+'</p></details>';return esc(t)}
+function renderMessages(i){const rows=Array.isArray(i.messages)?i.messages.slice().sort((a,b)=>Number(a.ts||0)-Number(b.ts||0)):[];$('messages').innerHTML=rows.length?rows.map(m=>'<div class="msg '+esc(m.from||'bot')+'">'+rescueMessageBody(m)+(m.operator?'<small>'+esc(m.operator)+'</small>':'')+'<small>'+esc(dt(m.ts))+'</small></div>').join(''):'<div class="empty">Chưa có tin nhắn.</div>';$('messages').scrollTop=$('messages').scrollHeight}
 async function saveProfile(e){e.preventDefault();const team={name:$('profileName').value.trim(),province_city:$('profileProvince').value.trim(),district:$('profileDistrict').value.trim(),ward:$('profileWard').value.trim(),phone:$('profilePhone').value.trim(),leader_name:$('profileLeader').value.trim(),vehicle_info:$('profileVehicle').value.trim(),status:$('profileStatus').value,capacity:Number($('profileCapacity').value)||1,lat:$('profileLat').value.trim()===''?null:Number($('profileLat').value),lon:$('profileLon').value.trim()===''?null:Number($('profileLon').value),notes:$('profileNotes').value.trim(),active:true};try{$('saveProfileBtn').disabled=true;await api('/api/rescue-team/profile',{method:'POST',body:JSON.stringify({team})});clearProfileDraft();try{parent.postMessage('floodguard:account-updated',location.origin)}catch{}await sync()}catch(err){alert('Không lưu được hồ sơ: '+err.message)}finally{$('saveProfileBtn').disabled=false}}
 async function updateStatus(status){if(!SELECTED)return;try{await api('/api/rescue-team/status',{method:'POST',body:JSON.stringify({id:SELECTED,status})});await sync()}catch(e){alert(e.message)}}
 async function sendMessage(){const v=$('chatText').value.trim();if(!v||!SELECTED)return;try{$('send').disabled=true;await api('/api/rescue-team/message',{method:'POST',body:JSON.stringify({id:SELECTED,text:v})});$('chatText').value='';await sync()}catch(e){alert(e.message)}finally{$('send').disabled=false}}
