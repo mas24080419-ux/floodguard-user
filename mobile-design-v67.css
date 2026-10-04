@@ -1,0 +1,96 @@
+/* One mobile layout layer, loaded after the older visual themes. */
+.fg-mobile-menu{display:none}
+@media(max-width:720px){
+ html:root body,html:root body #fgWebsiteHome{overflow-x:clip}
+ html:root body #fgWebsiteHome,html:root body main{overflow-wrap:break-word}
+ html:root body :is(input:not([type=checkbox]):not([type=radio]),select,textarea){font-size:16px!important}
+ html:root body :is(.site-shell,.wh-shell){width:calc(100% - 32px)!important;max-width:100%!important}
+ html:root body :is(.site-nav-in,#fgWebsiteHome .wh-nav-in){min-height:64px!important;gap:8px!important;flex-wrap:nowrap!important}
+ html:root body :is(.site-brand,#fgWebsiteHome .wh-brand){font-size:15px!important;gap:8px!important;min-width:0!important;white-space:nowrap!important}
+ html:root body :is(.site-logo,#fgWebsiteHome .wh-logo){width:32px!important;height:32px!important;flex:0 0 32px!important;border-radius:10px!important}
+ html:root body :is(.site-links,#fgWebsiteHome .wh-links){display:none!important}
+ html:root body :is(.site-actions,#fgWebsiteHome .wh-actions){margin-left:auto!important;flex:none!important;gap:0!important}
+ html:root body .site-actions>.site-btn:not(.primary){display:none!important}
+ html:root body :is(.site-actions .primary,#fgWebsiteHome .wh-actions .wh-btn){font-size:12px!important;min-height:42px!important;padding:10px 12px!important;white-space:nowrap!important;border-radius:10px!important}
+ html:root body :is(.site-menu,#fgWebsiteHome .fg-mobile-menu){display:grid!important;place-items:center!important;width:42px!important;height:42px!important;flex:0 0 42px!important;padding:0!important;border:1px solid #dce6f0!important;border-radius:10px!important;background:#fff!important;color:#16324f!important;font-size:21px!important}
+ html:root body .fg52-topbar-inner{width:calc(100% - 32px)!important;min-height:28px!important;font-size:10px!important}
+ html:root body .fg52-topbar-inner>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+ html:root body .fg52-topbar-inner>span:last-child{display:none!important}
+ html:root body .mobile-drawer{display:none!important;position:fixed!important;top:92px!important;left:12px!important;right:12px!important;width:auto!important;max-height:calc(100dvh - 108px)!important;overflow:auto!important;padding:10px!important;border:1px solid #dce6f0!important;border-radius:16px!important;background:#fff!important;box-shadow:0 16px 40px #16324f26!important;z-index:80!important}
+ html:root body .mobile-drawer.open{display:grid!important;grid-template-columns:1fr!important;gap:2px!important}
+ html:root body .mobile-drawer a{display:flex!important;align-items:center!important;min-height:46px!important;padding:12px!important;border-radius:10px!important;color:#16324f!important;font-size:15px!important;text-decoration:none!important}
+ html:root body .mobile-drawer a:is(:hover,.active){background:#edf5fe!important;color:#216db8!important}
+ html:root body #fgWebsiteHome .wh-nav{overflow:visible!important}
+ /* Shorter opening screen; no giant text or ornamental empty space. */
+ html:root body #fgWebsiteHome .wh-hero{min-height:0!important;width:calc(100% - 24px)!important;padding:32px 22px 88px!important;margin-top:12px!important;border-radius:18px!important;gap:0!important}
+ html:root body #fgWebsiteHome .fg51-hero-copy{min-width:0!important;max-width:100%!important}
+ html:root body #fgWebsiteHome .wh-hero h1{font-size:clamp(28px,7.4vw,34px)!important;line-height:1.22!important;margin:0 0 16px!important;letter-spacing:-.025em!important}
+ html:root body #fgWebsiteHome .wh-hero p{font-size:14px!important;line-height:1.7!important}
+ html:root body #fgWebsiteHome .wh-hero .wh-eyebrow{margin-bottom:16px!important;font-size:10px!important}
+ html:root body #fgWebsiteHome .wh-hero-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;margin-top:20px!important}
+ html:root body #fgWebsiteHome .wh-hero .wh-hero-actions .wh-btn{font-size:13px!important;min-height:46px!important;padding:11px 8px!important;width:100%!important}
+ html:root body #fgWebsiteHome .wh-hero .fg51-controls{bottom:36px!important;right:18px!important;gap:8px!important}
+ html:root body #fgWebsiteHome .fg51-controls>button{width:40px!important;height:40px!important}
+ html:root body #fgWebsiteHome .wh-hero .fg51-credit{bottom:10px!important;left:18px!important;right:18px!important;font-size:9px!important;line-height:1.5!important}
+ html:root body #fgWebsiteHome .fg57-quickbar-wrap{margin:12px auto 20px!important}
+ html:root body #fgWebsiteHome .fg57-quickitem{padding:14px!important;gap:12px!important}
+ html:root body #fgWebsiteHome .fg57-quickitem small{font-size:10px!important;letter-spacing:.04em!important}
+ html:root body #fgWebsiteHome .fg57-quickitem b{font-size:15px!important;margin:0!important}
+ html:root body #fgWebsiteHome .fg57-quickitem>span>span{font-size:13px!important;line-height:1.5!important}
+ /* Public information pages share the same reading rhythm. */
+ html:root body .page-hero{padding:30px 0!important;min-height:0!important}
+ html:root body .page-hero h1{font-size:32px!important;line-height:1.22!important;letter-spacing:-.025em!important;margin:14px 0!important}
+ html:root body .page-hero p{font-size:15px!important;line-height:1.75!important}
+ html:root body :is(.hero-grid,.wh-split,.wh-about){grid-template-columns:minmax(0,1fr)!important;gap:24px!important}
+ html:root body :is(.page-section,#fgWebsiteHome .wh-section){padding:36px 0!important}
+ html:root body :is(.section-head,.wh-section-head){margin-bottom:20px!important}
+ html:root body :is(.page-section h2,#fgWebsiteHome .wh-section h2){font-size:25px!important;line-height:1.3!important;margin:8px 0 12px!important}
+ html:root body :is(.info-card h3,.wh-card h3,.wh-step h3){font-size:18px!important;line-height:1.4!important}
+ html:root body :is(.section-head p,.info-card p,.wh-card p,.wh-copy p,.wh-step p,.wh-section-head p){font-size:14px!important;line-height:1.75!important}
+ html:root body :is(.feature-bento,.principle-grid,.cause-grid,.impact-grid,.flow-roadmap,.alert-console,.rescue-console,.wh-grid,.wh-flow){grid-template-columns:minmax(0,1fr)!important;gap:12px!important}
+ html:root body :is(.feature-tile,.info-card,.wh-card,.wh-card:nth-child(n)){grid-column:auto!important;grid-row:auto!important;min-height:0!important;padding:20px!important;border-radius:14px!important}
+ html:root body :is(.wh-step,.wh-step+.wh-step){min-height:0!important;padding:20px 0!important}
+ html:root body :is(.visual,.visual-card,.wh-panel){min-width:0!important;max-width:100%!important;transform:none!important;min-height:0!important}
+ html:root body :is(.cta-box,.wh-sos){padding:24px 20px!important;grid-template-columns:minmax(0,1fr)!important;gap:18px!important}
+ html:root body :is(.hero-actions,.footer-links,.wh-foot-links){flex-wrap:wrap!important;gap:10px!important}
+ html:root body :is(.site-btn,.wh-btn){min-height:44px!important;font-size:14px!important}
+ html:root body :is(.site-footer,.wh-footer){padding:28px 0!important}
+ html:root body :is(.footer-grid,.wh-footer-in){grid-template-columns:1fr!important;flex-wrap:wrap!important;gap:20px!important}
+ html:root body .fg52-reveal{opacity:1!important;transform:none!important}
+ /* Login must scroll above the phone keyboard. */
+ html:root body .auth-layout{min-height:100dvh!important;height:auto!important;padding:20px 16px calc(24px + env(safe-area-inset-bottom))!important;align-items:flex-start!important}
+ html:root body .auth-layout .card{width:100%!important;max-width:440px!important;margin:0 auto!important;padding:24px 20px!important;border-radius:20px!important}
+ /* Map workspace: leave the canvas clear and bound panel scrolling. */
+ html:root body #fg3App .fg3-header{height:54px!important;border-radius:14px!important;box-shadow:0 3px 14px #16324f12!important}
+ html:root body #fg3App .fg12-mobile-nav{bottom:env(safe-area-inset-bottom)!important;left:0!important;right:0!important;height:64px!important;border-radius:16px 16px 0 0!important;padding:5px 8px!important;border:1px solid #dce6f0!important;box-shadow:0 -3px 14px #16324f0d!important}
+ html:root body #fg3App .fg12-mobile-nav button{min-height:48px!important;border-radius:10px!important}
+ html:root body #fg3App .fg12-mobile-nav button span{font-size:11px!important;line-height:1.3!important;font-weight:600!important}
+ html:root body #fg3App :is(.fg3-routepanel,.fg4-evpanel,.fg3-drawer,.fg10-panel,.fg70-panel,.fg3-stationpanel,.fg3-overview,.fg13-alertpanel){top:calc(68px + env(safe-area-inset-top))!important;bottom:calc(70px + env(safe-area-inset-bottom))!important;left:8px!important;right:8px!important;border-radius:16px!important;min-height:0!important;overflow:hidden!important}
+ html:root body #fg3App :is(.fg3-route-scroll,.fg4-evscroll,.fg3-scroll,.fg10-scroll,.fg70-scroll){min-height:0!important;overflow-y:auto!important;overscroll-behavior:contain!important;padding:14px 14px 24px!important}
+ html:root body #fg3App :is(.fg3-note,.fg4-evstatus,.fg3-resultcard .desc,.fg3-route-legend){font-size:13px!important;line-height:1.65!important}
+ html:root body #fg3App :is(.fg3-field label,.fg3-route-field label,.fg4-evfield label){font-size:13px!important;line-height:1.5!important}
+ html:root body #fg3App :is(.fg3-run,.fg3-route-run,.fg4-evlocbtn,.fg10-btn,.fg70-btn,.fg3-route-close,.fg4-evclose){min-height:44px!important;font-size:14px!important}
+ html:root body #fg3App .fg16-chat{height:clamp(220px,calc(100dvh - 280px),620px)!important;min-height:220px!important}
+ html:root body #fg3App :is(.fg16-msg,.fg16-card p,.fg16-note){font-size:14px!important;line-height:1.65!important}
+ html:root body #fg3App .fg16-quickchat{display:flex!important;flex-wrap:wrap!important;gap:8px!important}
+ html:root body #fg3App .fg16-quickchat button{font-size:12px!important;min-height:40px!important;padding:9px 12px!important}
+ html:root body #fg3App #fg16SOSFab{bottom:calc(80px + env(safe-area-inset-bottom))!important;right:12px!important;box-shadow:0 3px 12px #b91c1c26!important;z-index:1740!important}
+ html:root body #fg3App #fg3RoutePanel .fg3-route-scroll{padding:14px 14px 24px!important}
+ /* Admin & rescue keep local table scrolling and one-column forms. */
+ html:root body.fg-admin-ui .main{padding:16px 12px calc(24px + env(safe-area-inset-bottom))!important}
+ html:root body.fg-admin-ui :is(.grid:not(.fg-rescue-workspace),.grantForm,.form,.formGrid){min-width:0!important}
+ html:root body.fg-admin-ui :is(.grantForm,.formGrid){grid-template-columns:minmax(0,1fr)!important;gap:12px!important}
+ html:root body.fg-admin-ui :is(.tableWrap,.table-wrap){max-width:100%!important;overflow-x:auto!important;overscroll-behavior-x:contain!important}
+ html:root body.fg-admin-ui :is(.btn,.nav button){font-size:13px!important;min-height:44px!important}
+ html:root body.fg-admin-ui :is(.title p,.panelHead span,.sectionHead span){font-size:13px!important;line-height:1.6!important}
+ html:root body.fg-admin-ui .kpi small{font-size:12px!important;white-space:normal!important}
+ html:root body :is(.loginCard,.modalCard){max-height:calc(100dvh - 32px)!important;overflow:auto!important}
+ html:root body :is(.loginCard p,.modalCard p){font-size:14px!important;line-height:1.65!important}
+ html:root body .fg-rescue-workspace .composer{padding-bottom:calc(12px + env(safe-area-inset-bottom))!important}
+ html:root body .fg-rescue-workspace .msg{font-size:14px!important;line-height:1.65!important}
+}
+@media(max-width:374px){
+ html:root body :is(.site-brand,#fgWebsiteHome .wh-brand){font-size:13px!important;gap:6px!important}
+ html:root body :is(.site-actions .primary,#fgWebsiteHome .wh-actions .wh-btn){font-size:11px!important;padding:10px 8px!important}
+ html:root body #fgWebsiteHome .wh-hero{padding-left:18px!important;padding-right:18px!important}
+}

@@ -34,6 +34,8 @@ function installThemes(){
  installStylesheet('./site-action-v59.css?v=61','action-v61');
  installStylesheet('./site-step-v62.css?v=62','step-v62');
  installStylesheet('./home-design-v66.css?v=66','home-v66');
+ installStylesheet('./mobile-design-v67.css?v=67','mobile-v67');
+ const mobileStyle=document.querySelector('link[href*="mobile-design-v67.css"]');if(mobileStyle)document.head.appendChild(mobileStyle);
  document.documentElement.dataset.fgEditorial='1';
  document.documentElement.dataset.fgLifestyle='1';
  document.documentElement.dataset.fgMona='1';
@@ -166,12 +168,20 @@ function rewriteHome(){
 function normalizeSiteNav(){
  addUtilityBar(null);purgeHiddenLinks(document);ensureOrderedLinks(document.querySelector('.site-links'));ensureOrderedLinks(document.querySelector('.mobile-drawer'),true);const footer=document.querySelector('.footer-links');if(footer)ensureOrderedLinks(footer);purgeHiddenLinks(document)
 }
+function homepageMenu(){
+ const root=document.getElementById('fgWebsiteHome'),nav=root?.querySelector('.wh-nav-in');if(!nav||nav.querySelector('[data-site-menu]'))return;
+ const button=document.createElement('button');button.className='fg-mobile-menu';button.type='button';button.setAttribute('data-site-menu','');button.setAttribute('aria-label','Mở menu điều hướng');button.innerHTML='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>';
+ const drawer=document.createElement('nav');drawer.className='mobile-drawer fg-home-drawer';drawer.setAttribute('data-site-drawer','');drawer.setAttribute('aria-label','Điều hướng trang chủ');ensureOrderedLinks(drawer,true);nav.appendChild(button);root.querySelector('.wh-nav').appendChild(drawer);
+}
 function mobileMenu(){
  const btn=document.querySelector('[data-site-menu]'),drawer=document.querySelector('[data-site-drawer]');if(!btn||!drawer)return;
- btn.addEventListener('click',()=>drawer.classList.toggle('open'));
- drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>drawer.classList.remove('open')));
- document.addEventListener('click',e=>{if(drawer.classList.contains('open')&&!drawer.contains(e.target)&&e.target!==btn)drawer.classList.remove('open')});
- document.addEventListener('keydown',e=>{if(e.key==='Escape')drawer.classList.remove('open')});
+ drawer.id=drawer.id||'fgMobileMenu';btn.setAttribute('aria-controls',drawer.id);btn.setAttribute('aria-expanded','false');btn.setAttribute('aria-label','Mở menu điều hướng');btn.type='button';drawer.inert=true;
+ function setOpen(open){drawer.classList.toggle('open',open);drawer.inert=!open;btn.setAttribute('aria-expanded',String(open));btn.setAttribute('aria-label',open?'Đóng menu điều hướng':'Mở menu điều hướng')}
+ btn.addEventListener('click',()=>setOpen(!drawer.classList.contains('open')));
+ drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>setOpen(false)));
+ document.addEventListener('click',e=>{if(drawer.classList.contains('open')&&!drawer.contains(e.target)&&!btn.contains(e.target))setOpen(false)});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&drawer.classList.contains('open')){setOpen(false);btn.focus()}});
+ matchMedia('(min-width: 721px)').addEventListener('change',e=>{if(e.matches)setOpen(false)});
 }
 function markActive(){
  const page=(location.pathname.split('/').pop()||'index.html').toLowerCase();
@@ -185,6 +195,6 @@ function reveal(){
  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('fg52-visible');io.unobserve(e.target)}}),{threshold:.06,rootMargin:'0px 0px -2%'});targets.forEach(x=>io.observe(x));
 }
 function addFooterResources(){document.querySelectorAll('.wh-foot-links,.footer-links').forEach(foot=>{[['Dữ liệu','./data.html'],['Hướng dẫn','./how-it-works.html'],['Liên hệ','./contact.html']].forEach(([label,href])=>{if(!foot.querySelector(`a[href="${href}"]`)){const a=document.createElement('a');a.textContent=label;a.href=href;foot.appendChild(a)}})});document.querySelectorAll('.site-actions .primary').forEach(a=>a.textContent='Mở bản đồ →')}
-function start(){installThemes();rewriteHome();normalizeSiteNav();mobileMenu();markActive();addFooterResources();reveal()}
+function start(){installThemes();rewriteHome();normalizeSiteNav();homepageMenu();mobileMenu();markActive();addFooterResources();reveal()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();

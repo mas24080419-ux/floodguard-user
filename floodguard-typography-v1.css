@@ -1,3 +1,4 @@
+@import url("./mobile-design-v67.css?v=67");
 @import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap");
 :root{--fg-font:"Be Vietnam Pro","Segoe UI",Arial,sans-serif}
 html body,html body #fgWebsiteHome :is(div,span,p,a,button,input,textarea,select,label,th,td,li,small,strong,b,h1,h2,h3,h4,h5,h6):not([class*="coord"]):not([class*="code"]):not([class*="icon"]):not([class*="fa-"]),html body #authScreen :is(div,span,p,a,button,input,textarea,select,label,th,td,li,small,strong,b,h1,h2,h3,h4,h5,h6):not([class*="coord"]):not([class*="code"]):not([class*="icon"]):not([class*="fa-"]),body :is(div,span,p,a,button,input,textarea,select,label,th,td,li,small,strong,b,h1,h2,h3,h4,h5,h6):not([class*="coord"]):not([class*="code"]):not([class*="icon"]):not([class*="fa-"]){font-family:var(--fg-font)!important}
