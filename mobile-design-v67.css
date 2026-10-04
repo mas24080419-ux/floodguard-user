@@ -9,15 +9,15 @@
  html:root body :is(.site-brand,#fgWebsiteHome .wh-brand){font-size:15px!important;gap:8px!important;min-width:0!important;white-space:nowrap!important}
  html:root body :is(.site-logo,#fgWebsiteHome .wh-logo){width:32px!important;height:32px!important;flex:0 0 32px!important;border-radius:10px!important}
  html:root body :is(.site-links,#fgWebsiteHome .wh-links){display:none!important}
- html:root body :is(.site-actions,#fgWebsiteHome .wh-actions){margin-left:auto!important;flex:none!important;gap:0!important}
- html:root body .site-actions>.site-btn:not(.primary){display:none!important}
+ html:root body :is(.site-actions,#fgWebsiteHome .wh-actions){display:flex!important;margin-left:auto!important;flex:none!important;gap:0!important}
+ html:root body #fgWebsiteHome .wh-actions>.secondary-home,html:root body .site-actions>.site-btn:not(.primary){display:none!important}
  html:root body :is(.site-actions .primary,#fgWebsiteHome .wh-actions .wh-btn){font-size:12px!important;min-height:42px!important;padding:10px 12px!important;white-space:nowrap!important;border-radius:10px!important}
  html:root body :is(.site-menu,#fgWebsiteHome .fg-mobile-menu){display:grid!important;place-items:center!important;width:42px!important;height:42px!important;flex:0 0 42px!important;padding:0!important;border:1px solid #dce6f0!important;border-radius:10px!important;background:#fff!important;color:#16324f!important;font-size:21px!important}
  html:root body .fg52-topbar-inner{width:calc(100% - 32px)!important;min-height:28px!important;font-size:10px!important}
  html:root body .fg52-topbar-inner>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
  html:root body .fg52-topbar-inner>span:last-child{display:none!important}
  html:root body .mobile-drawer{display:none!important;position:fixed!important;top:92px!important;left:12px!important;right:12px!important;width:auto!important;max-height:calc(100dvh - 108px)!important;overflow:auto!important;padding:10px!important;border:1px solid #dce6f0!important;border-radius:16px!important;background:#fff!important;box-shadow:0 16px 40px #16324f26!important;z-index:80!important}
- html:root body .mobile-drawer.open{display:grid!important;grid-template-columns:1fr!important;gap:2px!important}
+ html:root body .mobile-drawer.open{opacity:1!important;visibility:visible!important;pointer-events:auto!important;transform:none!important;display:grid!important;grid-template-columns:1fr!important;gap:2px!important}
  html:root body .mobile-drawer a{display:flex!important;align-items:center!important;min-height:46px!important;padding:12px!important;border-radius:10px!important;color:#16324f!important;font-size:15px!important;text-decoration:none!important}
  html:root body .mobile-drawer a:is(:hover,.active){background:#edf5fe!important;color:#216db8!important}
  html:root body #fgWebsiteHome .wh-nav{overflow:visible!important}
