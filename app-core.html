@@ -1077,6 +1077,8 @@ body.fg12-dark .leaflet-popup-content-wrapper,body.fg12-dark .leaflet-popup-tip{
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="./floodguard-typography-v1.css?v=1">
+<link rel="stylesheet" href="./community.css?v=1">
+<script src="./community.js?v=1" defer></script>
 </head>
 <body>
 <div id="map"></div>
@@ -3878,6 +3880,7 @@ if('serviceWorker' in navigator && location.protocol !== 'file:'){window.addEven
  let fg34PresenceTimer=null;
  function setAuthControls(ready){const a=$('fg31Submit'),g=$('fg31Google');if(a){a.disabled=!ready;a.style.opacity=ready?'1':'.58';a.style.cursor=ready?'pointer':'wait'}if(g){g.disabled=!ready;g.style.opacity=ready?'1':'.58';g.style.cursor=ready?'pointer':'wait'}}
  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+ window.FGCommunityAPI=(path,options={})=>api(path,options);
  window.FG31RoutingAPI=(input,options={})=>api('/api/routes/traffic',{method:'POST',body:JSON.stringify(input),signal:options.signal||(typeof AbortSignal.timeout==='function'?AbortSignal.timeout(15000):undefined)});
  async function api(path,opt={}){const s=(await sb?.auth.getSession())?.data?.session||session;const headers=Object.assign({'Content-Type':'application/json'},opt.headers||{});if(s?.access_token)headers.Authorization='Bearer '+s.access_token;const r=await fetch(API+path,{...opt,headers,cache:'no-store'});const d=await r.json().catch(()=>({}));if(!r.ok){const error=new Error(d.message||d.error||d.detail||('HTTP '+r.status));error.status=r.status;error.code=d.error;throw error}return d}
  function authMsg(m,cls=''){const e=$('fg31AuthMsg');if(e){e.className='fg31-auth-msg '+cls;e.textContent=m||''}}
