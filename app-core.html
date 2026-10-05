@@ -1079,6 +1079,8 @@ body.fg12-dark .leaflet-popup-content-wrapper,body.fg12-dark .leaflet-popup-tip{
 <link rel="stylesheet" href="./floodguard-typography-v1.css?v=1">
 <link rel="stylesheet" href="./community.css?v=1">
 <script src="./community.js?v=1" defer></script>
+<link rel="stylesheet" href="./route-motion.css?v=1">
+<script src="./route-motion.js?v=1" defer></script>
 </head>
 <body>
 <div id="map"></div>
@@ -2336,7 +2338,7 @@ body.fg12-dark .fg-street-suggest{background:#10283e;border-color:#405b78}body.f
  function closeOtherPanels(){['fg3Drawer','fg3Overview','fg3StationPanel','fg3Layers'].forEach(id=>{const e=$(id);if(e)e.classList.remove('open','show')})}
  function showStatus(html,type=''){status.className='fg3-route-status'+(type?' '+type:'');status.innerHTML=html}
  function setRouteTools(show){const e=$('fg80RouteTools');if(e)e.hidden=!show}
- function cancelPendingRoute(){routeRequestSeq++;routeRunController?.abort();routeRunController=null;clearTimeout(autoRunTimer);autoRunTimer=null;const b=$('fg3RouteRun');if(b){b.disabled=false;b.removeAttribute('aria-busy')}}
+ function cancelPendingRoute(){window.FGRouteMotion?.cancel(map);routeRequestSeq++;routeRunController?.abort();routeRunController=null;clearTimeout(autoRunTimer);autoRunTimer=null;const b=$('fg3RouteRun');if(b){b.disabled=false;b.removeAttribute('aria-busy')}}
  function clearRouteVisuals({points=false,statusToo=false}={}){routeLayer.clearLayers();lastRoutes=[];recommendedIndex=selectedIndex=null;routeSessionReady=false;results.innerHTML='';const s=$('fg3RouteSummary');if(s)s.style.display='none';setRouteTools(false);if(points){routePointLayer.clearLayers();startPoint=endPoint=null}if(statusToo&&status){status.innerHTML='';status.style.display='none'}}
  function invalidateEndpoint(which){cancelPendingRoute();if(which==='from')startPoint=null;else if(which==='to')endPoint=null;clearRouteVisuals();drawEndpointMarkers();}
  function openPanel(){closeOtherPanels();panel.classList.add('show');$('fg3RouteBtn')?.classList.add('active')}
@@ -2453,9 +2455,9 @@ body.fg12-dark .fg-street-suggest{background:#10283e;border-color:#405b78}body.f
  function drawRoutes(analyses,selIdx,fit=true){
    routeLayer.clearLayers();const selected=analyses.find(a=>a.index===selIdx)||analyses[0];
    analyses.filter(a=>a.index!==selected.index).forEach(a=>{const coords=a.route.geometry.coordinates.map(c=>[c[1],c[0]]);L.polyline(coords,{color:'#aeb8c2',weight:5,opacity:.58,lineCap:'round'}).bindTooltip(`${window.FGRouteTime(a)} · ${fmt1(a.distance)} km`).on('click',()=>selectRoute(a.index)).addTo(routeLayer)});
-   const cfg=ROUTE_MODES[travelMode]||ROUTE_MODES.car;const coords=selected.route.geometry.coordinates.map(c=>[c[1],c[0]]);L.polyline(coords,{color:cfg.color,weight:7,opacity:.96,lineCap:'round',attribution:selected.routingProvider==='TomTom'?'© TomTom':'© OpenStreetMap contributors'}).bindTooltip(`${cfg.icon} ${cfg.label} · ${window.FGRouteTime(selected)} · ${fmt1(selected.distance)} km`).addTo(routeLayer);
+   const cfg=ROUTE_MODES[travelMode]||ROUTE_MODES.car;const coords=selected.route.geometry.coordinates.map(c=>[c[1],c[0]]);L.polyline(coords,{className:'fg-route-reveal',color:cfg.color,weight:7,opacity:.96,lineCap:'round',attribution:selected.routingProvider==='TomTom'?'© TomTom':'© OpenStreetMap contributors'}).bindTooltip(`${cfg.icon} ${cfg.label} · ${window.FGRouteTime(selected)} · ${fmt1(selected.distance)} km`).addTo(routeLayer);
    selected.matched.forEach(m=>{if(m.hz.score<2||!m.step.geometry?.coordinates)return;const sc=m.step.geometry.coordinates.map(c=>[c[1],c[0]]);L.polyline(sc,{color:m.hz.score>=3?'#ef4444':'#f59e0b',weight:10,opacity:.92,lineCap:'round'}).bindPopup(`<div class="p-title">${m.hz.score>=3?'⚠':'◉'} ${esc(m.street)}</div><div class="p-sub"><b>${esc(m.hz.label)}</b><br>${esc(m.hz.detail)}${Number.isFinite(m.hz.depth)?`<br><b>Độ ngập tham chiếu:</b> ${fmt1(m.hz.depth)} cm`:''}<br><b>Đoạn route:</b> ${fmt1(m.km)} km</div>`).addTo(routeLayer)});
-   if(fit&&coords.length)map.fitBounds(L.latLngBounds(coords),{padding:[70,70]});
+   if(fit&&coords.length){const routeBounds=L.latLngBounds(coords);if(window.FGRouteMotion)window.FGRouteMotion.focus(map,routeBounds,panel);else map.fitBounds(routeBounds,{padding:[70,70]});}
  }
  function instructionText(step){const m=step.maneuver||{},name=step.name||'đường tiếp theo';const type=m.type||'';if(type==='depart')return `Bắt đầu theo ${name}`;if(type==='arrive')return 'Đến điểm đến';if(type==='turn')return `${m.modifier?.includes('left')?'Rẽ trái':m.modifier?.includes('right')?'Rẽ phải':'Rẽ'} vào ${name}`;if(type==='roundabout'||type==='rotary')return `Đi qua vòng xoay vào ${name}`;if(type==='merge')return `Nhập vào ${name}`;if(type==='fork')return `Đi theo nhánh vào ${name}`;if(type==='continue')return `Tiếp tục trên ${name}`;return `${name}`}
  function renderResults(analyses,recommended,rain){
@@ -2498,20 +2500,12 @@ body.fg12-dark .fg-street-suggest{background:#10283e;border-color:#405b78}body.f
    if(!mobile)return false;
    closePanel();
    document.querySelectorAll('#fg12MobileNav button').forEach(b=>b.classList.remove('active'));
-   requestAnimationFrame(()=>{
-     try{map.invalidateSize({pan:false});}catch(e){}
-     setTimeout(()=>{
-       try{
-         map.invalidateSize({pan:false});
-         if(lastRoutes.length)drawRoutes(lastRoutes,selectedIndex,true);
-       }catch(e){}
-     },120);
-   });
+   try{map.invalidateSize({pan:false});}catch(e){}
    window.fg51Toast?.('Đã hiển thị lộ trình trên bản đồ');
    return true;
  }
  async function run(isAutoModeSwitch=false){
-   routeRunController?.abort();const controller=new AbortController();routeRunController=controller;
+   window.FGRouteMotion?.cancel(map);routeRunController?.abort();const controller=new AbortController();routeRunController=controller;
    const seq=++routeRequestSeq,modeAtStart=travelMode,cfg=ROUTE_MODES[modeAtStart]||ROUTE_MODES.car;
    const rain=Math.max(0,Number($('fg3RouteRain').value)||0),btn=$('fg3RouteRun');btn.disabled=true;btn.setAttribute('aria-busy','true');const retained=lastRoutes.length>0&&lastRoutes.every(a=>a.travelMode===modeAtStart);if(!retained)clearRouteVisuals();fg70Publish();hideSuggestions();$('fg3RouteFrom')?.classList.remove('fg80-invalid');$('fg3RouteTo')?.classList.remove('fg80-invalid');showStatus(`Đang tìm vị trí và các phương án cho <b>${cfg.icon} ${cfg.label}</b>…`);if(!retained)results.innerHTML='';setRouteTools(false);
    try{
