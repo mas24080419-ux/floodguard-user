@@ -1,0 +1,18 @@
+const vm=require('node:vm'),fs=require('node:fs'),assert=require('node:assert/strict');
+const context={window:{}};vm.createContext(context);vm.runInContext(fs.readFileSync('report-validation.js','utf8'),context);
+const validate=context.window.FGReportValidation.validate;
+const valid={authenticated:true,chosen:{lat:10.78,lon:106.69},place:'Đường Thảo Điền',description:'Kiểm thử',severity:'deep',consent:true};
+assert.equal(validate(valid),null);
+assert.equal(validate({...valid,chosen:null}).field,'cgChooseMap');
+assert.ok(validate({...valid,chosen:{lat:21.02,lon:105.84}}).message.includes('TP.HCM'));
+assert.equal(validate({...valid,place:' '}).field,'cgPlace');
+assert.equal(validate({...valid,consent:false}).field,'cgConsent');
+assert.equal(validate({...valid,photoProcessing:true}).field,'cgPhoto');
+const source=fs.readFileSync('community.js','utf8');
+const start=source.indexOf("el('cgForm').onsubmit="),end=source.indexOf('\n};',start)+4;
+const elements=new Map();const el=id=>{if(!elements.has(id))elements.set(id,{value:'',checked:false,disabled:false,hidden:false,textContent:'',scrollIntoView(){},removeAttribute(){},setAttribute(){},reset(){this.wasReset=true;}});return elements.get(id);};
+el('cgPlace').value=' Thảo Điền ';el('cgDescription').value=' Test ';el('cgSeverity').value='deep';el('cgConsent').checked=true;
+let submitted=null,fail=false,status='';
+Object.assign(context,{el,panel:{querySelectorAll:()=>[]},busy:false,me:{authenticated:true},chosen:valid.chosen,photoProcessing:false,photoError:'',photo:'jpeg-test',photoVersion:0,draftPin:null,submitMessage:t=>status=t,AbortController,setTimeout,clearTimeout,api:async(path,opts)=>{submitted=JSON.parse(opts.body);if(fail)throw Error('Server error visible');return {message:'Accepted'};},refresh:async()=>{},message:()=>{}});
+vm.runInContext(source.slice(start,end),context);
+(async()=>{context.chosen=null;await el('cgForm').onsubmit({preventDefault(){}});assert.ok(status.includes('chưa chọn vị trí'));assert.equal(submitted,null);context.chosen=valid.chosen;fail=true;await el('cgForm').onsubmit({preventDefault(){}});assert.equal(status,'Server error visible');assert.equal(context.photo,'jpeg-test');assert.equal(el('cgSubmit').disabled,false);fail=false;await el('cgForm').onsubmit({preventDefault(){}});assert.equal(submitted.place,'Thảo Điền');assert.equal(submitted.photo,'jpeg-test');assert.equal(submitted.share_consent,true);assert.equal(el('cgForm').wasReset,true);assert.equal(context.photo,null);assert.ok(source.includes('novalidate'));console.log('Passed: visible location/field validation, valid photo submission, visible server failure, preserved draft and button recovery.');})().catch(e=>{console.error(e);process.exitCode=1});
