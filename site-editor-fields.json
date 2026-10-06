@@ -1,0 +1,211 @@
+{
+  "fields": [
+    {
+      "key": "home.title",
+      "group": "Trang chủ",
+      "label": "Tiêu đề chính",
+      "selector": ".wh-hero h1",
+      "max": 180,
+      "type": "text",
+      "page": "home"
+    },
+    {
+      "key": "home.intro",
+      "group": "Trang chủ",
+      "label": "Đoạn giới thiệu",
+      "selector": ".wh-hero > div:first-child > p",
+      "max": 1600,
+      "type": "text",
+      "page": "home"
+    },
+    {
+      "key": "about.title",
+      "group": "Giới thiệu",
+      "label": "Tiêu đề chính",
+      "selector": ".page-hero h1",
+      "max": 180,
+      "type": "text",
+      "page": "about"
+    },
+    {
+      "key": "about.intro",
+      "group": "Giới thiệu",
+      "label": "Đoạn mở đầu",
+      "selector": ".page-hero .hero-grid > div:first-child > p",
+      "max": 2000,
+      "type": "text",
+      "page": "about"
+    },
+    {
+      "key": "about.scopeTitle",
+      "group": "Giới thiệu",
+      "label": "Tiêu đề phạm vi",
+      "selector": ".visual-card h3",
+      "max": 180,
+      "type": "text",
+      "page": "about"
+    },
+    {
+      "key": "about.scopeBody",
+      "group": "Giới thiệu",
+      "label": "Nội dung phạm vi",
+      "selector": ".visual-card > p",
+      "max": 1400,
+      "type": "text",
+      "page": "about"
+    },
+    {
+      "key": "about.chapter1.title",
+      "group": "Phần 1",
+      "label": "Tiêu đề",
+      "selector": "#chapter-1 > h3",
+      "max": 180,
+      "type": "text",
+      "page": "about"
+    },
+    {
+      "key": "about.chapter1.body",
+      "group": "Phần 1",
+      "label": "Nội dung",
+      "selector": "#chapter-1 > p:first-of-type",
+      "max": 2500,
+      "type": "text",
+      "page": "about"
+    },
+    {
+      "key": "about.chapter2.title",
+      "group": "Phần 2",
+      "label": "Tiêu đề",
+      "selector": "#chapter-2 > h3",
+      "max": 180,
+      "type": "text",
+      "page": "about"
+    },
+    {
+      "key": "about.chapter2.body",
+      "group": "Phần 2",
+      "label": "Nội dung",
+      "selector": "#chapter-2 > p:first-of-type",
+      "max": 2500,
+      "type": "text",
+      "page": "about"
+    },
+    {
+      "key": "about.chapter3.title",
+      "group": "Phần 3",
+      "label": "Tiêu đề",
+      "selector": "#chapter-3 > h3",
+      "max": 180,
+      "type": "text",
+      "page": "about"
+    },
+    {
+      "key": "about.chapter3.body",
+      "group": "Phần 3",
+      "label": "Nội dung",
+      "selector": "#chapter-3 > p:first-of-type",
+      "max": 2500,
+      "type": "text",
+      "page": "about"
+    },
+    {
+      "key": "about.chapter4.title",
+      "group": "Phần 4",
+      "label": "Tiêu đề",
+      "selector": "#chapter-4 > h3",
+      "max": 180,
+      "type": "text",
+      "page": "about"
+    },
+    {
+      "key": "about.chapter4.body",
+      "group": "Phần 4",
+      "label": "Nội dung",
+      "selector": "#chapter-4 > p:first-of-type",
+      "max": 2500,
+      "type": "text",
+      "page": "about"
+    },
+    {
+      "key": "about.ctaTitle",
+      "group": "Giới thiệu",
+      "label": "Tiêu đề cuối trang",
+      "selector": ".cta-box h2",
+      "max": 180,
+      "type": "text",
+      "page": "about"
+    },
+    {
+      "key": "about.ctaBody",
+      "group": "Giới thiệu",
+      "label": "Nội dung cuối trang",
+      "selector": ".cta-box p",
+      "max": 1400,
+      "type": "text",
+      "page": "about"
+    },
+    {
+      "key": "contact.title",
+      "group": "Liên hệ",
+      "label": "Tiêu đề trang",
+      "selector": ".fg-contact-heading h1",
+      "max": 180,
+      "type": "text",
+      "page": "contact"
+    },
+    {
+      "key": "contact.intro",
+      "group": "Liên hệ",
+      "label": "Đoạn giới thiệu",
+      "selector": ".fg-contact-heading p",
+      "max": 1400,
+      "type": "text",
+      "page": "contact"
+    },
+    {
+      "key": "contact.email",
+      "group": "Liên hệ",
+      "label": "Email nhận phản hồi",
+      "selector": ".fg-contact-address",
+      "max": 160,
+      "type": "email",
+      "page": "contact"
+    },
+    {
+      "key": "contact.emailBody",
+      "group": "Liên hệ",
+      "label": "Mô tả email",
+      "selector": ".fg-contact-email .fg-contact-card-head p",
+      "max": 1400,
+      "type": "text",
+      "page": "contact"
+    },
+    {
+      "key": "contact.faqBody",
+      "group": "Liên hệ",
+      "label": "Mô tả câu hỏi thường gặp",
+      "selector": ".fg-contact-card[aria-labelledby='contactFaqTitle'] > p",
+      "max": 1400,
+      "type": "text",
+      "page": "contact"
+    },
+    {
+      "key": "contact.sosBody",
+      "group": "Liên hệ",
+      "label": "Mô tả cứu hộ",
+      "selector": ".fg-contact-card[aria-labelledby='contactSosTitle'] > p",
+      "max": 1400,
+      "type": "text",
+      "page": "contact"
+    },
+    {
+      "key": "contact.note",
+      "group": "Liên hệ",
+      "label": "Ghi chú cuối trang",
+      "selector": ".fg-contact-note",
+      "max": 1400,
+      "type": "text",
+      "page": "contact"
+    }
+  ]
+}
