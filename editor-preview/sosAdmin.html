@@ -1,11 +1,10 @@
 <!doctype html>
-<html lang="vi">
-<head>
+<html lang="vi"><head><base href="../"><meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data:; script-src 'self'; style-src 'self' 'unsafe-inline' https:; img-src 'self' https: data:; object-src 'none'; form-action 'none'; base-uri 'self'">
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Quản lý SOS | FloodGuard Admin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f4f7fb;--card:#fff;--text:#22304a;--muted:#7c899a;--line:#e5ebf2;--nav:#182d46;--blue:#6f98ef;--blue2:#7982eb;--mint:#40b989;--amber:#d9902f;--red:#d65a66;--shadow:0 14px 42px rgba(48,62,86,.10)}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,"Be Vietnam Pro",system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:linear-gradient(145deg,#f4f8ff,#faf8ff);color:var(--text)}button,input,select,textarea{font:inherit}
@@ -178,9 +177,9 @@ html,body{max-width:100%;overflow-x:hidden}
   .kpi small{font-size:9.5px}
 }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link rel="stylesheet" href="./floodguard-typography-v1.css?v=1">
 <style id="fg-admin-sidebar-v2">
 /* Admin sidebar refresh v2 */
@@ -254,130 +253,22 @@ body .side .sidefoot{display:none}
 @media(max-width:360px){body .main .actions{grid-template-columns:1fr}}
 </style>
 <link rel="stylesheet" href="./rescue-workspace.css?v=64">
-<script defer src="./rescue-workspace.js?v=64"></script>
+
 <link rel="stylesheet" href="./admin-design.css?v=65">
 <link rel="stylesheet" href="./mobile-design-v67.css?v=67">
-</head>
-<body class="fg-admin-ui">
+<style>body{min-height:100vh}#login,#gate,.fg34-auth-overlay{display:none!important}#fgWebsiteHome{position:relative!important;inset:auto!important}#authScreen{position:relative!important}#map:empty{background:linear-gradient(135deg,#e7eff4,#d6e5ed);min-height:360px}body[data-fg-editor-page="community"] .cg-panel{display:block;max-height:none;margin:auto}</style></head>
+<body class="fg-admin-ui" data-fg-editor-page="sosAdmin">
 <div class="overlay" id="gate"><div class="card"><div class="logo">FG</div><h2 id="gateTitle">FloodGuard SOS Admin</h2><p id="gateText">Đang kiểm tra tài khoản Admin…</p><button class="btn primary" id="gateBtn" style="width:100%;margin-top:12px">Đang kiểm tra…</button><div class="error" id="gateErr"></div></div></div>
 <div class="shell">
-<aside class="side"><div class="brand"><div class="logo">FG</div><div><b>FloodGuard Admin</b><small>Quản trị hệ thống</small></div></div><div class="nav"><button onclick="location.href='admin.html'"><svg class="fg-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span class="fg-nav-label">Tổng quan</span></button><button onclick="location.href='accounts.html'"><svg class="fg-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m20 0v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/><circle cx="9" cy="7" r="4"/></svg><span class="fg-nav-label">Tài khoản đăng nhập</span></button><button aria-current="page" class="active"><svg class="fg-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 7v6m0 4h.01"/></svg><span class="fg-nav-label">Quản lý SOS</span></button><button onclick="location.href='rescue-teams.html'"><svg class="fg-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h11v10H3V7Zm11 3h4l3 4v3h-7M6 10v4m-2-2h4"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg><span class="fg-nav-label">Đội cứu hộ</span></button><button onclick="location.href='admin.html#watchSec'"><svg class="fg-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span class="fg-nav-label">Watchlist</span></button><button onclick="location.href='admin.html#alertsSec'"><svg class="fg-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m3 7 9 6 9-6"/></svg><span class="fg-nav-label">Email cảnh báo</span></button></div><p class="fg-mobile-nav-hint">Vuốt ngang để xem các mục quản trị →</p><div class="sidefoot"><svg class="fg-foot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/><path d="m8 12 3 3 5-5"/></svg>Quản lý ca SOS, chat, phân công và trạng thái trong cùng website FloodGuard.<br><br>Quyền điều phối được xác thực bằng chính tài khoản FloodGuard Admin.</div></aside>
+<aside class="side"><div class="brand"><div class="logo">FG</div><div><b>FloodGuard Admin</b><small>Quản trị hệ thống</small></div></div><div class="nav"><button><svg class="fg-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg><span class="fg-nav-label">Tổng quan</span></button><button><svg class="fg-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m20 0v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path><circle cx="9" cy="7" r="4"></circle></svg><span class="fg-nav-label">Tài khoản đăng nhập</span></button><button aria-current="page" class="active"><svg class="fg-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"></rect><path d="M12 7v6m0 4h.01"></path></svg><span class="fg-nav-label">Quản lý SOS</span></button><button><svg class="fg-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h11v10H3V7Zm11 3h4l3 4v3h-7M6 10v4m-2-2h4"></path><circle cx="6" cy="18" r="2"></circle><circle cx="18" cy="18" r="2"></circle></svg><span class="fg-nav-label">Đội cứu hộ</span></button><button><svg class="fg-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"></path></svg><span class="fg-nav-label">Watchlist</span></button><button><svg class="fg-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"></rect><path d="m3 7 9 6 9-6"></path></svg><span class="fg-nav-label">Email cảnh báo</span></button></div><p class="fg-mobile-nav-hint">Vuốt ngang để xem các mục quản trị →</p><div class="sidefoot"><svg class="fg-foot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"></path><path d="m8 12 3 3 5-5"></path></svg>Quản lý ca SOS, chat, phân công và trạng thái trong cùng website FloodGuard.<br><br>Quyền điều phối được xác thực bằng chính tài khoản FloodGuard Admin.</div></aside>
 <main class="main">
 <header class="top"><div class="title"><h1>Quản lý SOS / Cứu hộ</h1><p id="updated">Chưa đồng bộ dữ liệu</p></div><div class="actions"><span class="status" id="conn">● Chưa kết nối</span><button class="btn" id="refresh">↻ Đồng bộ</button><button class="btn" id="back">← Tổng quan</button><button class="btn" id="logout">Đăng xuất Admin</button></div></header>
 <section class="kpis"><div class="kpi"><small>Tổng ca</small><strong id="kAll">0</strong></div><div class="kpi"><small>Ca mới</small><strong id="kNew">0</strong></div><div class="kpi"><small>Đang xử lý</small><strong id="kActive">0</strong></div><div class="kpi"><small>Đã tới</small><strong id="kArrived">0</strong></div><div class="kpi"><small>Hoàn thành</small><strong id="kDone">0</strong></div></section>
 <section class="work">
 <div class="panel"><div class="panelHead"><h2>Danh sách yêu cầu SOS</h2><span class="status" id="countTag">0 ca</span></div><div class="listTools"><input class="search" id="search" placeholder="Tìm ID, tên, SĐT…"><select class="select" id="filter"><option value="">Tất cả</option><option value="new">Mới</option><option value="accepted">Đã tiếp nhận</option><option value="dispatch">Đang điều phối</option><option value="arrived">Đã tới</option><option value="resolved">Hoàn thành</option><option value="cancelled">Đã hủy</option></select></div><div class="cases" id="cases"><div class="empty">Chưa có dữ liệu SOS.</div></div></div>
-<div class="panel detail"><div class="detailHead"><div><h2 id="caseTitle">Chọn một yêu cầu SOS</h2><p id="caseSub">Thông tin ca cứu hộ sẽ hiển thị tại đây.</p></div><span class="tag s-new hidden" id="caseStatus"></span></div><div class="detailBody"><div class="info" id="info"><div class="empty">Chọn một ca ở danh sách bên trái.</div></div><div class="chat"><div class="messages" id="messages"><div class="empty">Chưa chọn cuộc trò chuyện.</div></div><div class="composer"><textarea id="chatText" placeholder="Nhập tin nhắn cho người gửi SOS…" disabled></textarea><button class="btn primary" id="send" disabled>Gửi</button></div></div></div></div>
+<div class="panel detail"><div class="detailHead"><div><h2 id="caseTitle">Chọn một yêu cầu SOS</h2><p id="caseSub">Thông tin ca cứu hộ sẽ hiển thị tại đây.</p></div><span class="tag s-new hidden" id="caseStatus"></span></div><div class="detailBody"><div class="info" id="info"><div class="empty">Chọn một ca ở danh sách bên trái.</div></div><div class="chat"><div class="messages" id="messages"><div class="empty">Chưa chọn cuộc trò chuyện.</div></div><div class="composer"><textarea id="chatText" placeholder="Nhập tin nhắn cho người gửi SOS…" disabled=""></textarea><button class="btn primary" id="send" disabled="">Gửi</button></div></div></div></div>
 </section>
 </main></div>
-<script>
-const API='https://floodguard-rescue-backend.onrender.com';
-const $=id=>document.getElementById(id);
-let sb=null,session=null,INCIDENTS=[],TEAMS=[],SELECTED='',LAST_DETAIL_SIG='';
-const LABELS={new:'Mới',accepted:'Đã tiếp nhận',dispatch:'Đang điều phối',arrived:'Đã tới',resolved:'Hoàn thành',cancelled:'Đã hủy'};
-const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const dt=v=>{if(!v)return '—';let n=Number(v);if(Number.isFinite(n)&&n<1e12)n*=1000;const d=Number.isFinite(n)?new Date(n):new Date(v);return isNaN(d)?'—':d.toLocaleString('vi-VN',{hour12:false})};
-const text=(...v)=>v.find(x=>x!==undefined&&x!==null&&String(x).trim())||'';
-function coords(i){const pairs=[[i?.lat,i?.lng],[i?.lat,i?.lon],[i?.latitude,i?.longitude],[i?.location?.lat,i?.location?.lng],[i?.location?.lat,i?.location?.lon],[i?.geo?.lat,i?.geo?.lng],[i?.geo?.lat,i?.geo?.lon],[i?.coords?.lat,i?.coords?.lng]];for(const [a,b] of pairs){const x=Number(a),y=Number(b);if(Number.isFinite(x)&&Number.isFinite(y)&&Math.abs(x)<=90&&Math.abs(y)<=180)return [x,y]}return null}
-function person(i){return text(i?.name,i?.full_name,i?.contact?.name,i?.user_name,i?.user?.name,'Người gửi SOS')}
-function phone(i){return text(i?.phone,i?.contact?.phone,i?.user_phone,i?.tel,'—')}
-function address(i){return text(i?.address,i?.location_name,i?.location?.address,i?.place,i?.location_text,'—')}
-function desc(i){return text(i?.description,i?.note,i?.problem,i?.issue,i?.details,'—')}
-function normText(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()}
-function km(a,b){if(!a||!b)return null;const R=6371,rad=x=>x*Math.PI/180,dLat=rad(b[0]-a[0]),dLon=rad(b[1]-a[1]),x=Math.sin(dLat/2)**2+Math.cos(rad(a[0]))*Math.cos(rad(b[0]))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(x))}
-function teamPoint(t){if(t?.lat===null||t?.lat===undefined||t?.lat===''||t?.lon===null||t?.lon===undefined||t?.lon==='')return null;const a=Number(t.lat),b=Number(t.lon);return Number.isFinite(a)&&Number.isFinite(b)&&Math.abs(a)<=90&&Math.abs(b)<=180?[a,b]:null}
-function teamScore(t,i){if(!t?.active)return -9999;const a=normText(address(i)),p=normText(t.province_city),d=normText(t.district),w=normText(t.ward),status=String(t.status||'available');let s=0;if(w&&a.includes(w))s+=120;if(d&&a.includes(d))s+=80;if(p&&a.includes(p))s+=35;if(status==='available')s+=35;if(status==='busy')s-=25;if(status==='offline')s-=200;s-=Number(t.current_load||0)*15;const dist=km(coords(i),teamPoint(t));if(dist!==null)s+=Math.max(0,40-Math.min(40,dist));return s}
-function sortedTeams(i){return TEAMS.filter(t=>t.active!==false).slice().sort((a,b)=>teamScore(b,i)-teamScore(a,i)||String(a.name||'').localeCompare(String(b.name||''),'vi'))}
-function teamLabel(t,i){const dist=km(coords(i),teamPoint(t)),st=t.status==='available'?'Sẵn sàng':t.status==='busy'?'Đang bận':'Ngoại tuyến';return t.name+' · '+t.district+(t.ward?' / '+t.ward:'')+' · '+st+' · '+Number(t.current_load||0)+' ca'+(dist!==null?' · '+dist.toFixed(1)+' km':'')}
-async function loadTeams(){const d=await rescueFetch('/api/operator/teams');TEAMS=Array.isArray(d.teams)?d.teams:[];LAST_DETAIL_SIG='';if(SELECTED){const i=INCIDENTS.find(x=>String(x.id)===String(SELECTED));if(i)renderDetail(i)}return TEAMS}
 
-async function authHeaders(){const s=(await sb.auth.getSession()).data.session;session=s||null;return s?.access_token?{Authorization:'Bearer '+s.access_token}:{}}
-async function verifyAdmin(){const h=await authHeaders();if(!h.Authorization)throw new Error('Bạn chưa đăng nhập FloodGuard.');const r=await fetch(API+'/api/account/admin-status',{headers:h,cache:'no-store'}),d=await r.json().catch(()=>({}));if(!r.ok||!d.is_admin)throw new Error('Tài khoản hiện tại không có quyền Admin.');return d}
-function showGate(title,txt,action='Về FloodGuard',fn=()=>location.href='/'){$('gate').classList.remove('hidden');$('gateTitle').textContent=title;$('gateText').textContent=txt;$('gateBtn').disabled=false;$('gateBtn').textContent=action;$('gateBtn').onclick=fn;$('gateErr').textContent=''}
-async function rescueFetch(path,opt={}){const h=await authHeaders();if(!h.Authorization)throw new Error('Phiên Admin đã hết hạn. Vui lòng đăng nhập lại.');const headers=Object.assign({},h,opt.body?{'Content-Type':'application/json'}:{},opt.headers||{});const r=await fetch(API+path,{...opt,headers,cache:'no-store'});const d=await r.json().catch(()=>({}));if(r.status===401||r.status===403)throw new Error(d.error==='unauthorized'?'Tài khoản hiện tại không có quyền quản lý SOS.':(d.error||'Không được phép truy cập SOS.'));if(!r.ok)throw new Error(d.error||('HTTP '+r.status));return d}
-async function sync(){ $('conn').textContent='● Đang đồng bộ…';const d=await rescueFetch('/api/operator/sync');INCIDENTS=Array.isArray(d.incidents)?d.incidents.slice():[];INCIDENTS.sort((a,b)=>Number(b.updated_at||b.created_at||0)-Number(a.updated_at||a.created_at||0));renderAll();$('conn').textContent='● Online';$('conn').style.background='#eaf8f1';$('conn').style.color='#16825e';$('updated').textContent='Đồng bộ '+dt(d.server_time||Date.now())+' · '+(session?.user?.email||'Admin');return d}
-function renderAll(){const st=x=>String(x?.status||'new');$('kAll').textContent=INCIDENTS.length;$('kNew').textContent=INCIDENTS.filter(x=>st(x)==='new').length;$('kActive').textContent=INCIDENTS.filter(x=>['accepted','dispatch'].includes(st(x))).length;$('kArrived').textContent=INCIDENTS.filter(x=>st(x)==='arrived').length;$('kDone').textContent=INCIDENTS.filter(x=>st(x)==='resolved').length;renderList();if(SELECTED){const i=INCIDENTS.find(x=>String(x.id)===String(SELECTED));if(i)renderDetail(i);else{SELECTED='';LAST_DETAIL_SIG=''}}}
-function renderList(){const q=$('search').value.trim().toLowerCase(),f=$('filter').value;const rows=INCIDENTS.filter(i=>{const s=String(i.status||'new');const hay=[i.id,person(i),phone(i),address(i),desc(i),i.assigned_to].join(' ').toLowerCase();return(!f||s===f)&&(!q||hay.includes(q))});$('countTag').textContent=rows.length+' ca';$('cases').innerHTML=rows.length?rows.map(i=>{const s=String(i.status||'new');return '<button class="case '+(String(i.id)===String(SELECTED)?'active':'')+'" data-id="'+esc(i.id)+'"><div class="caseTop"><b><span class="fg-sos-mark" aria-hidden="true">SOS</span> '+esc(person(i))+'</b><span class="tag s-'+esc(s)+'">'+esc(LABELS[s]||s)+'</span></div><small>#'+esc(i.id)+' · '+esc(dt(i.updated_at||i.created_at))+'<br>'+esc(address(i))+(i.assigned_to?'<br>Đội: '+esc(i.assigned_to):'')+'</small></button>'}).join(''):'<div class="empty">Không có ca phù hợp bộ lọc.</div>';document.querySelectorAll('.case').forEach(b=>b.onclick=()=>selectCase(b.dataset.id))}
-function selectCase(id){if(String(SELECTED)!==String(id))LAST_DETAIL_SIG='';SELECTED=id;renderList();const i=INCIDENTS.find(x=>String(x.id)===String(id));if(i)renderDetail(i)}
-function detailSignature(i){
-  const m=Array.isArray(i?.messages)?i.messages:[];
-  const last=m.length?m[m.length-1]:null;
-  return [
-    String(i?.id||''),
-    String(i?.updated_at||i?.created_at||''),
-    String(i?.status||'new'),
-    String(i?.assigned_to||''),
-    String(i?.assigned_team_id||''),
-    String(m.length),
-    String(last?.id||last?.ts||'')
-  ].join('|');
-}
-function renderDetail(i){
-  const s=String(i.status||'new'),c=coords(i),sig=detailSignature(i);
-  $('caseTitle').textContent=person(i);
-  $('caseSub').textContent='#'+i.id+' · cập nhật '+dt(i.updated_at||i.created_at);
-  $('caseStatus').className='tag s-'+s;
-  $('caseStatus').textContent=LABELS[s]||s;
 
-  let dynamic=$('infoDynamic'),mapBox=$('rescueMapBox');
-  if(!dynamic||!mapBox){
-    $('info').innerHTML='<div id="infoDynamic"></div><div class="mapBox" id="rescueMapBox"></div>';
-    dynamic=$('infoDynamic');
-    mapBox=$('rescueMapBox');
-    LAST_DETAIL_SIG='';
-  }
-
-  if(LAST_DETAIL_SIG!==sig){
-    const statusFocused=document.activeElement?.id==='statusSel';
-    const teamFocused=document.activeElement?.id==='teamSel';
-    const teams=sortedTeams(i);
-    const selectedId=String(i.assigned_team_id||'');
-    const teamOptions=teams.length
-      ?'<option value="">— Chọn đội cứu hộ theo khu vực —</option>'+teams.map((t,idx)=>'<option value="'+esc(t.id)+'" '+(String(t.id)===selectedId?'selected':'')+'>'+esc((idx===0?'★ ':'')+teamLabel(t,i))+'</option>').join('')
-      :'<option value="">Chưa có đội cứu hộ nào được khai báo</option>';
-    const best=teams[0]||null;
-    const bestDist=best?km(c,teamPoint(best)):null;
-    const hint=best
-      ?'<div class="teamHint"><b>Gợi ý điều phối:</b> '+esc(best.name)+' · '+esc(best.district)+(best.ward?' / '+esc(best.ward):'')+' · <span class="'+(best.status==='available'?'ok':best.status==='busy'?'busy':'off')+'">'+esc(best.status==='available'?'Sẵn sàng':best.status==='busy'?'Đang bận':'Ngoại tuyến')+'</span> · '+Number(best.current_load||0)+' ca đang xử lý'+(bestDist!==null?' · cách khoảng '+bestDist.toFixed(1)+' km':'')+'.</div>'
-      :'<div class="teamHint">Chưa có dữ liệu đội cứu hộ. Hãy vào <b>Đội cứu hộ</b> để khai báo các đội theo tỉnh/thành, quận/huyện và phường/xã.</div>';
-
-    dynamic.innerHTML='<div class="infoGrid"><div class="infoCard"><small><svg class="fg-rescue-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3H4a1 1 0 0 0-1 1c0 9.4 7.6 17 17 17a1 1 0 0 0 1-1v-3l-5-2-2 2a14 14 0 0 1-7-7l2-2-2-5Z"/></svg>Số điện thoại</small><b>'+esc(phone(i)==='—'?'Chưa cung cấp':phone(i))+'</b></div><div class="infoCard"><small><svg class="fg-rescue-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Tạo lúc</small><b>'+esc(dt(i.created_at))+'</b></div><div class="infoCard wide"><small><svg class="fg-rescue-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>Vị trí / địa chỉ</small><b>'+esc(address(i))+'</b></div><div class="infoCard wide"><small><svg class="fg-rescue-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H5v18h14V8l-5-5Z"/><path d="M14 3v5h5M8 12h8M8 16h6"/></svg>Mô tả sự cố</small><b>'+esc(desc(i)==='—'?'Chưa có mô tả':desc(i))+'</b></div></div><div class="controls"><div class="controlRow"><label>Trạng thái</label><select class="select" id="statusSel">'+Object.entries(LABELS).map(([v,l])=>'<option value="'+v+'" '+(v===s?'selected':'')+'>'+esc(l)+'</option>').join('')+'</select><button class="btn primary" id="statusBtn">Cập nhật</button></div><div class="controlRow"><label>Đội cứu hộ</label><select class="select" id="teamSel">'+teamOptions+'</select><div class="teamActions"><button class="btn" id="assignBtn">Phân công</button><button class="btn" id="manageTeamsBtn">Quản lý đội</button></div></div></div>'+hint;
-
-    if(statusFocused)$('statusSel').focus();
-    else if(teamFocused)$('teamSel').focus();
-
-    $('statusBtn').onclick=()=>action('status',{status:$('statusSel').value});
-    $('assignBtn').onclick=()=>{
-      const id=$('teamSel').value;
-      const t=TEAMS.find(x=>String(x.id)===String(id));
-      if(!t){alert('Hãy chọn một đội cứu hộ trước khi phân công.');return}
-      action('assign',{assigned_to:t.name,assigned_team_id:t.id});
-    };
-    $('manageTeamsBtn').onclick=()=>location.href='rescue-teams.html';
-    renderMessages(i);
-    LAST_DETAIL_SIG=sig;
-  }
-
-  const mapKey=c?c[0].toFixed(6)+','+c[1].toFixed(6):'none';
-  if(mapBox.dataset.mapKey!==mapKey){
-    mapBox.dataset.mapKey=mapKey;
-    if(c){
-      mapBox.innerHTML='<iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.openstreetmap.org/export/embed.html?bbox='+(c[1]-.006)+'%2C'+(c[0]-.004)+'%2C'+(c[1]+.006)+'%2C'+(c[0]+.004)+'&layer=mapnik&marker='+c[0]+'%2C'+c[1]+'"></iframe>';
-    }else{
-      mapBox.innerHTML='<div class="mapEmpty">Ca SOS này chưa có tọa độ hợp lệ.</div>';
-    }
-  }
-
-  $('chatText').disabled=false;
-  $('send').disabled=false;
-}
-function rescueMessageBody(m){const t=String(m.text||'');if((m.from||'bot')==='bot'&&t.length>160)return '<details><summary>'+esc(t.slice(0,88))+'…</summary><p>'+esc(t)+'</p></details>';return esc(t)}
-function renderMessages(i){const m=Array.isArray(i.messages)?i.messages.slice():[];m.sort((a,b)=>Number(a.ts||0)-Number(b.ts||0));$('messages').innerHTML=m.length?m.map(x=>'<div class="msg '+esc(x.from||'bot')+'">'+rescueMessageBody(x)+(x.operator?'<small>'+esc(x.operator)+'</small>':'')+'<small>'+esc(dt(x.ts))+'</small></div>').join(''):'<div class="empty">Chưa có tin nhắn trong ca này.</div>';$('messages').scrollTop=$('messages').scrollHeight}
-async function action(kind,data){const i=INCIDENTS.find(x=>String(x.id)===String(SELECTED));if(!i)return;const body={id:i.id,operator:session?.user?.email||'FloodGuard Admin',...data};let path=kind==='message'?'/api/operator/message':kind==='assign'?'/api/operator/assign':'/api/operator/status';try{setBusy(true);await rescueFetch(path,{method:'POST',body:JSON.stringify(body)});if(kind==='message')$('chatText').value='';await sync();selectCase(i.id)}catch(e){alert(e.message)}finally{setBusy(false)}}
-function setBusy(v){['send','refresh'].forEach(id=>$(id).disabled=v)}
-async function init(){try{$('gateBtn').disabled=true;const r=await fetch(API+'/api/public-config',{cache:'no-store'}),d=await r.json();if(!r.ok||!d.supabase?.url||!d.supabase?.anon_key)throw new Error('Backend/Supabase chưa sẵn sàng.');sb=window.supabase.createClient(d.supabase.url,d.supabase.anon_key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});session=(await sb.auth.getSession()).data.session||null;await verifyAdmin();await loadTeams();await sync();$('gate').classList.add('hidden')}catch(e){showGate('Không mở được SOS Admin',e.message,'Về FloodGuard',()=>location.href='/')}}
-$('search').oninput=renderList;$('filter').onchange=renderList;$('refresh').onclick=()=>Promise.all([loadTeams(),sync()]).catch(e=>alert(e.message));$('send').onclick=()=>{const t=$('chatText').value.trim();if(t)action('message',{text:t})};$('chatText').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('send').click()}});$('back').onclick=()=>location.href='admin.html';$('logout').onclick=async()=>{try{await sb?.auth.signOut()}finally{location.href='/'}};
-setInterval(()=>{if(session&&!document.hidden)sync().catch(()=>{})},5000);
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
-</script>
-<script src="./site-content.js?v=2" defer></script></body></html>
+<div id="infoDynamic"></div><div class="mapBox" id="rescueMapBox"></div><script src="../site-content.js?v=2"></script></body></html>
