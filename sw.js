@@ -1,10 +1,11 @@
-const CACHE='floodguard-user-v70-site-editor';
-const CORE=['./mobile-design-v67.css','./home-design-v66.css','./admin-design.css','./rescue-workspace.css','./rescue-workspace.js','./','./index.html','./app-core.html','./watchlist-email-v40.js','./site-pages.css','./site-luxe.css','./site-atelier-v47.css','./site-cinematic-v48.css','./site-editorial-v49.css','./site-hide-ev-v50.css','./site-navigation-v2.js','./problem.html','./features.html','./how-it-works.html','./alerts.html','./ev.html','./rescue.html','./about.html','./admin.html','./accounts.html','./rescue-team.html','./rescue-teams.html','./sos-admin.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
+const CACHE='floodguard-user-v71-report-photos';
+const CORE=['./mobile-design-v67.css','./home-design-v66.css','./admin-design.css','./rescue-workspace.css','./rescue-workspace.js','./','./index.html','./app-core.html','./watchlist-email-v40.js','./site-pages.css','./site-luxe.css','./site-atelier-v47.css','./site-cinematic-v48.css','./site-editorial-v49.css','./site-hide-ev-v50.css','./site-navigation-v2.js','./problem.html','./features.html','./how-it-works.html','./alerts.html','./ev.html','./rescue.html','./about.html','./admin.html','./admin-report-photos.html','./accounts.html','./rescue-team.html','./rescue-teams.html','./sos-admin.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)));self.skipWaiting()});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 function navKey(u){
   const p=u.pathname;
   if(p.endsWith('/app-core.html'))return './app-core.html';
+  if(p.endsWith('/admin-report-photos.html'))return './admin-report-photos.html';
   if(p.endsWith('/admin.html'))return './admin.html';
   if(p.endsWith('/accounts.html'))return './accounts.html';
   if(p.endsWith('/rescue-team.html'))return './rescue-team.html';
@@ -63,7 +64,7 @@ self.addEventListener('fetch',e=>{
     return;
   }
   if(u.origin===location.origin){
-    const freshAsset=['/site-content.js','/site-editor.js','/site-editor.css','/site-editor-fields.json','/mobile-design-v67.css','/home-design-v66.css','/admin-design.css','/rescue-workspace.css','/rescue-workspace.js','/model-insights.js','/admin-insights.js','/flood-insights.css','/insight-charts.js'].some(p=>u.pathname.endsWith(p))||u.pathname.endsWith('/floodguard-typography-v1.css')||u.pathname.endsWith('/site-navigation-v2.js')||u.pathname.endsWith('/site-pages.css')||u.pathname.endsWith('/site-luxe.css')||u.pathname.endsWith('/site-atelier-v47.css')||u.pathname.endsWith('/site-cinematic-v48.css')||u.pathname.endsWith('/site-editorial-v49.css')||u.pathname.endsWith('/site-hide-ev-v50.css');
+    const freshAsset=['/admin-report-photos.js','/admin-report-photos-page.js','/admin-report-photos.css','/site-content.js','/site-editor.js','/site-editor.css','/site-editor-fields.json','/mobile-design-v67.css','/home-design-v66.css','/admin-design.css','/rescue-workspace.css','/rescue-workspace.js','/model-insights.js','/admin-insights.js','/flood-insights.css','/insight-charts.js'].some(p=>u.pathname.endsWith(p))||u.pathname.endsWith('/floodguard-typography-v1.css')||u.pathname.endsWith('/site-navigation-v2.js')||u.pathname.endsWith('/site-pages.css')||u.pathname.endsWith('/site-luxe.css')||u.pathname.endsWith('/site-atelier-v47.css')||u.pathname.endsWith('/site-cinematic-v48.css')||u.pathname.endsWith('/site-editorial-v49.css')||u.pathname.endsWith('/site-hide-ev-v50.css');
     if(freshAsset){
       e.respondWith(fetch(e.request,{cache:'no-store'}).then(r=>{if(r.ok){const x=r.clone();caches.open(CACHE).then(c=>c.put(e.request,x))}return r}).catch(()=>caches.match(e.request)));
       return;
@@ -71,3 +72,4 @@ self.addEventListener('fetch',e=>{
     e.respondWith(caches.match(e.request).then(hit=>hit||fetch(e.request).then(r=>{if(r.ok){const x=r.clone();caches.open(CACHE).then(c=>c.put(e.request,x))}return r})));
   }
 });
+
