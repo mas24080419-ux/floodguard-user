@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "node build.cjs",
-    "test": "node ../tests/site-editor-dom.test.cjs"
+    "test": "node ../tests/site-editor-dom.test.cjs && node ../tests/site-editor-service-worker.test.cjs"
   },
   "dependencies": {
     "jsdom": "30.1.2"
