@@ -4,6 +4,9 @@ on:
   pull_request:
     branches: [main]
     paths:
+      - '**/*.test.cjs'
+      - 'live-conditions.js'
+      - 'live-conditions.css'
       - 'floodguard-design-system.css'
       - 'tests/design-system.mjs'
       - 'index.html'
@@ -37,6 +40,9 @@ on:
   push:
     branches: [main]
     paths:
+      - '**/*.test.cjs'
+      - 'live-conditions.js'
+      - 'live-conditions.css'
       - 'floodguard-design-system.css'
       - 'tests/design-system.mjs'
       - 'index.html'
@@ -88,6 +94,10 @@ jobs:
           npm init -y >/dev/null 2>&1
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
+      - name: Install DOM test dependencies
+        run: npm ci --prefix editor-tools
+      - name: Run logic and DOM regression tests
+        run: node --test *.test.cjs tests/*.test.cjs
       - name: Start local static server
         run: |
           python3 -m http.server 4173 >/tmp/floodguard-http.log 2>&1 &
@@ -118,7 +128,7 @@ jobs:
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/site-hide-ev-v50.css -o /tmp/hide.css
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/ev.html -o /tmp/ev.html
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/app-core.html -o /tmp/app.html
-          grep -q 'floodguard-user-v73-design-system' /tmp/sw.js
+          grep -q 'floodguard-user-v74-reliability' /tmp/sw.js
           grep -q 'site-hide-ev-v50.css' /tmp/sw.js
           grep -q 'site-hide-ev-v50.css' /tmp/site-pages.css
           grep -q 'ev.html' /tmp/hide.css

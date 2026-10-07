@@ -28,3 +28,5 @@
 @media(max-width:980px){.live-layout{grid-template-columns:1fr}.live-panel{position:static}#liveMap{height:500px}.live-hours{grid-template-columns:repeat(4,1fr)}}
 @media(max-width:620px){.live-map-head{align-items:flex-start;flex-direction:column}.live-map-actions{width:100%}.live-mini-btn{flex:1}#liveMap{height:430px}.live-metrics{grid-template-columns:1fr 1fr}.live-hours{grid-template-columns:repeat(4,1fr);gap:6px}.live-timeline{padding:14px}}
 @media(prefers-reduced-motion:reduce){.live-meter i{transition:none}}
+/* Missing observations must not share the low-risk green state. */
+#riskBadge[data-level="unknown"]{background:#eef2f6;color:#334155;border-color:#94a3b8}

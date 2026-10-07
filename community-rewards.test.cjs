@@ -10,7 +10,8 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),{chromium}=requ
   window.FGCommunityAPI=async(path,options={})=>{
    if(path.endsWith('/me'))return {authenticated:true,admin:true,points:balance,earned:60,badge:'Người đóng góp',tiers:[{threshold:30,name:'Người đóng góp',bonus:5,achieved:true,claimed:true},{threshold:100,name:'Người đồng hành',bonus:15,achieved:false,claimed:false}],history:[]};
    if(path.endsWith('/rewards'))return {vouchers:[{sku:'trial-50',title:'Voucher trải nghiệm',description:'Thử nghiệm',cost:50,validity_days:30,demo:true},{sku:'trial-100',title:'Voucher cộng đồng',description:'Thử nghiệm',cost:100,validity_days:30,demo:true}],redemptions:owned};
-   if(path.endsWith('/redeem')){window.posts.push(JSON.parse(options.body));await new Promise(r=>setTimeout(r,100));balance-=50;owned=[{title:'Voucher trải nghiệm',code:'FG-TEST-EXAMPLE',cost:50,created_at:new Date().toISOString(),expires_at:new Date(Date.now()+86400000).toISOString()}];return{message:'Đã đổi voucher thử nghiệm.',voucher:owned[0]}};
+   if(path.includes('/voucher/'))return {voucher:owned[0]};
+   if(path.endsWith('/redeem')){window.posts.push(JSON.parse(options.body));await new Promise(r=>setTimeout(r,100));balance-=50;owned=[{id:'22222222-2222-4222-8222-222222222222',title:'Voucher trải nghiệm',code:'FG-TEST-EXAMPLE',cost:50,created_at:new Date().toISOString(),expires_at:new Date(Date.now()+86400000).toISOString()}];return{message:'Đã đổi voucher thử nghiệm.',voucher:owned[0]}};
    return {reports:[]};
   };
  });
@@ -21,7 +22,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),{chromium}=requ
  assert.equal(await page.locator('[data-redeem="trial-50"]').isDisabled(),false);assert.equal(await page.locator('[data-redeem="trial-100"]').isDisabled(),true);
  await page.locator('[data-redeem="trial-50"]').click();await page.waitForFunction(()=>document.querySelector('#cgPoints').textContent==='15');
  assert.equal(await page.evaluate(()=>window.posts.length),1);assert.equal(await page.locator('[data-redeem="trial-50"]').isDisabled(),true);
- assert.match(await page.locator('#cgMyVouchers').textContent(),/FG-TEST-EXAMPLE/);assert.equal(await page.locator('#cgBadge').textContent(),'Người đóng góp');assert.match(await page.locator('#cgRewardStatus').textContent(),/thử nghiệm/);
+ assert.match(await page.locator('#cgMyVouchers').textContent(),/1 voucher đã đổi/);await page.locator('[data-order]').click();assert.equal(await page.locator('.cg-order-dialog a').getAttribute('href'),'./voucher.html?id=22222222-2222-4222-8222-222222222222');assert.match(await page.locator('#cgRewardStatus').textContent(),/FG-TEST-EXAMPLE/);assert.equal(await page.locator('#cgBadge').textContent(),'Người đóng góp');assert.match(await page.locator('#cgRewardStatus').textContent(),/thử nghiệm/);
  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth);assert.equal(overflow,false);
  console.log('Passed: no user-side review even for admin, mobile layout, voucher thresholds, deduction feedback, owned code and retained badge.');
  }finally{await browser.close()}

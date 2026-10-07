@@ -57,7 +57,7 @@ function ensureOrderedLinks(container,home=false){
 function addUtilityBar(root){
  if(document.querySelector('.fg52-topbar'))return;
  const bar=document.createElement('div');bar.className='fg52-topbar';
- bar.innerHTML='<div class="fg52-topbar-inner"><span>🌧 FloodGuard HCMC · Dữ liệu ngập & hỗ trợ hành trình</span><span><a href="./alerts.html#live">Mưa trực tiếp</a> &nbsp;·&nbsp; <a href="./live.html">Mưa trực tiếp</a> &nbsp;·&nbsp; <a href="./data.html">Dữ liệu</a> &nbsp;·&nbsp; <a href="./contact.html">Liên hệ</a></span></div>';
+ bar.innerHTML='<div class="fg52-topbar-inner"><span>🌧 FloodGuard HCMC · Dữ liệu ngập & hỗ trợ hành trình</span><span><a href="./alerts.html#live">Mưa trực tiếp</a> &nbsp;·&nbsp; <a href="./data.html">Dữ liệu</a> &nbsp;·&nbsp; <a href="./contact.html">Liên hệ</a></span></div>';
  const nav=root?.querySelector?.('.wh-nav');
  if(root&&nav)root.insertBefore(bar,nav);else{const siteNav=document.querySelector('.site-nav');if(siteNav)siteNav.before(bar)}
 }
