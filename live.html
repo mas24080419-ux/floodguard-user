@@ -1,0 +1,53 @@
+<!doctype html>
+<html data-fg-design="1" lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#102c56">
+<title>Mưa & radar gần thời gian thực TP.HCM | FloodGuard</title>
+<meta name="description" content="Xem mưa hiện tại, dự báo 6–24 giờ, radar mưa và cao độ theo điểm tại TP.HCM trên FloodGuard.">
+<link rel="canonical" href="https://floodguard-user.onrender.com/live.html">
+<link rel="stylesheet" href="./site-pages.css">
+<link rel="stylesheet" href="./floodguard-typography-v1.css?v=1">
+<link rel="stylesheet" href="./mobile-design-v67.css?v=67">
+<link rel="stylesheet" href="./floodguard-design-system.css?v=73">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<link rel="stylesheet" href="./live-conditions.css?v=74">
+</head>
+<body>
+<header class="site-nav"><div class="site-shell site-nav-in"><a class="site-brand" href="./"><span class="site-logo">FG</span>FloodGuard HCMC</a><nav class="site-links"><a href="./problem.html">Vấn đề</a><a href="./features.html">Tính năng</a><a href="./how-it-works.html">Cách hoạt động</a><a href="./alerts.html">Cảnh báo</a><a href="./live.html">Mưa trực tiếp</a><a href="./rescue.html">Cứu hộ</a><a href="./about.html">Giới thiệu</a></nav><div class="site-actions"><a class="site-btn" href="./?login=1">Đăng nhập</a><a class="site-btn primary" href="./?login=1">Mở bản đồ →</a></div><button class="site-menu" data-site-menu>☰</button></div></header>
+<div class="mobile-drawer" data-site-drawer><a href="./">Trang chủ</a><a href="./problem.html">Vấn đề</a><a href="./features.html">Tính năng</a><a href="./how-it-works.html">Cách hoạt động</a><a href="./alerts.html">Cảnh báo</a><a href="./live.html">Mưa trực tiếp</a><a href="./rescue.html">Cứu hộ</a><a href="./about.html">Giới thiệu</a><a class="site-btn primary" href="./?login=1">Mở bản đồ</a></div>
+<main>
+<section class="page-hero live-hero"><div class="site-shell hero-grid"><div><a class="back-link" href="./">← Trang chủ</a><div class="eyebrow"><i></i> LIVE WEATHER CONTEXT</div><h1>Mưa, radar và cao độ <span>theo đúng điểm bạn đang xem</span></h1><p>Bấm lên bản đồ hoặc dùng vị trí của bạn để xem mưa hiện tại, lượng mưa dự báo 6–24 giờ, radar gần nhất và cao độ địa hình.</p><div class="live-note"><strong>Phạm vi sử dụng:</strong> chỉ số bên dưới là lớp sàng lọc thời tiết–địa hình để hỗ trợ quyết định. Nó chưa bao gồm triều, năng lực thoát nước hay độ sâu ngập thực đo, nên không phải cảnh báo thiên tai chính thức.</div></div><div class="visual"><div class="visual-card"><span class="visual-label">Nguồn dữ liệu trực tiếp</span><h3>Open‑Meteo + SRTM30m + RainViewer</h3><p>Dữ liệu được tổng hợp qua backend FloodGuard, có cơ chế cache để giảm tải nhà cung cấp và tự hạ cấp khi radar/cao độ tạm thời không phản hồi.</p><div class="metric-grid"><div class="metric"><b>🌧 Open‑Meteo</b><small>Mưa và dự báo theo giờ</small></div><div class="metric"><b>📉 SRTM30m</b><small>Cao độ địa hình</small></div><div class="metric"><b>📡 RainViewer</b><small>Radar mưa gần nhất</small></div><div class="metric"><b>🗺 OpenStreetMap</b><small>Nền bản đồ</small></div></div></div></div></div></section>
+<section class="page-section alt"><div class="site-shell">
+<div class="live-layout">
+ <section class="live-map-card">
+  <div class="live-map-head"><div><h2>Bản đồ mưa</h2><small id="radarStatus">Đang tải radar…</small></div><div class="live-map-actions"><button class="live-mini-btn primary" id="locateBtn" type="button">Vị trí của tôi</button><button class="live-mini-btn" id="resetBtn" type="button">Trung tâm TP.HCM</button></div></div>
+  <div class="live-map-wrap"><div id="liveMap" aria-label="Bản đồ radar mưa TP.HCM"></div><div class="live-loading" id="liveLoading">Đang tải dữ liệu trực tiếp…</div></div>
+ </section>
+ <aside class="live-panel">
+  <div class="live-status"><div><h2>Điều kiện tại điểm</h2><p id="liveSubtitle">Đang tải tọa độ…</p></div><span class="live-badge" id="riskBadge" data-level="very-low">Đang tải</span></div>
+  <div class="live-score"><div class="live-score-row"><div><small>Chỉ số sàng lọc</small><strong id="riskScore">—</strong></div><small id="updatedAt">—</small></div><div class="live-meter"><i id="riskMeter"></i></div></div>
+  <div class="live-metrics">
+   <div class="live-metric"><span>Mưa hiện tại</span><b id="currentRain">—</b><small>Open‑Meteo</small></div>
+   <div class="live-metric"><span>Mưa 6 giờ tới</span><b id="rain6h">—</b><small>Tổng dự báo</small></div>
+   <div class="live-metric"><span>Mưa 24 giờ tới</span><b id="rain24h">—</b><small>Tổng dự báo</small></div>
+   <div class="live-metric"><span>Mưa lớn nhất / giờ</span><b id="max1h">—</b><small>24 giờ tới</small></div>
+   <div class="live-metric"><span>Cao độ</span><b id="elevation">—</b><small id="elevationSource">SRTM30m</small></div>
+   <div class="live-metric"><span>Nhiệt độ · Ẩm</span><b><span id="temperature">—</span> · <span id="humidity">—</span></b><small>Điều kiện hiện tại</small></div>
+  </div>
+  <div class="live-factors" id="riskFactors"></div>
+  <div class="live-disclaimer" id="screeningDisclaimer">Chỉ số này không phải cảnh báo chính thức.</div>
+ </aside>
+</div>
+<div class="live-timeline"><div class="live-timeline-head"><div><h2>Mưa 8 giờ tiếp theo</h2><p>Dữ liệu dự báo theo giờ tại điểm đang chọn</p></div><span>mm / giờ</span></div><div class="live-hours" id="liveHours"></div></div>
+<div class="live-sources"><a class="live-source" href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open‑Meteo ↗</a><a class="live-source" href="https://www.opentopodata.org/" target="_blank" rel="noopener noreferrer">Open Topo Data ↗</a><a class="live-source" href="https://www.rainviewer.com/" target="_blank" rel="noopener noreferrer">RainViewer ↗</a><a class="live-source" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap ↗</a></div>
+</div></section>
+<section class="page-section"><div class="site-shell"><div class="cta-box"><div><div class="kicker">Tiếp tục trong FloodGuard</div><h2>Dùng lớp dữ liệu trực tiếp cùng bản đồ rủi ro và tuyến đường</h2></div><div class="hero-actions"><a class="site-btn" href="./data.html">Xem phương pháp dữ liệu</a><a class="site-btn primary" href="./?login=1">Mở ứng dụng →</a></div></div></div></section>
+</main>
+<footer class="site-footer"><div class="site-shell footer-row"><a class="site-brand" href="./"><span class="site-logo">FG</span>FloodGuard HCMC</a><div class="footer-links"><a href="./live.html">Mưa trực tiếp</a><a href="./data.html">Dữ liệu</a><a href="./faq.html">FAQ</a><a href="./contact.html">Liên hệ</a></div><span>© 2026 FloodGuard HCMC</span></div></footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="./live-conditions.js?v=74"></script>
+<script src="./site-navigation-v2.js?v=74"></script>
+<script src="./site-content.js?v=2" defer></script>
+</body></html>
