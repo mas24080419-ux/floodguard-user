@@ -8,10 +8,11 @@ const ROUTES={
  'tính năng':'./features.html',
  'cách hoạt động':'./how-it-works.html',
  'cảnh báo':'./alerts.html',
+ 'mưa trực tiếp':'./live.html',
  'cứu hộ':'./rescue.html',
  'giới thiệu':'./about.html'
 };
-const ORDER=['Vấn đề','Tính năng','Cách hoạt động','Cảnh báo','Cứu hộ','Giới thiệu'];
+const ORDER=['Vấn đề','Tính năng','Cách hoạt động','Cảnh báo','Mưa trực tiếp','Cứu hộ','Giới thiệu'];
 const HIDDEN_KEYS=new Set(['trạm sạc ev']);
 const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 const norm=s=>String(s||'').trim().toLowerCase().replace(/\s+/g,' ');
@@ -57,7 +58,7 @@ function ensureOrderedLinks(container,home=false){
 function addUtilityBar(root){
  if(document.querySelector('.fg52-topbar'))return;
  const bar=document.createElement('div');bar.className='fg52-topbar';
- bar.innerHTML='<div class="fg52-topbar-inner"><span>🌧 FloodGuard HCMC · Dữ liệu ngập & hỗ trợ hành trình</span><span><a href="./data.html">Dữ liệu</a> &nbsp;·&nbsp; <a href="./contact.html">Liên hệ</a></span></div>';
+ bar.innerHTML='<div class="fg52-topbar-inner"><span>🌧 FloodGuard HCMC · Dữ liệu ngập & hỗ trợ hành trình</span><span><a href="./live.html">Mưa trực tiếp</a> &nbsp;·&nbsp; <a href="./data.html">Dữ liệu</a> &nbsp;·&nbsp; <a href="./contact.html">Liên hệ</a></span></div>';
  const nav=root?.querySelector?.('.wh-nav');
  if(root&&nav)root.insertBefore(bar,nav);else{const siteNav=document.querySelector('.site-nav');if(siteNav)siteNav.before(bar)}
 }
@@ -194,7 +195,7 @@ function reveal(){
  targets.forEach(x=>x.classList.add('fg52-reveal'));
  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('fg52-visible');io.unobserve(e.target)}}),{threshold:.06,rootMargin:'0px 0px -2%'});targets.forEach(x=>io.observe(x));
 }
-function addFooterResources(){document.querySelectorAll('.wh-foot-links,.footer-links').forEach(foot=>{[['Dữ liệu','./data.html'],['Hướng dẫn','./how-it-works.html'],['Liên hệ','./contact.html']].forEach(([label,href])=>{if(!foot.querySelector(`a[href="${href}"]`)){const a=document.createElement('a');a.textContent=label;a.href=href;foot.appendChild(a)}})});document.querySelectorAll('.site-actions .primary').forEach(a=>a.textContent='Mở bản đồ →')}
+function addFooterResources(){document.querySelectorAll('.wh-foot-links,.footer-links').forEach(foot=>{[['Mưa trực tiếp','./live.html'],['Dữ liệu','./data.html'],['Hướng dẫn','./how-it-works.html'],['Liên hệ','./contact.html']].forEach(([label,href])=>{if(!foot.querySelector(`a[href="${href}"]`)){const a=document.createElement('a');a.textContent=label;a.href=href;foot.appendChild(a)}})});document.querySelectorAll('.site-actions .primary').forEach(a=>a.textContent='Mở bản đồ →')}
 function start(){installThemes();rewriteHome();normalizeSiteNav();homepageMenu();mobileMenu();markActive();addFooterResources();reveal()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
