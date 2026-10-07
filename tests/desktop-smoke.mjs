@@ -13,7 +13,7 @@ function staticAudit(){
   const app=fs.readFileSync('app-core.html','utf8');
   if(!/ev\.html/.test(hide)||!pages.includes('site-hide-ev-v50.css'))throw new Error('EV hide stylesheet is not wired');
   if(!/location\.replace\(['"]\.\/features\.html/.test(ev))throw new Error('Public EV page does not redirect');
-  if(!/floodguard-user-v50-hide-public-ev/.test(sw)||!sw.includes('site-hide-ev-v50.css'))throw new Error('v50 service worker not wired');
+  if(!/floodguard-user-v73-design-system/.test(sw)||!sw.includes('site-hide-ev-v50.css')||!sw.includes('floodguard-design-system.css'))throw new Error('v73 service worker not wired');
   if(!/Trạm sạc|EV/i.test(app))throw new Error('Authenticated app EV functionality appears to be missing');
   console.log('STATIC_V50_OK');
 }
