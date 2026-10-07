@@ -4,6 +4,8 @@ on:
   pull_request:
     branches: [main]
     paths:
+      - 'floodguard-design-system.css'
+      - 'tests/design-system.mjs'
       - 'index.html'
       - 'app-core.html'
       - 'watchlist-email-v40.js'
@@ -35,6 +37,8 @@ on:
   push:
     branches: [main]
     paths:
+      - 'floodguard-design-system.css'
+      - 'tests/design-system.mjs'
       - 'index.html'
       - 'app-core.html'
       - 'watchlist-email-v40.js'
@@ -90,6 +94,10 @@ jobs:
           for i in {1..30}; do curl -fsS http://127.0.0.1:4173/index.html >/dev/null && exit 0; sleep 1; done
           cat /tmp/floodguard-http.log
           exit 1
+      - name: Run design system checks
+        env:
+          LOCAL_URL: http://127.0.0.1:4173
+        run: node tests/design-system.mjs
       - name: Run desktop smoke tests
         env:
           LOCAL_URL: http://127.0.0.1:4173
@@ -102,7 +110,7 @@ jobs:
         env:
           LOCAL_URL: http://127.0.0.1:4173
         run: node tests/deep-functional.mjs
-      - name: Verify production v50
+      - name: Verify production design system
         if: github.event_name == 'push'
         run: |
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/sw.js -o /tmp/sw.js
@@ -110,7 +118,7 @@ jobs:
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/site-hide-ev-v50.css -o /tmp/hide.css
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/ev.html -o /tmp/ev.html
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/app-core.html -o /tmp/app.html
-          grep -q 'floodguard-user-v50-hide-public-ev' /tmp/sw.js
+          grep -q 'floodguard-user-v73-design-system' /tmp/sw.js
           grep -q 'site-hide-ev-v50.css' /tmp/sw.js
           grep -q 'site-hide-ev-v50.css' /tmp/site-pages.css
           grep -q 'ev.html' /tmp/hide.css
