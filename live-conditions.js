@@ -6,6 +6,7 @@ const $=id=>document.getElementById(id);
 let map,marker,radarLayer,requestController;
 
 function fmt(value,digits=1,suffix=''){
+ if(value===null||value===undefined||value==='')return '—';
  const n=Number(value);return Number.isFinite(n)?n.toFixed(digits).replace(/\.0$/,'')+suffix:'—';
 }
 function timeLabel(value){
@@ -15,6 +16,40 @@ function timeLabel(value){
 }
 function setLoading(on,text='Đang tải dữ liệu trực tiếp…'){
  const el=$('liveLoading');if(!el)return;el.hidden=!on;el.textContent=text;
+}
+
+function n(value,fallback=0){const x=Number(value);return Number.isFinite(x)?x:fallback}
+function sum(values,count){return (Array.isArray(values)?values.slice(0,count):[]).reduce((a,v)=>a+Math.max(0,n(v)),0)}
+function clientScreening(currentMm,next6hMm,next24hMm,max1hMm,elevationM){
+ let score=0;const factors=[];
+ if(currentMm>=20){score+=30;factors.push('Mưa hiện tại rất lớn')}else if(currentMm>=10){score+=22;factors.push('Mưa hiện tại lớn')}else if(currentMm>=5){score+=12;factors.push('Đang có mưa đáng kể')}else if(currentMm>0){score+=5;factors.push('Đang có mưa')}
+ if(next6hMm>=50){score+=35;factors.push('Tổng mưa 6 giờ dự báo rất cao')}else if(next6hMm>=30){score+=26;factors.push('Tổng mưa 6 giờ dự báo cao')}else if(next6hMm>=15){score+=15;factors.push('Tổng mưa 6 giờ đáng chú ý')}else if(next6hMm>=5){score+=7;factors.push('Có mưa trong 6 giờ tới')}
+ if(next24hMm>=100){score+=20;factors.push('Tổng mưa 24 giờ rất cao')}else if(next24hMm>=60){score+=14;factors.push('Tổng mưa 24 giờ cao')}else if(next24hMm>=30){score+=8;factors.push('Tổng mưa 24 giờ đáng chú ý')}
+ if(max1hMm>=20){score+=15;factors.push('Có giờ mưa cường độ rất lớn')}else if(max1hMm>=10){score+=9;factors.push('Có giờ mưa cường độ lớn')}
+ if(Number.isFinite(Number(elevationM))){const e=Number(elevationM);if(e<=1){score+=18;factors.push('Cao độ rất thấp')}else if(e<=3){score+=12;factors.push('Cao độ thấp')}else if(e<=5){score+=7;factors.push('Cao độ tương đối thấp')}}
+ score=Math.min(100,Math.max(0,Math.round(score)));let level='very-low',label='Rất thấp';
+ if(score>=80){level='extreme';label='Rất cao'}else if(score>=60){level='high';label='Cao'}else if(score>=40){level='moderate';label='Trung bình'}else if(score>=20){level='low';label='Thấp'}
+ return {score,level,label,factors:factors.slice(0,5),basis:'precipitation-and-elevation-only',official_warning:false,disclaimer:'Chỉ số sàng lọc chỉ dùng mưa dự báo và cao độ. Chưa bao gồm triều, thoát nước, độ sâu ngập quan trắc hoặc cảnh báo chính thức.'};
+}
+async function directWeather(lat,lon,signal){
+ const u=new URL('https://api.open-meteo.com/v1/forecast');
+ u.searchParams.set('latitude',lat);u.searchParams.set('longitude',lon);
+ u.searchParams.set('current','temperature_2m,relative_humidity_2m,precipitation,rain,showers,weather_code');
+ u.searchParams.set('hourly','precipitation,rain,showers,precipitation_probability,weather_code');
+ u.searchParams.set('forecast_hours','24');u.searchParams.set('timezone','Asia/Ho_Chi_Minh');
+ const r=await fetch(u,{cache:'no-store',signal});if(!r.ok)throw new Error('Open-Meteo HTTP '+r.status);
+ return r.json();
+}
+function applyDirectWeather(base,weather,lat,lon){
+ const h=weather?.hourly||{},p=Array.isArray(h.precipitation)?h.precipitation:[],rain=Array.isArray(h.rain)?h.rain:[],showers=Array.isArray(h.showers)?h.showers:[];
+ const currentMm=Math.max(0,n(weather?.current?.precipitation)),next3=sum(p,3),next6=sum(p,6),next24=sum(p,24),max1=p.length?Math.max(...p.map(v=>Math.max(0,n(v)))):0;
+ const elevation=base?.location?.elevation_m;
+ base.location=base.location||{latitude:Number(lat),longitude:Number(lon),elevation_m:null,elevation_source:'unavailable'};
+ base.current={observed_at:weather?.current?.time||null,temperature_c:n(weather?.current?.temperature_2m,null),humidity_percent:n(weather?.current?.relative_humidity_2m,null),precipitation_mm:currentMm,rain_mm:n(weather?.current?.rain,null),showers_mm:n(weather?.current?.showers,null),weather_code:Number.isFinite(Number(weather?.current?.weather_code))?Number(weather.current.weather_code):null};
+ base.forecast={next_3h_mm:next3,next_6h_mm:next6,next_24h_mm:next24,max_1h_mm:max1,timeline:(Array.isArray(h.time)?h.time:[]).slice(0,24).map((time,i)=>({time,precipitation_mm:n(p[i]),rain_mm:n(rain[i]),showers_mm:n(showers[i]),precipitation_probability:Number.isFinite(Number(h.precipitation_probability?.[i]))?Number(h.precipitation_probability[i]):null,weather_code:Number.isFinite(Number(h.weather_code?.[i]))?Number(h.weather_code[i]):null}))};
+ base.screening=clientScreening(currentMm,next6,next24,max1,elevation);
+ base.provider_status=Object.assign({},base.provider_status,{weather:'browser-direct'});
+ base.generated_at=new Date().toISOString();return base;
 }
 function setError(message){
  $('liveSubtitle').textContent=message||'Không thể tải dữ liệu trực tiếp.';
@@ -48,10 +83,10 @@ function renderRadar(radar){
  $('radarStatus').textContent='Radar gần nhất · '+timeLabel(radar.observed_at);
 }
 function render(data){
- const s=data.screening||{};
+ const s=data.screening||{},score=s.score===null||s.score===undefined?null:Number(s.score);
  $('riskBadge').textContent=s.label||'Chưa rõ';$('riskBadge').dataset.level=s.level||'very-low';
- $('riskScore').textContent=Number.isFinite(Number(s.score))?String(Math.round(Number(s.score))):'—';
- $('riskMeter').style.width=Math.max(0,Math.min(100,Number(s.score)||0))+'%';
+ $('riskScore').textContent=Number.isFinite(score)?String(Math.round(score)):'—';
+ $('riskMeter').style.width=Number.isFinite(score)?Math.max(0,Math.min(100,score))+'%':'0%';
  $('currentRain').textContent=fmt(data.current?.precipitation_mm,1,' mm');
  $('rain6h').textContent=fmt(data.forecast?.next_6h_mm,1,' mm');
  $('rain24h').textContent=fmt(data.forecast?.next_24h_mm,1,' mm');
@@ -75,10 +110,13 @@ async function load(lat,lon,{pan=true}={}){
  setLoading(true);
  try{
   const u=new URL(API+'/api/environment/context');u.searchParams.set('lat',lat);u.searchParams.set('lon',lon);
-  const r=await fetch(u,{cache:'no-store',signal:requestController.signal});
-  const d=await r.json().catch(()=>({}));
-  if(!r.ok)throw new Error(d.message||'Không thể tải dữ liệu trực tiếp.');
-  const ll=[Number(d.location.latitude),Number(d.location.longitude)];
+  const backendPromise=fetch(u,{cache:'no-store',signal:requestController.signal}).then(async r=>{const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.message||'Backend FloodGuard chưa phản hồi.');return d});
+  const weatherPromise=directWeather(lat,lon,requestController.signal);
+  const [backendResult,weatherResult]=await Promise.allSettled([backendPromise,weatherPromise]);
+  if(backendResult.status!=='fulfilled'&&weatherResult.status!=='fulfilled')throw new Error('Không thể tải dữ liệu trực tiếp.');
+  let d=backendResult.status==='fulfilled'?backendResult.value:{ok:true,location:{latitude:Number(lat),longitude:Number(lon),elevation_m:null,elevation_source:'unavailable'},radar:{available:false},provider_status:{backend:'unavailable'},screening:{score:null,label:'Đang chờ dữ liệu',level:'unknown',factors:[]},generated_at:new Date().toISOString()};
+  if(weatherResult.status==='fulfilled')d=applyDirectWeather(d,weatherResult.value,lat,lon);
+  const ll=[Number(d.location?.latitude??lat),Number(d.location?.longitude??lon)];
   if(!marker)marker=L.marker(ll,{draggable:true}).addTo(map);
   else marker.setLatLng(ll);
   marker.bindPopup('<b>Điểm kiểm tra</b><br>'+ll[0].toFixed(5)+', '+ll[1].toFixed(5));
