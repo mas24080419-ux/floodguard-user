@@ -1,0 +1,2 @@
+const {test}=require('node:test'),assert=require('node:assert/strict'),CSV=require('./csv-utils');
+test('CSV supports multiline quoted source notes and rejects malformed structure',()=>{const r=CSV.parse('street;note;depth_cm\r\n"A;B";"Một\nHai";0');assert.equal(r[0].street,'A;B');assert.equal(r[0].note,'Một\nHai');for(const s of ['a,a\n1,2','a,b\n1','a,b\n"x,y'])assert.throws(()=>CSV.parse(s));assert.ok(CSV.encode([{a:'=HYPERLINK("x")'}],['a']).includes("'=HYPERLINK"))});
