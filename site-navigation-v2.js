@@ -8,10 +8,11 @@ const ROUTES={
  'tính năng':'./features.html',
  'cách hoạt động':'./how-it-works.html',
  'cảnh báo':'./alerts.html',
+ 'kịch bản mike+':'./scenario.html',
  'cứu hộ':'./rescue.html',
  'giới thiệu':'./about.html'
 };
-const ORDER=['Vấn đề','Tính năng','Cách hoạt động','Cảnh báo','Cứu hộ','Giới thiệu'];
+const ORDER=['Vấn đề','Tính năng','Cách hoạt động','Cảnh báo','Kịch bản MIKE+','Cứu hộ','Giới thiệu'];
 const HIDDEN_KEYS=new Set(['trạm sạc ev']);
 const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 const norm=s=>String(s||'').trim().toLowerCase().replace(/\s+/g,' ');
@@ -71,7 +72,7 @@ function insertQuickBar(root){
  const wrap=document.createElement('div');wrap.className='fg57-quickbar-wrap';
  wrap.innerHTML=`<div class="fg57-quickbar" aria-label="Truy cập nhanh FloodGuard">
    <a class="fg57-quickitem" href="./?login=1"><span class="fg57-quickicon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6Z"/><path d="M9 3v15m6-12v15"/></svg></span><span><small>Kiểm tra khu vực</small><b>Mở bản đồ ngập</b><span>Xem rủi ro theo vị trí và tuyến đường.</span></span></a>
-   <a class="fg57-quickitem" href="./?login=1"><span class="fg57-quickicon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15a4 4 0 0 1 0-8 6 6 0 0 1 11-2 5 5 0 1 1 4 10"/><path d="m7 18-1 3m6-3-1 3m6-3-1 3"/></svg></span><span><small>Kịch bản lượng mưa</small><b>Thử dự báo ngập</b><span>Ước tính mức ngập theo dữ liệu hiện có.</span></span></a>
+   <a class="fg57-quickitem" href="./scenario.html"><span class="fg57-quickicon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15a4 4 0 0 1 0-8 6 6 0 0 1 11-2 5 5 0 1 1 4 10"/><path d="m7 18-1 3m6-3-1 3m6-3-1 3"/></svg></span><span><small>Kịch bản MIKE+</small><b>Xem mức ngập mô phỏng</b><span>Ước tính mức ngập theo dữ liệu hiện có.</span></span></a>
    <a class="fg57-quickitem" href="./how-it-works.html"><span class="fg57-quickicon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h10M4 10h7M4 15h5m6-1 5 3-5 3v-6Z"/></svg></span><span><small>Hành trình</small><b>Hướng dẫn sử dụng</b><span>Ba bước để bắt đầu kiểm tra tuyến.</span></span></a>
   </div>`;
  hero.insertAdjacentElement('afterend',wrap);

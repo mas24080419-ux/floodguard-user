@@ -1,0 +1,3 @@
+
+# Raw JSON is reproducible; deploy the smaller gzip export.
+scenario-data/mike-scenarios-v1.json
