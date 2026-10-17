@@ -1,7 +1,7 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.FGScenarioCore=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
 'use strict';
-const LEVELS={UNKNOWN:{key:'UNKNOWN',label:'Chưa đủ dữ liệu',color:'#64748b'},WATCH:{key:'WATCH',label:'Theo dõi · dưới 10 cm',color:'#2563a6'},CAUTION:{key:'CAUTION',label:'Cảnh giác · 10 đến dưới 30 cm',color:'#b86d0b'},HIGH:{key:'HIGH',label:'Cảnh báo cao · từ 30 cm',color:'#bc3344'}};
-function classify(depth){if(typeof depth!=='number'||!Number.isFinite(depth)||depth<0)return LEVELS.UNKNOWN;return depth>=30?LEVELS.HIGH:depth>=10?LEVELS.CAUTION:LEVELS.WATCH;}
+const LEVELS={UNKNOWN:{key:'UNKNOWN',label:'Chưa đủ dữ liệu',color:'#64748b'},WATCH:{key:'WATCH',label:'Theo dõi · dưới 20 cm',color:'#2563a6'},CAUTION:{key:'CAUTION',label:'Cảnh giác · 20 đến dưới 40 cm',color:'#b86d0b'},HIGH:{key:'HIGH',label:'Cảnh báo cao · từ 40 cm',color:'#bc3344'}};
+function classify(depth){if(typeof depth!=='number'||!Number.isFinite(depth)||depth<0)return LEVELS.UNKNOWN;return depth>=40?LEVELS.HIGH:depth>=20?LEVELS.CAUTION:LEVELS.WATCH;}
 function scenario(data,rain,tide){if(typeof rain!=='number'||typeof tide!=='number'||!Number.isFinite(rain)||!Number.isFinite(tide))return null;return data.scenarios.find(s=>Math.abs(s.rain_mm-rain)<1e-8&&Math.abs(s.tide_m-tide)<1e-8)||null;}
 function pointInCell(lon,lat,polygon){if(!Number.isFinite(lon)||!Number.isFinite(lat)||!Array.isArray(polygon)||polygon.length!==4)return false;let sign=0;for(let i=0;i<4;i++){const a=polygon[i],b=polygon[(i+1)%4],cross=(b[0]-a[0])*(lat-a[1])-(b[1]-a[1])*(lon-a[0]);if(Math.abs(cross)<1e-14)continue;const s=Math.sign(cross);if(sign&&sign!==s)return false;sign=s;}return true;}
 function locate(data,lon,lat){return data.sites.findIndex(s=>pointInCell(lon,lat,s.polygon));}

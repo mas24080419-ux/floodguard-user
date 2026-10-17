@@ -1,6 +1,6 @@
 {
   "file": "mike-scenarios-v1.json",
-  "sha256": "4dba08189abb90137cae195c9657f0b1f73d9da6cb5d1bc218d332a9d513c168",
+  "sha256": "60744c19fc457a2fd01eb02faccb9ed8d848e611b6e103a129fdff20c6bd22e7",
   "source_sample_sha256": "e67a918fa800da325095d8ff34a635cd1f348ddc718074b40fa5db0ba4432e44",
   "rf_model_sha256": "82b3bcf2c74a046f22518804cfbaa4b96552de246f5cf756399eba814e8debe7",
   "sites": 846,
@@ -13,5 +13,9 @@
     1188
   ],
   "validity": "Research scenario screening only; no verified road or charger mapping",
-  "rounding_cm": 1e-05
+  "rounding_cm": 1e-05,
+  "warning_thresholds_cm": [
+    20,
+    40
+  ]
 }
