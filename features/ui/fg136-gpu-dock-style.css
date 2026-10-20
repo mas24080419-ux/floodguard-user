@@ -1,0 +1,97 @@
+
+/* ===== FloodGuard 13.7 · instant-response GPU dock ===== */
+@media(min-width:701px){
+  .fg3-nav{
+    --fg136-ease:cubic-bezier(.22,1,.36,1);
+    position:relative!important;
+    isolation:isolate!important;
+    overflow:visible!important;
+    background:transparent!important;
+    border-color:transparent!important;
+    box-shadow:none!important;
+    padding:3px!important;
+    gap:2px!important;
+    width:auto!important;min-width:0!important;
+    transform:translateZ(0)!important;
+    transition:none!important;
+    pointer-events:none!important;
+  }
+  .fg136-shell{
+    position:absolute;inset:0;z-index:-1;border-radius:14px;
+    background:rgba(244,247,250,.78);
+    border:1px solid rgba(220,229,237,.78);
+    box-shadow:0 5px 18px rgba(15,23,42,.05);
+    backdrop-filter:blur(18px) saturate(1.08);
+    -webkit-backdrop-filter:blur(18px) saturate(1.08);
+    transform-origin:center center;
+    transform:translateZ(0) scaleX(1);
+    transition:transform .36s var(--fg136-ease),background-color .22s ease,box-shadow .22s ease,border-color .22s ease;
+    will-change:transform;
+    pointer-events:auto;
+  }
+  .fg3-nav .fg3-btn{
+    position:relative!important;z-index:2!important;
+    width:auto!important;min-width:34px!important;max-width:none!important;height:34px!important;
+    padding:0 8px!important;gap:5px!important;
+    opacity:1!important;visibility:visible!important;
+    transform:translate3d(0,0,0) scale(1)!important;
+    transition:opacity .18s ease .09s,transform .38s var(--fg136-ease),color .2s ease,background-color .2s ease,box-shadow .2s ease!important;
+    will-change:transform,opacity;
+    pointer-events:auto!important;
+  }
+  .fg3-nav .fg14-nav-label{
+    max-width:100px!important;opacity:1!important;margin:0!important;
+    transform:none!important;transition:none!important;
+  }
+  .fg3-nav .fg14-nav-ico{transform:translateZ(0)!important;transition:transform .25s var(--fg136-ease)!important}
+  .fg3-nav .fg3-btn:hover{transform:translate3d(0,-1px,0)!important}
+  .fg3-nav .fg3-btn:active{transform:translate3d(0,0,0) scale(.975)!important}
+  .fg3-nav .fg3-btn.primary,.fg3-nav .fg3-btn.active{
+    background:rgba(255,255,255,.96)!important;color:#1d4ed8!important;
+    box-shadow:0 4px 13px rgba(37,99,235,.09)!important;
+  }
+
+  /* Compact mirror: its layout never affects the open dock. */
+  .fg136-compact-strip{
+    position:absolute;left:50%;top:3px;z-index:5;height:34px;
+    display:flex;align-items:center;gap:2px;
+    transform:translate3d(-50%,2px,0) scale(.94);
+    transform-origin:center center;
+    opacity:0;visibility:hidden;pointer-events:none;
+    transition:opacity .14s ease,transform .34s var(--fg136-ease),visibility 0s linear .34s;
+    will-change:transform,opacity;
+  }
+  .fg136-mini{
+    width:34px;height:34px;padding:0;border:0;border-radius:10px;background:transparent;
+    display:grid;place-items:center;font-size:12px;line-height:1;color:#40566d;cursor:pointer;
+    transform:translateZ(0);transition:background-color .18s ease,color .18s ease,transform .18s ease,box-shadow .18s ease;
+  }
+  .fg136-mini:hover{background:rgba(255,255,255,.76);transform:translateY(-1px)}
+  .fg136-mini:active{transform:scale(.94)}
+  .fg136-mini.active{background:#fff;color:#1d4ed8;box-shadow:0 4px 13px rgba(37,99,235,.09)}
+
+  /* No width/layout animation in compact mode. */
+  .fg3-nav.fg14-compact{padding:3px!important;gap:2px!important;width:auto!important;background:transparent!important;box-shadow:none!important}
+  .fg3-nav.fg14-compact .fg3-btn{
+    width:auto!important;min-width:34px!important;max-width:none!important;padding:0 8px!important;gap:5px!important;
+    opacity:0!important;visibility:hidden!important;pointer-events:none!important;
+    transform:translate3d(0,1px,0) scale(.985)!important;
+    transition:opacity .12s ease,transform .28s var(--fg136-ease),visibility 0s linear .16s!important;
+  }
+  .fg3-nav.fg14-compact .fg14-nav-label{max-width:100px!important;opacity:1!important;margin:0!important;transform:none!important}
+  .fg3-nav.fg14-compact .fg136-shell{transform:translateZ(0) scaleX(var(--fg136-compact-scale,.55))}
+  .fg3-nav.fg14-compact .fg136-compact-strip{
+    opacity:1;visibility:visible;pointer-events:auto;
+    transform:translate3d(-50%,0,0) scale(1);
+    transition:opacity .16s ease .04s,transform .34s var(--fg136-ease),visibility 0s;
+  }
+
+  body.fg12-dark .fg136-shell{background:rgba(19,38,57,.76);border-color:rgba(62,88,111,.5);box-shadow:0 5px 18px rgba(0,0,0,.10)}
+  body.fg12-dark .fg136-mini{color:#c8d8e6}
+  body.fg12-dark .fg136-mini:hover{background:rgba(35,64,91,.55)}
+  body.fg12-dark .fg136-mini.active{background:#1b3550;color:#e7f2ff;box-shadow:0 4px 13px rgba(0,0,0,.14)}
+}
+@media(max-width:700px){.fg136-shell,.fg136-compact-strip{display:none!important}}
+@media(prefers-reduced-motion:reduce){
+  .fg136-shell,.fg136-compact-strip,.fg136-mini,.fg3-nav .fg3-btn{transition-duration:.01ms!important}
+}

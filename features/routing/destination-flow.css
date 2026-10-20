@@ -1,0 +1,51 @@
+#fgDestSearch,#fgDestPlace,#fgDestEndpoints,#fgDestOriginNote,#fgDestModes{display:none}
+/* Presentation only: keep route metadata in the DOM and calculation state. */
+html[data-fg-design] body #fg3RouteResults :is(.fg-dest-source,.fg-routing-source){display:none!important}
+@media(max-width:700px),(max-width:950px) and (max-height:500px){
+/* Route and place sheets are non-modal: keep the map clear and interactive. */
+html.fg-compact-app.fg-compact-route-open[data-fg-design] body #fg3App #fg12Backdrop,
+html.fg-compact-app[data-fg-destination-stage="place"][data-fg-design] body #fg3App #fg12Backdrop{background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;pointer-events:none!important}
+html.fg-compact-app.fg-destination-flow[data-fg-design][data-fg-design] body #fg3App :is(#fgDestSearch,#fgDestPlace,#fgDestEndpoints)[hidden]{display:none!important}
+html.fg-compact-app.fg-destination-flow[data-fg-design][data-fg-design] body #fg3App #fgDestSearch{display:flex;flex-direction:column;position:absolute;inset:0;background:var(--fg-surface);z-index:2300;pointer-events:auto;padding:12px 0}
+.fg-dest-searchbar{display:flex;gap:4px;align-items:center;margin:0 12px 12px;background:var(--fg-canvas);border-radius:28px;padding:2px 4px}
+html.fg-compact-app.fg-destination-flow[data-fg-design][data-fg-design] body #fg3App .fg-dest-searchbar input{flex:1;min-width:0;border:0!important;background:transparent!important;padding:8px!important;outline-offset:0!important;height:48px!important;font-size:16px!important}
+html.fg-compact-app.fg-destination-flow[data-fg-design][data-fg-design] body #fg3App .fg-dest-searchbar button{flex:none;width:44px!important;height:44px!important;border:0!important;background:transparent!important;color:var(--fg-ink)!important;font-size:28px!important;border-radius:50%!important}
+.fg-dest-searchbody{overflow-y:auto;padding:8px 20px;flex:1;min-height:0}.fg-dest-searchbody h2{font-size:15px;font-weight:600;margin:8px 0 16px}.fg-dest-searchbody p{font-size:14px;line-height:1.6;color:var(--fg-muted)}#fgDestList{padding:0;margin:0;list-style:none}
+html.fg-compact-app.fg-destination-flow[data-fg-design][data-fg-design] body #fg3App #fgDestList button{display:flex;width:100%;align-items:flex-start;flex-direction:column;gap:4px;padding:16px 0!important;border:0!important;border-bottom:1px solid var(--fg-border)!important;border-radius:0!important;background:transparent!important;text-align:left;color:var(--fg-ink)!important;min-height:72px!important}
+#fgDestList b{font-size:15px;font-weight:500}#fgDestList span{font-size:13px;color:var(--fg-muted);line-height:1.5}
+html.fg-compact-app.fg-destination-flow[data-fg-design][data-fg-design] body #fg3App #fgDestPlace{display:block;position:absolute;left:0;right:0;bottom:62px;z-index:1860;pointer-events:auto;background:var(--fg-surface);padding:20px;border:1px solid var(--fg-border);border-radius:24px 24px 0 0;box-shadow:0 -4px 20px #17324d12}
+.fg-dest-placehead{display:flex;align-items:flex-start;gap:12px}.fg-dest-placehead h2{flex:1;font-size:20px;line-height:1.4;font-weight:600;margin:0}#fgDestAddress{font-size:14px;color:var(--fg-muted);line-height:1.5;margin:8px 0}#fgDestSource{display:block;font-size:12px;color:var(--fg-muted);line-height:1.5}
+html.fg-compact-app.fg-destination-flow[data-fg-design][data-fg-design] body #fg3App #fgDestClose{border:0!important;background:var(--fg-canvas)!important;color:var(--fg-muted)!important;border-radius:50%!important;width:44px!important;height:44px!important;flex:none;font-size:24px!important;padding:0!important}
+html.fg-compact-app.fg-destination-flow[data-fg-design][data-fg-design] body #fg3App #fgDestDirections{margin-top:18px;border:0!important;background:var(--fg-brand)!important;color:#fff!important;border-radius:24px!important;min-height:48px!important;padding:10px 22px!important;font-size:15px!important}
+html.fg-compact-app.fg-dest-searching[data-fg-design][data-fg-design] body #fg3App :is(#fg12MobileNav,#fgCompactChips,#fg16SOSFab){display:none!important}
+html.fg-compact-app.fg-dest-directions[data-fg-design][data-fg-design] body #fg3App :is(.fg3-header,#fgCompactChips){display:none!important}
+html.fg-compact-app.fg-dest-directions[data-fg-design][data-fg-design] body #fg3App #fgDestEndpoints{display:block;position:absolute;top:12px;left:12px;right:12px;background:var(--fg-surface);padding:12px 48px 4px 12px;border:1px solid var(--fg-border);border-radius:22px;z-index:1900;pointer-events:auto;box-shadow:0 3px 12px #17324d12}
+#fgDestEndpoints>div{position:relative}#fgDestEndpoints .fg3-route-connector{display:none!important}
+html.fg-compact-app.fg-dest-directions[data-fg-design][data-fg-design] body #fg3App #fgDestEndpoints .fg3-route-field{position:relative;padding:0!important;margin-bottom:8px!important}
+#fgDestEndpoints .fg3-route-field>label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+html.fg-compact-app.fg-dest-directions[data-fg-design][data-fg-design] body #fg3App #fgDestEndpoints .fg3-route-inputrow{display:flex;align-items:center;gap:0;border-bottom:1px solid var(--fg-border)}
+html.fg-compact-app.fg-dest-directions[data-fg-design][data-fg-design] body #fg3App #fgDestEndpoints input{flex:1;min-width:0;min-height:44px!important;height:44px!important;border:0!important;padding:6px 4px 6px 22px!important;background:transparent!important;font-size:14px!important}
+html.fg-compact-app.fg-dest-directions[data-fg-design][data-fg-design] body #fg3App #fgDestEndpoints .fg3-route-pick{position:static!important;width:36px!important;min-width:36px!important;height:44px!important;padding:0!important;border:0!important;background:transparent!important;color:var(--fg-brand)!important}
+#fgDestEndpoints .fg3-route-dot{left:4px!important;top:20px!important;width:8px!important;height:8px!important}
+html.fg-compact-app.fg-dest-directions[data-fg-design][data-fg-design] body #fg3App #fgDestEndpoints #fg3RouteSwap{position:absolute!important;right:-42px!important;top:28px!important;width:40px!important;height:44px!important;padding:0!important;transform:none!important;background:transparent!important;border:0!important;box-shadow:none!important}
+html.fg-compact-app.fg-dest-directions[data-fg-design][data-fg-design] body #fg3App #fg3RoutePanel #fg3RouteModebar{padding:2px!important}
+html.fg-compact-app.fg-dest-directions[data-fg-design][data-fg-design] body #fg3App #fgDestOriginNote:not(:empty){display:block;margin:0 0 10px;font-size:13px;color:var(--fg-muted);line-height:1.5}
+html.fg-compact-app.fg-dest-results[data-fg-design][data-fg-design] body #fg3App #fg3RoutePanel{height:min(43dvh,360px)!important}
+html.fg-compact-app.fg-dest-results[data-fg-design][data-fg-design] body #fg3App #fg3RoutePanel.fg-sheet-expanded{height:calc(100dvh - 160px)!important}
+html.fg-compact-app.fg-dest-results[data-fg-design][data-fg-design] body #fg3App #fg3RoutePanel :is(#fg3RouteRun,#fg3RouteSummary,#fg90RouteDecision){display:none!important}
+html.fg-compact-app.fg-dest-results[data-fg-design][data-fg-design] body #fg3App #fg3RoutePanel .fg3-route-status.ok{display:none!important}
+html.fg-compact-app.fg-dest-results[data-fg-design][data-fg-design] body #fg3App #fg3RoutePanel .fg3-route-scroll{display:flex;flex-direction:column}
+html.fg-compact-app.fg-dest-results[data-fg-design][data-fg-design] body #fg3App #fg3RoutePanel .fg3-route-scroll>*{flex-shrink:0}
+html.fg-compact-app.fg-dest-results[data-fg-design][data-fg-design] body #fg3App #fg3RouteResults{order:0}
+html.fg-compact-app.fg-dest-results[data-fg-design][data-fg-design] body #fg3App #fg3RoutePanel .fg3-route-form{order:1}
+html.fg-compact-app.fg-dest-results[data-fg-design][data-fg-design] body #fg3App #fg80RouteTools{order:2}
+html.fg-compact-app.fg-dest-results[data-fg-design][data-fg-design] body #fg3App #fg3RouteStatus.error{order:-1}
+html.fg-compact-app.fg-dest-results[data-fg-design][data-fg-design] body #fg3App #fgDestModes{display:block;flex:none;padding:0 16px 4px}
+html.fg-compact-app.fg-dest-results[data-fg-design][data-fg-design] body #fg3App #fg3RoutePanel #fgCompactOptions{margin-bottom:4px}
+.fg-dest-source{margin:0 0 8px;border-bottom:1px solid var(--fg-border)}.fg-dest-source>summary{min-height:40px;display:flex;align-items:center;font-size:12px;color:var(--fg-muted);cursor:pointer}.fg-dest-source>summary::after{content:'⌄';margin-left:auto}
+}
+#fgDestClearRecent{float:right;border:0;background:transparent;color:#175cd3;font:inherit;font-size:12px;padding:8px;min-height:40px;cursor:pointer}#fgDestClearRecent[hidden]{display:none!important}
+#fgDestList.fg-recent-list button{position:relative;padding-left:44px!important}#fgDestList.fg-recent-list button:before{content:'';position:absolute;left:0;top:22px;width:28px;height:28px;border-radius:50%;background:#edf2f6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23526779' stroke-width='1.7'%3E%3Ccircle cx='12' cy='12' r='8'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E") center/20px no-repeat}
+@media(max-width:700px),(max-width:950px) and (max-height:500px){
+html.fg-compact-app.fg-destination-flow[data-fg-design][data-fg-design] body #fg3App #fgDestList.fg-recent-list button{padding-left:44px!important}
+}

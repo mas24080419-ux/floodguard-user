@@ -1,0 +1,7 @@
+
+.fg31-account-actions #fg31Logout{border-color:#fecaca!important;background:#fff5f5!important;color:#b42318!important;font-weight:900!important}
+.fg31-account-actions #fg31Logout:hover{background:#fee2e2!important}
+.fg31-more-logout{border-color:#fecaca!important;background:#fff7f7!important}
+.fg31-more-logout strong{background:#fee2e2!important;color:#b42318!important}
+.fg31-more-logout b{color:#b42318!important}
+@media(min-width:701px){#fg31AccountBtn{position:relative}#fg31AccountBtn:after{content:"";position:absolute;inset:-4px;border-radius:12px;border:1px solid rgba(59,130,246,.14);pointer-events:none}}

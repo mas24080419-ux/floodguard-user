@@ -1,0 +1,26 @@
+#fgLanguagePicker{box-sizing:border-box;position:fixed;inset:auto 0 0;margin:0 auto;width:min(100%,480px);max-height:calc(100dvh - 24px);overflow:auto;border:1px solid #e5ebf3;border-bottom:0;border-radius:24px 24px 0 0;padding:10px 20px max(24px,env(safe-area-inset-bottom));background:#fff;color:#17324d;font:14px/1.5 "Be Vietnam Pro","Segoe UI",sans-serif;box-shadow:0 -8px 30px #17324d0a}
+#fgLanguagePicker::backdrop{background:#17324d38}
+#fgLanguagePicker *{box-sizing:border-box}
+#fgLanguagePicker .fg-language-handle{width:36px;height:4px;border-radius:4px;background:#d9e2ec;margin:0 auto 18px}
+#fgLanguagePicker h2{font:600 20px/1.5 "Be Vietnam Pro","Segoe UI",sans-serif;margin:0 48px 0 0;color:#17324d;letter-spacing:0}
+#fgLanguagePicker .fg-language-description{font-size:13px;color:#52677d;margin:6px 36px 16px 0}
+#fgLanguagePicker button{font:inherit;cursor:pointer;box-shadow:none;min-height:48px}
+#fgLanguagePicker [data-language-close]{position:absolute;right:12px;top:28px;width:48px;height:48px;padding:0;border:0;background:transparent;color:#52677d;font-size:25px;border-radius:50%}
+#fgLanguagePicker [data-language]{display:flex;align-items:center;gap:12px;min-height:68px;width:100%;padding:10px 0;border:0;border-bottom:1px solid #edf1f6;border-radius:0;background:transparent;text-align:left;color:#17324d}
+#fgLanguagePicker [data-language]:last-child{border-bottom:0}
+#fgLanguagePicker .fg-language-code{display:grid;place-items:center;width:36px;height:36px;flex:none;background:#edf3fb;color:#356aaf;border-radius:10px;font-size:12px;font-weight:600}
+#fgLanguagePicker b{font-size:15px;font-weight:500}#fgLanguagePicker small{display:block;font-size:12px;color:#52677d;margin-top:2px}
+#fgLanguagePicker i{margin-left:auto;border:1.5px solid #6b7d92;border-radius:50%;width:21px;height:21px;flex:none}
+#fgLanguagePicker [aria-checked=true] i{border:6px solid #175cd3}
+#fgLanguagePicker [role=status]{font-size:12px;color:#805600;margin:8px 0 0}#fgLanguagePicker [role=status]:empty{display:none}
+#fgLanguagePicker button:focus-visible,.fg-language-entry:focus-visible{outline:2px solid #175cd3;outline-offset:2px}
+#fgLanguagePicker [data-language]:active{background:#edf3fb}
+.fg-language-entry{display:flex;align-items:center;gap:12px;min-height:48px;padding:10px 12px;background:#f4f7fb;border:0;border-radius:10px;color:#17324d;font:inherit;text-align:left;cursor:pointer}
+.fg-language-entry strong{display:flex;color:#356aaf}.fg-language-entry b{font-size:13px;font-weight:500}.fg-language-entry span[data-language-current]{display:block;font-size:12px;color:#52677d}.fg-language-login{margin:12px auto 0;background:transparent}
+#fgLanguageMore strong svg{width:20px;height:20px}
+.fg-language-authbar{position:absolute;z-index:3;top:max(8px,env(safe-area-inset-top));right:16px}
+.fg-language-authbar .fg-language-login{margin:0;min-height:48px;padding:8px 12px;gap:8px;background:#fff;border:1px solid #e5ebf3;border-radius:12px}
+.fg-language-authbar b{display:none}.fg-language-authbar span[data-language-current]{font-size:13px;font-weight:500;color:#17324d;white-space:nowrap}
+#fgLanguageDesktop{margin-left:4px}#fgLanguageDesktop div{display:none}
+@media(max-width:900px){#fgLanguageDesktop{display:none!important}}
+@media(prefers-reduced-motion:reduce){#fgLanguagePicker{animation:none!important;transition:none!important}}

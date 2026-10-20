@@ -1,0 +1,9 @@
+
+/* User-facing rain-gauge location module intentionally hidden.
+   Rain-station data remains loaded for Live/model/internal calculations. */
+#fg3StationBtn,
+#fg3StationPanel,
+#fg10Gauge,
+[data-target="fg3StationBtn"],
+[data-fg12-action="gauge"],
+[data-fg51-open="fg3StationBtn"]{display:none!important;}

@@ -1,0 +1,5 @@
+
+/* UI cleanup 2.3: hide explanatory labels only; functionality remains unchanged. */
+.fg16-brandnote,
+.fg4-evrainhint,
+.fg15-evengine { display:none !important; }

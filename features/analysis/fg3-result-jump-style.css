@@ -1,0 +1,11 @@
+
+.fg3-run{position:relative;overflow:hidden}
+.fg3-run.is-running{opacity:.95;pointer-events:none;box-shadow:0 0 0 4px rgba(22,119,255,.12)}
+.fg3-run.is-running:after{content:"";position:absolute;right:14px;top:50%;width:14px;height:14px;margin-top:-7px;border-radius:50%;border:2px solid rgba(255,255,255,.45);border-top-color:#fff;animation:fg3spin .7s linear infinite}
+@keyframes fg3spin{to{transform:rotate(360deg)}}
+.fg3-step-result{scroll-margin-top:10px}
+.fg3-resultwrap{border-radius:16px;transition:transform .22s ease,box-shadow .22s ease,background-color .22s ease}
+.fg3-resultwrap.fg3-pop-in{animation:fg3pop .55s ease}
+@keyframes fg3pop{0%{transform:translateY(10px);opacity:.72}100%{transform:translateY(0);opacity:1}}
+.fg3-analysis-hidden{display:none!important}
+.fg3-resultcard.fg3-resultflash{box-shadow:0 0 0 3px rgba(59,130,246,.12),0 14px 30px rgba(15,23,42,.10)!important;border-color:#93c5fd!important;background:linear-gradient(180deg,#ffffff,#f8fbff)!important}

@@ -1,0 +1,28 @@
+
+/* ===== FloodGuard Mobile Hotfix 1.2 ===== */
+@media (max-width:700px){
+  /* Keep scenario rain inside the Active Trip card instead of covering its text. */
+  .fg90-active-trip{padding-right:128px!important;min-height:58px!important}
+  .fg90-active-trip .txt{min-width:0!important}
+  .fg90-active-trip b{font-size:11px!important;line-height:1.25!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  .fg90-active-trip span{font-size:9px!important;line-height:1.25!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  .fg12-rain-orb{left:auto!important;right:16px!important;top:calc(137px + var(--fgm-safe-top))!important;transform:none!important;height:34px!important;max-width:116px!important;padding:0 9px!important;gap:5px!important;z-index:1735!important;border-radius:12px!important;box-shadow:none!important;background:#f8fbff!important;border:1px solid #dbeafe!important}
+  .fg12-rain-orb>span:nth-of-type(2){font-size:0!important}
+  .fg12-rain-orb>span:nth-of-type(2):after{content:'Mưa';font-size:8px!important;color:#64748b!important}
+  .fg12-rain-orb b{font-size:10px!important;white-space:nowrap!important}
+  .fg12-rain-orb .live{width:6px!important;height:6px!important;flex:none!important}
+  .fg12-rain-pop{left:8px!important;right:8px!important;top:calc(192px + var(--fgm-safe-top))!important;width:auto!important;transform:translateY(-6px)!important;z-index:1740!important}
+  .fg12-rain-pop.show{transform:none!important}
+
+  /* Move Leaflet controls slightly lower so they never collide with the trip card. */
+  .leaflet-top{top:calc(196px + var(--fgm-safe-top))!important}
+
+  /* Messenger/in-app browsers sometimes paint the map gray before tiles arrive. */
+  #map,.leaflet-container{background:#dfe9e6!important}
+  .leaflet-tile-pane{will-change:transform;transform:translateZ(0)}
+  .leaflet-tile{image-rendering:auto!important}
+}
+@media (max-width:380px){
+  .fg90-active-trip{padding-right:114px!important}
+  .fg12-rain-orb{right:12px!important;max-width:104px!important;padding:0 7px!important}
+}

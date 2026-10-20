@@ -427,3 +427,19 @@ html body #fg3App #fg90ActiveTrip {
   padding-top: 7px !important;
   padding-bottom: 7px !important;
 }
+/* One text family across user screens; SVG and icon-font glyphs keep their own rendering. */
+html[data-fg-design][data-fg-design]{--fg-font:"Be Vietnam Pro","Segoe UI",sans-serif!important}
+html[data-fg-design][data-fg-design] body,
+html[data-fg-design][data-fg-design] body :is(#fg3App,#authScreen,#fg31Auth,.cg-panel,.cg-order-dialog),
+html[data-fg-design][data-fg-design] body :is(#fg3App,#authScreen,#fg31Auth,.cg-panel,.cg-order-dialog) *:not(.fa):not(.fas):not(.far):not(.fab):not([class*="fa-"]),
+html[data-fg-design][data-fg-design] body :is(input,button,select,textarea,code,pre,kbd,samp,svg text){font-family:"Be Vietnam Pro","Segoe UI",sans-serif!important}
+/* Required markers follow existing validation; optional fields remain unmarked. */
+html body :is(.field,.fg16-field):has(input:required,select:required,textarea:required)>label:after,
+html body label:has(+input:required,+select:required,+textarea:required):after,
+html body label:has(+div input:required):after,
+html body label:has(input:required):after,
+html body label[for="cgSeverity"]:after,
+html body .fg3-route-field:has(#fg3RouteFrom,#fg3RouteTo)>label:after,
+html body .fg17-addressbox>label:after,
+html body #cgLocation:after{content:' *';color:#b42318!important;font-size:14px!important;font-weight:700!important;white-space:pre}
+html body .fg16-field:has(#fg16Vehicle)>label:after{content:' *';color:#b42318!important;font-size:14px!important;font-weight:700!important;white-space:pre}

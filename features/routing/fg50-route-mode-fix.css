@@ -1,0 +1,10 @@
+
+/* ===== 5.0 FIX: clickable transport selector ===== */
+#fg3RouteModebar{position:relative!important;z-index:60!important;display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:7px!important;margin:10px 0 6px!important;padding:5px!important;border:1px solid #e2e8f0!important;border-radius:15px!important;background:#f8fafc!important;pointer-events:auto!important;isolation:isolate}
+#fg3RouteModebar .fg3-route-mode{position:relative!important;z-index:61!important;pointer-events:auto!important;touch-action:manipulation!important;user-select:none!important;-webkit-user-select:none!important;cursor:pointer!important;min-height:42px!important;border:1px solid transparent!important;border-radius:11px!important;background:transparent!important;color:#64748b!important;font-size:9.5px!important;font-weight:850!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;padding:9px 8px!important;transition:background .16s ease,color .16s ease,border-color .16s ease,box-shadow .16s ease!important}
+#fg3RouteModebar .fg3-route-mode:hover{background:#fff!important;color:#0f172a!important;border-color:#dbe5ef!important;transform:none!important}
+#fg3RouteModebar .fg3-route-mode.active[data-route-mode="car"]{background:#fff!important;color:#1557b0!important;border-color:#bfdbfe!important;box-shadow:0 4px 12px rgba(37,99,235,.10)!important}
+#fg3RouteModebar .fg3-route-mode.active[data-route-mode="motorbike"]{background:#faf5ff!important;color:#6d28d9!important;border-color:#d8b4fe!important;box-shadow:0 4px 12px rgba(124,58,237,.10)!important}
+#fg3RouteModebar .fg3-route-mode.active[data-route-mode="walk"]{background:#f0fdf4!important;color:#047857!important;border-color:#86efac!important;box-shadow:0 4px 12px rgba(5,150,105,.10)!important}
+#fg3RouteModebar .fg3-route-mode:focus-visible{outline:3px solid rgba(59,130,246,.20)!important;outline-offset:2px!important}
+.fg49-modeinfo{position:relative;z-index:2}

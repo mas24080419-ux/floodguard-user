@@ -1,0 +1,4 @@
+
+#fg70CmdBack.show{pointer-events:auto!important}
+#fg70CmdBack .fg70-cmd,#fg70CmdBack .fg70-cmdhead,#fg70CmdBack .fg70-cmdinput,#fg70CmdBack .fg70-cmdresults,#fg70CmdBack .fg70-cmditem{pointer-events:auto!important}
+#fg70CmdBack .fg70-cmditem{touch-action:manipulation;user-select:none}

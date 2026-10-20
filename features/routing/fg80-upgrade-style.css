@@ -1,0 +1,12 @@
+
+/* FloodGuard 8.0 — route reliability & interaction polish */
+.fg3-route-swap{display:grid!important;place-items:center!important;z-index:12!important;touch-action:manipulation;transition:transform .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease!important}
+.fg3-route-swap:hover{background:#ecfdf5!important;border-color:#86efac!important;color:#047857!important;box-shadow:0 6px 16px rgba(5,150,105,.16)!important}
+.fg3-route-swap:active{transform:scale(.92)}
+.fg3-route-swap.fg80-swapping{animation:fg80swap .34s ease}
+@keyframes fg80swap{0%{transform:rotate(0)}50%{transform:rotate(180deg) scale(1.08)}100%{transform:rotate(360deg)}}
+.fg3-route-quick button{min-height:29px}.fg3-route-quick button.active{background:#e8f1ff!important;border-color:#93c5fd!important;color:#1557b0!important}.fg3-route-quick #fg80UseMyLocation{border-color:#bae6fd;background:#f0f9ff;color:#0369a1}.fg3-route-quick #fg80ClearRoute{border-color:#e2e8f0;background:#f8fafc;color:#64748b}
+.fg80-route-tools{display:flex;gap:6px;flex-wrap:wrap;margin:7px 0 3px}.fg80-route-tools[hidden]{display:none!important}.fg80-route-tools button{border:1px solid #dbe5ee;background:#fff;color:#40566d;border-radius:9px;padding:7px 9px;font-size:8.4px;font-weight:800;cursor:pointer}.fg80-route-tools button:hover{background:#f5f9fd;border-color:#c7d7e6}.fg80-route-tools button:first-child{color:#1557b0;border-color:#c7dcf5;background:#f8fbff}
+.fg3-route-input.fg80-invalid{border-color:#fda4af!important;box-shadow:0 0 0 3px rgba(244,63,94,.08)!important;background:#fff7f8!important}
+.fg80-netbadge{display:inline-flex;align-items:center;gap:5px;padding:3px 6px;border:1px solid #dce6ef;border-radius:999px;font-size:7.2px;font-weight:850;color:#64748b;background:#fff;margin-left:5px;vertical-align:middle}.fg80-netbadge i{width:6px;height:6px;border-radius:50%;background:#22c55e}.fg80-netbadge.off i{background:#ef4444}.fg80-netbadge.off{color:#991b1b;background:#fff1f2;border-color:#fecdd3}
+@media(max-width:650px){.fg80-route-tools button{flex:1}.fg3-route-quick #fg80UseMyLocation,.fg3-route-quick #fg80ClearRoute{flex:1 1 45%}}

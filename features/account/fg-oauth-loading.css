@@ -1,0 +1,3 @@
+
+html.fg-auth-return #fgWebsiteHome{display:none!important}
+html.fg-auth-return::before{content:"Đang mở FloodGuard…";position:fixed;inset:0;z-index:10000;display:grid;place-items:center;background:#f5f8f0;color:#294326;font:600 18px system-ui,sans-serif}

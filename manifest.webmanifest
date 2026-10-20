@@ -1,24 +1,19 @@
 {
-  "name": "FloodGuard HCMC · Multi-user Alerts",
+  "name": "FloodGuard HCMC Â· Multi-user Alerts",
   "short_name": "FloodGuard",
   "description": "FloodGuard HCMC responsive flood risk, EV rescue and smart address-to-map location web app.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f7f8fb",
+  "background_color": "#ffffff",
   "theme_color": "#7aa7ff",
   "lang": "vi",
   "icons": [
     {
-      "src": "./icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "./icon-512.png",
-      "sizes": "512x512",
+      "src": "./floodguard-logo.png",
+      "sizes": "1254x1254",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }

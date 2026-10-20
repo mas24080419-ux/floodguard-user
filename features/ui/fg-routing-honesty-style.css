@@ -1,0 +1,7 @@
+
+.fg-routing-source{margin:12px 0;padding:14px;border:1px solid #93c5fd;border-radius:14px;background:#eff6ff;color:#15375b;font-size:13px;line-height:1.6}
+.fg-routing-source strong{font-size:14px}.fg-routing-source p{margin:7px 0}.fg-routing-source details{margin-top:9px}.fg-routing-source summary{cursor:pointer;font-weight:700}
+.fg-google-maps-link{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 14px;border-radius:10px;background:#185adb;color:#fff!important;text-decoration:none;font-weight:700;border:2px solid transparent}
+.fg-google-maps-link:focus-visible{outline:3px solid #f59e0b;outline-offset:3px}
+.fg-routing-source small{display:block;margin-top:8px;color:#294b70}
+#fg3RouteResults .fg3-route-card-time{font-size:20px}

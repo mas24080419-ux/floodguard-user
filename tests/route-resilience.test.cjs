@@ -1,6 +1,6 @@
 /* Isolated fault-injection fixtures only; never loaded by the production app. */
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
-const html=fs.readFileSync(process.env.FG_TEST_APP||path.resolve(__dirname,'../app-core.html'),'utf8');
+const html=require('./helpers/app-source.cjs')(process.env.FG_TEST_APP||path.resolve(__dirname,'../app-core.html'));
 const script=id=>html.match(new RegExp('<script id="'+id+'">([\\s\\S]*?)<\\/script>'))[1];
 const routeScript=script('fg-routing-honesty'),geoScript=script('fg81-network-resilience');
 const point={lat:10.803,lon:106.733},end={lat:10.776,lon:106.701};

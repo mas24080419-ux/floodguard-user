@@ -1,0 +1,15 @@
+/* Approved floating navigation: scope to the four user-app tabs. */
+@media(max-width:700px){
+html.fg-compact-app[data-fg-design][data-fg-design] body #fg3App #fg12MobileNav{box-sizing:border-box!important;left:16px!important;right:16px!important;bottom:calc(24px + env(safe-area-inset-bottom))!important;height:72px!important;padding:6px!important;gap:4px!important;border:1px solid #e5ebf3!important;border-radius:36px!important;background:rgba(255,255,255,.96)!important;box-shadow:0 6px 24px #17324d15!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+html.fg-compact-app[data-fg-design][data-fg-design] body #fg3App #fg12MobileNav button{min-width:0!important;min-height:48px!important;height:58px!important;padding:4px!important;gap:5px!important;border:0!important;border-radius:30px!important;background:transparent!important;box-shadow:none!important;color:#64748b!important;font-size:11px!important;line-height:1.3!important;font-weight:500!important;transition:background-color .12s ease,color .12s ease!important}
+html.fg-compact-app[data-fg-design][data-fg-design] body #fg3App #fg12MobileNav button>span:not(.fg-mobile-nav-icon){font-size:11px!important;line-height:1.3!important;font-weight:500!important;letter-spacing:0!important}
+html.fg-compact-app[data-fg-design][data-fg-design] body #fg3App #fg12MobileNav button.active{background:#eaf2ff!important;color:#175cd3!important}
+html.fg-compact-app[data-fg-design][data-fg-design] body #fg3App #fg12MobileNav button.active>span:not(.fg-mobile-nav-icon){font-weight:600!important}
+html.fg-compact-app[data-fg-design][data-fg-design] body #fg3App #fg12MobileNav .fg-mobile-nav-icon,html.fg-compact-app[data-fg-design][data-fg-design] body #fg3App #fg12MobileNav .fg-mobile-nav-icon svg{width:23px!important;height:23px!important}
+html.fg-compact-app[data-fg-design][data-fg-design] body #fg3App #fg12MobileNav .fg-mobile-nav-icon svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+html.fg-compact-app[data-fg-design][data-fg-design] body #fg3App #fg12MobileNav button.active svg{stroke-width:2.1}
+html.fg-compact-app[data-fg-design][data-fg-design] body #fg3App #fg12MobileNav button:focus-visible{outline:2px solid #175cd3!important;outline-offset:1px}
+html.fg-compact-app[data-fg-design][data-fg-design] body #fg3App :is(#fg14MoreSheet,#fg3Drawer,#fg10Panel,#fg4EvPanel,#fg16Panel,#fg3RoutePanel){bottom:calc(108px + env(safe-area-inset-bottom))!important;max-height:calc(100dvh - 128px - env(safe-area-inset-bottom))!important}
+html.fg-compact-app[data-fg-design][data-fg-design] body #fg3App #fg16SOSFab{bottom:calc(112px + env(safe-area-inset-bottom))!important}
+}
+@media(prefers-reduced-motion:reduce){html.fg-compact-app[data-fg-design][data-fg-design] body #fg3App #fg12MobileNav button{transition:none!important}}
