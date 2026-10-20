@@ -1,0 +1,8 @@
+/* FloodGuard v50 — hide the public EV marketing page while preserving EV functionality inside the authenticated app. */
+a[href$="/ev.html"],
+a[href="./ev.html"],
+a[href="ev.html"],
+#fgMultiPageExplore .fgmp-card[href$="ev.html"]{display:none!important}
+
+/* Keep navigation spacing balanced after removing the public EV page link. */
+.site-links,.wh-links,.footer-links,.wh-foot-links{align-items:center}

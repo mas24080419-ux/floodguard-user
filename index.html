@@ -3,30 +3,78 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script src="/device-entry.js"></script>
 <meta name="theme-color" content="#102c56">
 <title>FloodGuard HCMC</title>
-<script src="./features/account/oauth-return.js"></script>
-<link id="fg-oauth-loading" rel="stylesheet" href="./features/account/fg-oauth-loading.css">
+<script>
+(()=>{
+  const q=new URLSearchParams(location.search);
+  const h=new URLSearchParams(location.hash.slice(1));
+  if(h.has('access_token')||h.has('error')||q.has('code')||q.has('error')){
+    document.documentElement.classList.add('fg-auth-return');
+  }
+})();
+</script>
+<style id="fg-oauth-loading">
+html.fg-auth-return #fgWebsiteHome{display:none!important}
+html.fg-auth-return::before{content:"Đang mở FloodGuard…";position:fixed;inset:0;z-index:10000;display:grid;place-items:center;background:#f5f8f0;color:#294326;font:600 18px system-ui,sans-serif}
+</style>
 
 <link rel="manifest" href="./manifest.webmanifest">
-<link rel="stylesheet" href="./features/account/login-style-2.css">
+<style>
+:root{--navy:#0d2444;--navy2:#173c69;--blue:#4d83ff;--violet:#7c7cf2;--cyan:#4fc6db;--card:rgba(255,255,255,.94);--text:#142846;--muted:#6d7d93;--line:#dce6f1;--danger:#bc2f3d;--ok:#12815f;--shadow:0 26px 80px rgba(5,25,55,.30)}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:Inter,"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--text);overflow:hidden;background:#0c2446}button,input{font:inherit}
+.hidden{display:none!important}
+.auth{position:fixed;inset:0;z-index:10;overflow:auto;background:linear-gradient(135deg,#0c2242 0%,#173c6b 43%,#4667b5 72%,#7694d7 100%)}
+.auth:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 18%,rgba(95,207,255,.24),transparent 30%),radial-gradient(circle at 80% 14%,rgba(158,135,255,.22),transparent 28%),linear-gradient(115deg,rgba(255,255,255,.05),transparent 34%);pointer-events:none}
+.auth:after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to bottom,#000,transparent 78%);pointer-events:none}
+.scene{position:absolute;inset:0;pointer-events:none;overflow:hidden}.orb{position:absolute;border-radius:50%;filter:blur(1px);border:1px solid rgba(255,255,255,.15);box-shadow:inset 0 0 50px rgba(255,255,255,.06)}.orb.a{width:330px;height:330px;left:-80px;top:11%}.orb.b{width:190px;height:190px;right:6%;top:8%}.pulse{position:absolute;width:17px;height:17px;border-radius:50%;background:#72e1f5;box-shadow:0 0 0 8px rgba(114,225,245,.13),0 0 0 20px rgba(114,225,245,.07)}.pulse.p1{left:16%;top:34%}.pulse.p2{right:16%;top:39%;transform:scale(.75)}
+.city{position:absolute;left:0;right:0;bottom:14%;height:230px;opacity:.36}.waves{position:absolute;left:-3%;right:-3%;bottom:-1px;height:27%;min-height:180px;opacity:.78}.map-lines{position:absolute;inset:7% 5% 20%;opacity:.15}.brand-copy{position:absolute;left:max(5vw,38px);top:50%;transform:translateY(-50%);width:min(430px,34vw);color:#fff;text-shadow:0 4px 25px rgba(5,22,47,.18)}.hero-logo{display:inline-flex;align-items:center;gap:13px;margin-bottom:24px}.hero-mark{width:58px;height:58px;border-radius:18px;background:linear-gradient(135deg,#65a6ff,#747bf4);display:grid;place-items:center;font-weight:900;font-size:22px;box-shadow:0 15px 35px rgba(38,69,152,.35);border:1px solid rgba(255,255,255,.32)}.hero-logo b{font-size:24px}.brand-copy h1{font-size:clamp(32px,4vw,57px);line-height:1.04;letter-spacing:-.045em;margin:0 0 18px}.brand-copy p{font-size:15px;line-height:1.75;color:rgba(238,247,255,.84);margin:0}.feature-row{display:flex;gap:9px;flex-wrap:wrap;margin-top:23px}.feature{padding:8px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(8,34,69,.22);backdrop-filter:blur(8px);font-size:11px;color:#eaf7ff}
+.auth-layout{position:relative;z-index:2;min-height:100%;display:flex;justify-content:flex-end;align-items:center;padding:34px max(5vw,38px)}
+.card{width:min(510px,46vw);max-width:100%;background:var(--card);border:1px solid rgba(255,255,255,.8);border-radius:30px;box-shadow:var(--shadow);padding:27px 28px 24px;backdrop-filter:blur(22px)}.card-head{display:flex;gap:14px;align-items:center;margin-bottom:20px}.mark{width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,#5e9dff,#7578ed);display:grid;place-items:center;color:white;font-weight:900;font-size:17px;box-shadow:0 10px 25px rgba(81,104,218,.25)}.card-head h2{margin:0;font-size:22px;letter-spacing:-.025em}.card-head p{margin:4px 0 0;color:var(--muted);font-size:11px;line-height:1.55}.tabs{display:grid;grid-template-columns:1fr 1fr;background:#edf2f8;border-radius:14px;padding:4px;margin-bottom:16px}.tab{border:0;background:transparent;border-radius:11px;padding:11px 8px;color:#66768d;font-weight:800;font-size:11px;cursor:pointer}.tab.active{background:#fff;color:#235caa;box-shadow:0 4px 13px rgba(53,72,106,.09)}
+.form{display:grid;gap:12px}.field{display:grid;gap:6px}.field label{font-size:9px;font-weight:850;letter-spacing:.055em;text-transform:uppercase;color:#52667f}.input-wrap{position:relative}.field input{width:100%;border:1px solid var(--line);background:#f9fbfe;border-radius:14px;padding:13px 14px;color:#18293f;outline:none;transition:.18s}.field input:focus{border-color:#6e98f1;background:#fff;box-shadow:0 0 0 4px rgba(80,126,228,.11)}.field input::placeholder{color:#9ba7b6}.password-toggle{position:absolute;right:9px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:#6d7d93;cursor:pointer;padding:7px;font-size:11px}.password-input{padding-right:58px!important}.form-meta{display:flex;justify-content:flex-end;margin-top:-2px}.linkbtn{border:0;background:transparent;color:#356fbe;font-weight:750;font-size:10px;cursor:pointer;padding:0}.primary{width:100%;border:0;border-radius:14px;padding:14px 16px;background:linear-gradient(105deg,#6498ed,#7e7be9);color:#fff;font-weight:850;cursor:pointer;box-shadow:0 10px 25px rgba(82,105,220,.24);transition:.18s}.primary:hover{transform:translateY(-1px);box-shadow:0 13px 30px rgba(82,105,220,.31)}.primary:disabled,.google:disabled{opacity:.65;cursor:not-allowed;transform:none}.divider{display:flex;align-items:center;gap:12px;color:#8d9aad;font-size:9px;margin:15px 0}.divider:before,.divider:after{content:"";height:1px;flex:1;background:#dce4ed}.google{width:100%;border:1px solid #dce5ef;background:#fff;border-radius:14px;padding:13px;display:flex;align-items:center;justify-content:center;gap:10px;color:#56677d;font-weight:800;font-size:11px;cursor:pointer}.google:hover{background:#f9fbff}.gicon{width:18px;height:18px;display:block}.msg{min-height:18px;margin-top:11px;font-size:10px;line-height:1.5}.msg.error{color:var(--danger)}.msg.ok{color:var(--ok)}.status-line{display:flex;align-items:center;gap:7px;color:#8190a4;font-size:9px;margin-top:2px}.status-dot{width:7px;height:7px;border-radius:50%;background:#a9b6c6}.status-dot.ok{background:#32b786;box-shadow:0 0 0 4px rgba(50,183,134,.10)}.fine{font-size:8.5px;line-height:1.5;color:#97a3b3;text-align:center;margin:16px 0 0}.spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.42);border-top-color:#fff;border-radius:50%;display:inline-block;vertical-align:-2px;margin-right:7px;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.appview{position:fixed;inset:0;background:#fff;z-index:20}.appview iframe{width:100%;height:100%;border:0;display:block;background:#fff}
+@media(max-width:960px){.brand-copy{display:none}.auth-layout{justify-content:center;padding:25px 18px}.card{width:min(520px,100%)}.city{opacity:.27}.map-lines{opacity:.1}}
+@media(max-width:560px){.auth-layout{align-items:flex-start;padding:20px 12px 32px}.card{border-radius:24px;padding:21px 17px 20px;margin-top:4vh}.card-head{margin-bottom:16px}.card-head h2{font-size:20px}.waves{height:23%}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.spinner{animation:none}.primary{transition:none}}
+.brand-copy p{display:none!important}
+
+/* password-recovery-v2 */
+.recovery-overlay{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:18px;background:rgba(5,20,43,.58);backdrop-filter:blur(9px)}
+.recovery-box{width:min(430px,100%);background:#fff;border:1px solid rgba(255,255,255,.85);border-radius:24px;box-shadow:0 24px 70px rgba(0,20,55,.34);padding:24px;color:#172b47}
+.recovery-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:16px}.recovery-head h3{margin:0;font-size:20px}.recovery-head p{margin:6px 0 0;color:#718098;font-size:11px;line-height:1.55}.recovery-close{border:0;background:#eef3f9;border-radius:10px;width:34px;height:34px;cursor:pointer;color:#50637d;font-size:18px}.recovery-step{display:grid;gap:12px}.recovery-note{padding:11px 12px;border-radius:13px;background:#f1f6ff;color:#49617f;font-size:10px;line-height:1.55;border:1px solid #e0e9f5}.recovery-actions{display:flex;gap:9px}.recovery-actions .primary{flex:1}.secondary{border:1px solid #dce5ef;background:#fff;border-radius:14px;padding:12px 14px;color:#536880;font-weight:800;cursor:pointer}.recovery-msg{min-height:16px;font-size:10px;line-height:1.5}.recovery-msg.error{color:var(--danger)}.recovery-msg.ok{color:var(--ok)}
+
+
+/* password-otp-v3 */
+.otp-input{width:100%!important;text-align:center;font-size:26px!important;font-weight:850!important;letter-spacing:10px!important;padding-left:22px!important;font-variant-numeric:tabular-nums}
+.otp-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:10px;color:#708098}.otp-email{font-weight:800;color:#315f9d;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.otp-resend{border:0;background:transparent;color:#356fbe;font-weight:800;cursor:pointer;padding:4px 0}.otp-resend:disabled{color:#9aa7b8;cursor:not-allowed}
+
+</style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<link id="fg-website-home-v1" rel="stylesheet" href="./features/ui/fg-website-home-v1.css">
-<link id="fg-back-home-style" rel="stylesheet" href="./features/ui/fg-back-home-style.css">
+<style id="fg-website-home-v1">
+.website-home{position:fixed;inset:0;z-index:100;background:#f6f9fd;color:#102a43;overflow:auto;overscroll-behavior:contain;font-family:Inter,"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;scroll-behavior:smooth}.website-home.hidden{display:none!important}.wh-shell{width:min(1180px,calc(100% - 40px));margin:auto}.wh-nav{position:sticky;top:0;z-index:6;background:rgba(247,250,254,.88);backdrop-filter:blur(18px);border-bottom:1px solid rgba(214,225,238,.8)}.wh-nav-in{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:18px}.wh-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#102a43;font-weight:900;letter-spacing:-.02em}.wh-logo{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#2f80ed,#7068f0);color:#fff;font-size:13px;box-shadow:0 9px 24px rgba(48,103,214,.25)}.wh-links{display:flex;gap:24px;align-items:center}.wh-links a{font-size:13px;font-weight:700;color:#52667e;text-decoration:none}.wh-links a:hover{color:#1f66c7}.wh-actions{display:flex;gap:9px}.wh-btn{border:1px solid #d7e2ef;background:#fff;color:#31516f;border-radius:12px;padding:10px 14px;font-weight:850;font-size:12px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:7px}.wh-btn:hover{transform:translateY(-1px)}.wh-btn.primary{border-color:#2f74df;background:linear-gradient(135deg,#2f7ae5,#586de6);color:white;box-shadow:0 10px 24px rgba(43,94,202,.22)}.wh-hero{min-height:650px;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:62px;padding:76px 0 62px}.wh-eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid #d6e4f4;background:#fff;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:850;color:#2d65a7;box-shadow:0 6px 18px rgba(48,85,130,.06)}.wh-eyebrow i{width:7px;height:7px;border-radius:50%;background:#20a878;box-shadow:0 0 0 5px rgba(32,168,120,.1)}.wh-hero h1{font-size:clamp(42px,5.6vw,72px);line-height:1.01;letter-spacing:-.055em;margin:18px 0 19px;color:#102a43}.wh-hero h1 span{background:linear-gradient(100deg,#2474dc,#6e63df);-webkit-background-clip:text;background-clip:text;color:transparent}.wh-hero p{max-width:650px;margin:0;color:#60758a;font-size:16px;line-height:1.75}.wh-hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:27px}.wh-trust{display:flex;gap:22px;flex-wrap:wrap;margin-top:28px;color:#6b7f93;font-size:11px;font-weight:700}.wh-trust span{display:flex;align-items:center;gap:7px}.wh-trust i{width:6px;height:6px;border-radius:50%;background:#55a3ef}.wh-product{position:relative;min-height:490px}.wh-product:before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,#cbe2ff 0%,rgba(203,226,255,.2) 58%,transparent 70%);left:50%;top:50%;transform:translate(-50%,-50%)}.wh-window{position:absolute;inset:35px 0 25px 25px;border-radius:26px;background:#fff;border:1px solid #dce6f1;box-shadow:0 32px 80px rgba(16,42,67,.2);overflow:hidden;transform:rotate(-1.5deg)}.wh-window-top{height:47px;display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid #e8eff6;background:#fbfdff}.wh-dots{display:flex;gap:5px}.wh-dots i{width:8px;height:8px;border-radius:50%;background:#d6e2ee}.wh-window-title{font-size:10px;font-weight:850;color:#58708a}.wh-map{position:absolute;inset:47px 0 0;background:linear-gradient(135deg,#dbe7ef,#cddce8);overflow:hidden}.wh-map:before,.wh-map:after{content:"";position:absolute;inset:-15%;background-image:linear-gradient(35deg,transparent 47%,rgba(255,255,255,.72) 48%,rgba(255,255,255,.72) 51%,transparent 52%),linear-gradient(118deg,transparent 46%,rgba(255,255,255,.55) 47%,rgba(255,255,255,.55) 50%,transparent 51%);background-size:160px 120px,210px 150px;opacity:.82}.wh-route-line{position:absolute;left:13%;right:15%;top:52%;height:7px;border-radius:99px;background:linear-gradient(90deg,#2c8be6 0 28%,#f0aa32 28% 49%,#e34f55 49% 68%,#2c8be6 68%);transform:rotate(-11deg);box-shadow:0 0 0 3px rgba(255,255,255,.74);z-index:2}.wh-map-card{position:absolute;z-index:3;background:rgba(255,255,255,.96);border:1px solid #e0e8f1;border-radius:14px;box-shadow:0 12px 30px rgba(30,60,88,.16);padding:11px 12px}.wh-map-card.risk{left:18px;top:18px;width:180px}.wh-map-card.ev{right:18px;bottom:20px;width:165px}.wh-map-card b{display:block;font-size:10px}.wh-map-card span{display:block;font-size:8.5px;line-height:1.45;color:#72859a;margin-top:4px}.wh-risk{display:flex;gap:5px;margin-top:7px}.wh-risk i{height:6px;border-radius:99px;flex:1;background:#dbe6ef}.wh-risk i:nth-child(1){background:#32ad7a}.wh-risk i:nth-child(2){background:#e3ad34}.wh-risk i:nth-child(3){background:#e45b5f}.wh-pin{position:absolute;z-index:4;width:18px;height:18px;border-radius:50%;background:#fff;border:5px solid #2f7de3;box-shadow:0 4px 13px rgba(14,56,111,.24)}.wh-pin.a{left:33%;top:42%}.wh-pin.b{right:25%;top:59%;border-color:#e34f55}.wh-pin.c{left:54%;top:29%;border-color:#24a878}.wh-floating{position:absolute;right:-10px;top:8px;z-index:5;background:#102a43;color:white;border-radius:15px;padding:11px 13px;box-shadow:0 14px 32px rgba(16,42,67,.26);font-size:9px;font-weight:850}.wh-section{padding:86px 0}.wh-section.alt{background:#fff;border-top:1px solid #e7eef6;border-bottom:1px solid #e7eef6}.wh-section-head{max-width:700px;margin-bottom:34px}.wh-kicker{color:#2f74d5;text-transform:uppercase;letter-spacing:.14em;font-size:10px;font-weight:900}.wh-section h2{font-size:clamp(28px,3.4vw,44px);line-height:1.08;letter-spacing:-.04em;margin:9px 0 12px}.wh-section-head p,.wh-copy p{margin:0;color:#6b7f93;line-height:1.72;font-size:14px}.wh-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.wh-card{background:#fff;border:1px solid #dfe8f2;border-radius:20px;padding:22px;box-shadow:0 11px 32px rgba(30,60,90,.055);transition:.2s}.wh-card:hover{transform:translateY(-3px);box-shadow:0 17px 38px rgba(30,60,90,.09)}.wh-icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:#edf5ff;color:#246ed0;font-size:19px}.wh-card h3{margin:15px 0 7px;font-size:16px}.wh-card p{margin:0;color:#718397;font-size:12px;line-height:1.65}.wh-flow{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.wh-step{position:relative;padding:26px 22px;border-radius:20px;background:#f7faff;border:1px solid #dfe8f4}.wh-step b{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:11px;background:#173d6f;color:white;font-size:11px}.wh-step h3{font-size:16px;margin:17px 0 8px}.wh-step p{color:#72849a;font-size:12px;line-height:1.65;margin:0}.wh-split{display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:center}.wh-panel{border-radius:24px;background:linear-gradient(145deg,#102e57,#244f83);padding:27px;color:#fff;box-shadow:0 25px 65px rgba(13,45,84,.2)}.wh-panel small{color:#bcd3ed;font-size:10px}.wh-alert-example{margin-top:18px;background:#fff;color:#16304f;border-radius:17px;padding:18px}.wh-alert-example .tag{display:inline-block;background:#fff0dc;color:#9a5c07;border-radius:999px;padding:5px 8px;font-size:9px;font-weight:900}.wh-alert-example h4{margin:12px 0 5px;font-size:14px}.wh-alert-example p{margin:0;color:#708197;font-size:10px;line-height:1.55}.wh-alert-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.wh-alert-metrics div{background:#f6f9fc;border-radius:10px;padding:9px}.wh-alert-metrics b{display:block;font-size:13px}.wh-alert-metrics span{font-size:8px;color:#7b899a}.wh-copy h2{margin-top:8px}.wh-checks{display:grid;gap:10px;margin-top:20px}.wh-check{display:flex;gap:10px;align-items:flex-start;font-size:12px;color:#526c85}.wh-check i{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#e7f7ef;color:#13845e;font-style:normal;font-size:10px;font-weight:900;flex:none}.wh-sos{background:linear-gradient(135deg,#112d52,#1a4776);border-radius:28px;color:#fff;padding:42px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:30px;box-shadow:0 24px 55px rgba(17,45,82,.22)}.wh-sos h2{margin:0 0 10px;color:#fff}.wh-sos p{margin:0;color:#c4d7eb;line-height:1.65;font-size:13px;max-width:720px}.wh-sos .wh-btn{border-color:rgba(255,255,255,.2);padding:13px 17px}.wh-about{display:grid;grid-template-columns:.8fr 1.2fr;gap:52px;align-items:start}.wh-about-stat{display:grid;grid-template-columns:1fr 1fr;gap:10px}.wh-about-stat div{background:#fff;border:1px solid #dfe8f2;border-radius:16px;padding:18px}.wh-about-stat b{display:block;font-size:23px}.wh-about-stat span{font-size:10px;color:#78899a}.wh-footer{padding:31px 0 36px;border-top:1px solid #dde7f1;background:#f1f6fb}.wh-foot{display:flex;align-items:center;justify-content:space-between;gap:20px;color:#758699;font-size:10px}.wh-foot-links{display:flex;gap:17px;flex-wrap:wrap}.wh-foot a{color:#5d7288;text-decoration:none}.wh-mobile{display:none}.wh-home-close{position:fixed;right:18px;bottom:18px;z-index:10}
+@media(max-width:920px){.wh-links{display:none}.wh-hero{grid-template-columns:1fr;gap:30px;min-height:auto;padding:58px 0}.wh-product{min-height:420px}.wh-window{inset:20px 6%}.wh-grid{grid-template-columns:1fr 1fr}.wh-split,.wh-about{grid-template-columns:1fr}.wh-sos{grid-template-columns:1fr}.wh-flow{grid-template-columns:1fr}.wh-mobile{display:inline-flex}.wh-actions .secondary-home{display:none}}
+@media(max-width:610px){.wh-shell{width:min(100% - 24px,1180px)}.wh-nav-in{min-height:62px}.wh-actions{gap:6px}.wh-btn{padding:9px 11px}.wh-hero{padding:43px 0 45px}.wh-hero h1{font-size:40px}.wh-hero p{font-size:14px}.wh-product{min-height:340px}.wh-window{inset:10px 0 20px}.wh-map-card.risk{width:150px}.wh-grid{grid-template-columns:1fr}.wh-section{padding:64px 0}.wh-sos{padding:28px 22px}.wh-foot{align-items:flex-start;flex-direction:column}.wh-about-stat{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){.website-home{scroll-behavior:auto}.wh-card,.wh-btn{transition:none}}
+</style>
+<style id="fg-back-home-style">
+.fg-back-home{text-decoration:none;display:inline-flex;align-items:center;position:absolute;top:24px;left:max(5vw,24px);z-index:50!important;pointer-events:auto!important;border:1px solid rgba(255,255,255,.25);border-radius:999px;background:rgba(255,255,255,.08);color:#fff;padding:11px 16px;font:600 14px system-ui,sans-serif;cursor:pointer}
+.fg-back-home:hover{background:rgba(255,255,255,.16)}
+.fg-back-home:focus-visible{outline:2px solid #fff;outline-offset:4px}
+@media(max-width:560px){.fg-back-home{top:18px;left:18px}.auth-layout{padding-top:62px!important}}
+</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="./floodguard-typography-v1.css?v=1">
 <link rel="stylesheet" href="./mobile-design-v67.css?v=67">
 <link rel="stylesheet" href="./floodguard-design-system.css?v=73">
-<link rel="stylesheet" href="./language.css"><script src="./language-catalog.js" defer></script><script src="./language.js" defer></script><link rel="icon" type="image/png" href="./floodguard-logo.png">
-<link rel="stylesheet" href="./brand-logo.css">
 </head>
 <body>
 
 <section class="website-home" id="fgWebsiteHome" aria-label="Trang chủ FloodGuard">
   <header class="wh-nav"><div class="wh-shell wh-nav-in">
-    <a class="wh-brand" href="#top"><img class="wh-logo" src="./floodguard-logo.png" alt="FloodGuard" width="44" height="44"><span>FloodGuard HCMC</span></a>
+    <a class="wh-brand" href="#top"><span class="wh-logo">FG</span><span>FloodGuard HCMC</span></a>
     <nav class="wh-links" aria-label="Điều hướng chính"><a href="#features">Tính năng</a><a href="#how">Cách hoạt động</a><a href="#watchlist">Cảnh báo</a><a href="#ev">Trạm sạc EV</a><a href="#rescue">Cứu hộ</a><a href="#about">Giới thiệu</a></nav>
     <div class="wh-actions"><button class="wh-btn secondary-home" type="button" data-fg-home-login>Đăng nhập</button><button class="wh-btn primary" type="button" data-fg-home-app>Mở bản đồ →</button></div>
   </div></header>
@@ -53,7 +101,7 @@
     <section class="wh-section fg-review-data" id="about"><div class="wh-shell fg-review-data-grid"><div><span class="wh-kicker">Dữ liệu và phạm vi</span><h2>Hiểu kết quả trong đúng bối cảnh</h2><p>FloodGuard tập trung vào TP.HCM. Dữ liệu lịch sử, thời tiết và kết quả mô hình có vai trò khác nhau; độ phủ và chất lượng dữ liệu có thể khác nhau giữa các tuyến.</p><a class="fg-review-link" href="./data.html">Xem nguồn dữ liệu và phương pháp →</a></div><aside><h3>Trước khi sử dụng kết quả</h3><p>Ước tính nguy cơ không phải phép đo độ sâu ngập tại thời điểm hiện tại và không bảo đảm tuyến đường đi qua được.</p><p>Trong tình huống khẩn cấp, liên hệ cơ quan chức năng phù hợp. SOS là một kênh hỗ trợ trong phạm vi FloodGuard.</p><a href="./faq.html">Câu hỏi thường gặp →</a></aside></div></section>
   </main>
 
-  <footer class="wh-footer"><div class="wh-shell wh-foot"><a class="wh-brand" href="#top"><img class="wh-logo" src="./floodguard-logo.png" alt="FloodGuard" width="44" height="44"><span>FloodGuard HCMC</span></a><div class="wh-foot-links"><a href="#features">Tính năng</a><a href="#watchlist">Cảnh báo</a><a href="#ev">Trạm sạc EV</a><a href="#rescue">Cứu hộ</a><a href="#about">Giới thiệu</a></div><span>© 2026 FloodGuard HCMC</span></div></footer>
+  <footer class="wh-footer"><div class="wh-shell wh-foot"><a class="wh-brand" href="#top"><span class="wh-logo">FG</span><span>FloodGuard HCMC</span></a><div class="wh-foot-links"><a href="#features">Tính năng</a><a href="#watchlist">Cảnh báo</a><a href="#ev">Trạm sạc EV</a><a href="#rescue">Cứu hộ</a><a href="#about">Giới thiệu</a></div><span>© 2026 FloodGuard HCMC</span></div></footer>
 </section>
 <section class="auth" id="authScreen">
   <a class="fg-back-home" id="fgBackHome" href="./?home=1">← Về trang chủ</a>
@@ -64,14 +112,14 @@
     <svg class="waves" viewBox="0 0 1600 240" preserveAspectRatio="none"><path fill="#153d70" d="M0 72c206 91 316-40 516 22 205 63 269 8 414-26 163-39 277 84 435 54 86-16 157-59 235-55v173H0Z"/><path fill="#1d568c" fill-opacity=".9" d="M0 128c171-48 322 65 500 19 178-47 323-48 485 4 209 67 368-37 615-4v93H0Z"/><path fill="#3b78aa" fill-opacity=".62" d="M0 187c244-51 372 32 576 5 245-33 303 34 486 21 203-15 329-57 538-14v41H0Z"/></svg>
   </div>
   <div class="brand-copy">
-    <div class="hero-logo"><img class="hero-mark" src="./floodguard-logo.png" alt="FloodGuard" width="58" height="58"><b>FloodGuard HCMC</b></div>
+    <div class="hero-logo"><div class="hero-mark">FG</div><b>FloodGuard HCMC</b></div>
     <h1>Đi trước một bước trước khi đường ngập.</h1>
     <p>Theo dõi rủi ro ngập, tuyến đường, trạm sạc và cảnh báo cá nhân hóa trong một giao diện duy nhất.</p>
     <div class="feature-row"><span class="feature">◉ Cảnh báo ngập</span><span class="feature">⌁ Tuyến đường</span><span class="feature">⚡ Trạm sạc EV</span></div>
   </div>
   <div class="auth-layout">
     <main class="card" aria-labelledby="authTitle">
-      <div class="card-head"><img class="mark" src="./floodguard-logo.png" alt="FloodGuard" width="100" height="100"><div><h2 id="authTitle">FloodGuard HCMC</h2><p></p></div></div>
+      <div class="card-head"><div class="mark">FG</div><div><h2 id="authTitle">FloodGuard HCMC</h2><p>Đăng nhập để đồng bộ lịch sử, tuyến thường dùng, trạm sạc và cảnh báo.</p></div></div>
       <div class="tabs" role="tablist"><button class="tab active" id="loginTab" type="button">Đăng nhập</button><button class="tab" id="signupTab" type="button">Đăng ký</button></div>
       <form class="form" id="loginForm" autocomplete="on">
         <div class="field"><label for="loginEmail">Email / tài khoản</label><input id="loginEmail" name="email" type="email" inputmode="email" autocomplete="username" placeholder="tenban@gmail.com" required></div>
@@ -89,7 +137,7 @@
       <button class="google" id="googleBtn" type="button" aria-label="Tiếp tục với Google"><svg class="gicon" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M21.35 12.25c0-.75-.07-1.48-.2-2.18H12v4.12h5.23a4.47 4.47 0 0 1-1.94 2.94v2.68h3.14c1.84-1.7 2.92-4.2 2.92-7.56Z"/><path fill="#34A853" d="M12 21.75c2.63 0 4.83-.87 6.44-2.36l-3.14-2.68c-.87.58-1.98.93-3.3.93-2.54 0-4.69-1.72-5.46-4.03H3.29v2.76A9.75 9.75 0 0 0 12 21.75Z"/><path fill="#FBBC05" d="M6.54 13.61A5.86 5.86 0 0 1 6.24 12c0-.56.1-1.1.3-1.61V7.63H3.29A9.75 9.75 0 0 0 2.25 12c0 1.57.37 3.06 1.04 4.37l3.25-2.76Z"/><path fill="#EA4335" d="M12 6.36c1.43 0 2.71.49 3.72 1.45l2.79-2.79A9.35 9.35 0 0 0 12 2.25a9.75 9.75 0 0 0-8.71 5.38l3.25 2.76C7.31 8.08 9.46 6.36 12 6.36Z"/></svg>Tiếp tục với Google</button>
       <div class="msg" id="message" role="status" aria-live="polite"></div>
       <div class="status-line"><span class="status-dot" id="statusDot"></span><span id="statusText">Đang kết nối hệ thống tài khoản…</span></div>
-      <p class="fine"></p>
+      <p class="fine">Phiên đăng nhập được xác thực bằng Supabase Auth. FloodGuard không lưu mật khẩu dạng văn bản trong trình duyệt.</p>
     </main>
   </div>
 
@@ -125,9 +173,369 @@
   </div>
 </section>
 <section class="appview hidden" id="appView"><iframe id="appFrame" title="FloodGuard HCMC" allow="geolocation; clipboard-read; clipboard-write; fullscreen"></iframe></section>
-<script src="./features/account/auth-shell.js"></script>
+<script>
+(()=>{
+'use strict';
+const API='https://floodguard-rescue-backend.onrender.com';
+const $=id=>document.getElementById(id);
+const ENTRY_PARAMS=new URLSearchParams(location.search);
+let RESCUE_INVITE=ENTRY_PARAMS.get('rescue_invite')||'';
+let RESCUE_EMAIL=(ENTRY_PARAMS.get('rescue_email')||'').trim().toLowerCase();
+let sb=null,busy=false,recoveryEmailValue='',recoveryToken='',recoveryTimer=null,currentAppMode='',accountModeTimer=null;
+const ui={auth:$('authScreen'),app:$('appView'),frame:$('appFrame'),message:$('message'),statusText:$('statusText'),statusDot:$('statusDot'),loginBtn:$('loginBtn'),signupBtn:$('signupBtn'),googleBtn:$('googleBtn')};
+function setRecoveryMessage(text='',kind=''){const el=$('recoveryMessage');if(!el)return;el.textContent=text;el.className='recovery-msg'+(kind?' '+kind:'')}
+function setRecoveryStep(step='email'){
+  const emailForm=$('recoveryEmailForm'),otpForm=$('recoveryOtpForm'),resetForm=$('recoveryResetForm');
+  emailForm.classList.toggle('hidden',step!=='email');otpForm.classList.toggle('hidden',step!=='otp');resetForm.classList.toggle('hidden',step!=='reset');
+  if(step==='email'){$('recoveryTitle').textContent='Khôi phục mật khẩu';$('recoverySubtitle').textContent='Xác minh tài khoản bằng mã OTP 6 số.'}
+  if(step==='otp'){$('recoveryTitle').textContent='Nhập mã OTP';$('recoverySubtitle').textContent='Kiểm tra email và nhập mã xác minh 6 số.';$('otpEmailLabel').textContent=recoveryEmailValue;setTimeout(()=>$('recoveryOtp').focus(),50)}
+  if(step==='reset'){$('recoveryTitle').textContent='Tạo mật khẩu mới';$('recoverySubtitle').textContent='OTP đã được xác minh thành công.';setTimeout(()=>$('newRecoveryPassword').focus(),50)}
+}
+function openRecovery(step='email'){
+  $('recoveryOverlay').classList.remove('hidden');setRecoveryMessage();
+  if(step==='email'){$('recoveryEmail').value=$('loginEmail').value.trim();setTimeout(()=>$('recoveryEmail').focus(),50)}
+  setRecoveryStep(step);
+}
+function closeRecovery(){
+  $('recoveryOverlay')?.classList.add('hidden');setRecoveryMessage();recoveryToken='';
+  if(recoveryTimer){clearInterval(recoveryTimer);recoveryTimer=null}
+  if($('recoveryOtp'))$('recoveryOtp').value='';
+}
+function startResendTimer(seconds=60){
+  if(recoveryTimer)clearInterval(recoveryTimer);let left=Number(seconds)||60;const btn=$('resendOtpBtn');
+  const tick=()=>{if(left<=0){btn.disabled=false;btn.textContent='Gửi lại mã';clearInterval(recoveryTimer);recoveryTimer=null;return}btn.disabled=true;btn.textContent='Gửi lại sau '+left+'s';left-=1};
+  tick();recoveryTimer=setInterval(tick,1000);
+}
+async function otpApi(path,payload){
+  const r=await fetch(API+'/api/auth/password-otp/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload||{})});
+  const d=await r.json().catch(()=>({}));if(!r.ok){const err=new Error(d.message||'Không thể xử lý yêu cầu OTP.');err.data=d;err.status=r.status;throw err}return d;
+}
+function setMessage(text='',kind=''){ui.message.textContent=text;ui.message.className='msg'+(kind?' '+kind:'')}
+function setStatus(text,ok=false){ui.statusText.textContent=text;ui.statusDot.classList.toggle('ok',!!ok)}
+function setBusy(on,label){busy=on;[ui.loginBtn,ui.signupBtn,ui.googleBtn].forEach(b=>b.disabled=on);if(label&&on)ui.loginBtn.innerHTML='<span class="spinner"></span>'+label;else ui.loginBtn.textContent='Đăng nhập'}
+function friendlyError(error){const m=String(error?.message||error||'').toLowerCase();if(m.includes('invalid login credentials'))return 'Sai email hoặc mật khẩu. Vui lòng kiểm tra lại.';if(m.includes('email not confirmed'))return 'Email chưa được xác minh. Hãy kiểm tra hộp thư của bạn.';if(m.includes('user already registered'))return 'Email này đã được đăng ký.';if(m.includes('provider')&&(m.includes('disabled')||m.includes('not enabled')||m.includes('unsupported')))return 'Đăng nhập Google chưa được bật trong Supabase. Cần bật Google Provider một lần trong cấu hình dự án.';if(m.includes('network')||m.includes('fetch'))return 'Không thể kết nối máy chủ tài khoản. Hãy kiểm tra mạng và thử lại.';return error?.message||'Đã xảy ra lỗi. Vui lòng thử lại.'}
+async function accountContext(session){
+  if(!session?.access_token)throw new Error('missing_session');
+  const r=await fetch(
+    API+'/api/account/context',
+    {
+      headers:{
+        Authorization:
+          'Bearer '+
+          session.access_token
+      },
+      cache:'no-store'
+    }
+  );
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok){
+    const e=new Error(d.error||('HTTP '+r.status));
+    e.status=r.status;
+    throw e;
+  }
+  return d;
+}
 
-<script id="fg-website-home-script" src="./features/ui/fg-website-home-script.js"></script>
+function rescueModuleUrl(){
+  const u=
+    new URL(
+      './rescue-team.html',
+      location.href
+    );
+  u.searchParams.set(
+    'embedded',
+    '1'
+  );
+  if(RESCUE_INVITE){
+    u.searchParams.set(
+      'invite',
+      RESCUE_INVITE
+    );
+  }
+  if(RESCUE_EMAIL){
+    u.searchParams.set(
+      'email',
+      RESCUE_EMAIL
+    );
+  }
+  return u.pathname+u.search;
+}
+
+function cleanRescueInviteFromAddress(){
+  if(!RESCUE_INVITE&&!RESCUE_EMAIL)return;
+  try{
+    history.replaceState(
+      null,
+      '',
+      location.pathname+'#app'
+    );
+  }catch(_){}
+  RESCUE_INVITE='';
+  RESCUE_EMAIL='';
+}
+
+async function showApp(session=null){
+  setMessage();
+  const s=
+    session||
+    (await sb?.auth.getSession())
+      ?.data?.session||
+    null;
+
+  if(!s){
+    return showLogin();
+  }
+
+  setStatus('Đang xác định quyền tài khoản…',true);
+  let ctx;
+  try{
+    ctx=await accountContext(s);
+  }catch(e){
+    ui.auth.classList.remove('hidden');
+    ui.app.classList.add('hidden');
+    document.getElementById('fgWebsiteHome')?.classList.add('hidden');
+    finishOAuthLoading();
+    setStatus('Chưa xác định được quyền tài khoản');
+    setMessage('Không thể kiểm tra vai trò tài khoản. Hãy thử lại sau vài giây.','error');
+    throw e;
+  }
+
+  const rescueMode=
+    !!RESCUE_INVITE||
+    !!ctx?.rescue?.enabled;
+
+  const nextMode=
+    rescueMode
+    ?'rescue'
+    :'user';
+
+  const nextSrc=
+    rescueMode
+    ?rescueModuleUrl()
+    :'./app-core.html';
+
+  // Open the application once Supabase has restored the session and roles.
+  // Wait until here so homepage navigation cannot remove OAuth callback data early.
+  if(!window.FGViewingHomepage)window.FGOpenFloodGuard?.();
+  ui.auth.classList.add('hidden');
+  ui.app.classList.remove('hidden');
+
+  if(
+    currentAppMode!==nextMode||
+    !ui.frame.getAttribute('src')
+  ){
+    currentAppMode=
+      nextMode;
+    ui.frame.setAttribute(
+      'src',
+      nextSrc
+    );
+  }
+
+  if(rescueMode){
+    cleanRescueInviteFromAddress();
+  }
+}
+
+function finishOAuthLoading(){document.documentElement.classList.remove('fg-auth-return')}
+ui.frame.addEventListener('load',()=>{if(ui.frame.getAttribute('src'))finishOAuthLoading()});
+
+function showLogin(){
+  if(document.documentElement.classList.contains('fg-auth-return'))document.getElementById('fgWebsiteHome')?.classList.add('hidden');
+  finishOAuthLoading();
+  currentAppMode='';
+  ui.app.classList.add('hidden');
+  ui.auth.classList.remove('hidden');
+  if(ui.frame.getAttribute('src')){
+    ui.frame.removeAttribute('src');
+  }
+  if(RESCUE_EMAIL){
+    if($('loginEmail'))$('loginEmail').value=RESCUE_EMAIL;
+    if($('signupEmail'))$('signupEmail').value=RESCUE_EMAIL;
+    setMessage(
+      'Email này đã được mời tham gia đội cứu hộ. Hãy đăng nhập hoặc đăng ký bằng đúng email để tiếp tục.',
+      'ok'
+    );
+  }
+  setStatus(
+    sb
+      ?'Sẵn sàng đăng nhập'
+      :'Đang kết nối hệ thống tài khoản…',
+    !!sb
+  );
+}
+
+async function refreshAccountMode(){
+  if(!sb)return;
+  try{
+    const s=
+      (await sb.auth.getSession())
+      .data.session;
+    if(s)await showApp(s);
+  }catch(_){}
+}
+
+async function init(){
+  try{
+    if(!window.supabase?.createClient){
+      throw new Error(
+        'Không tải được Supabase SDK'
+      );
+    }
+
+    const r=
+      await fetch(
+        API+'/api/public-config',
+        {cache:'no-store'}
+      );
+
+    const d=
+      await r.json()
+      .catch(()=>({}));
+
+    if(
+      !r.ok||
+      !d.supabase?.url||
+      !d.supabase?.anon_key
+    ){
+      throw new Error(
+        'Backend/Supabase chưa sẵn sàng'
+      );
+    }
+
+    sb=
+      window.supabase
+      .createClient(
+        d.supabase.url,
+        d.supabase.anon_key,
+        {
+          auth:{
+            persistSession:true,
+            autoRefreshToken:true,
+            detectSessionInUrl:true
+          }
+        }
+      );
+
+    sb.auth.onAuthStateChange(
+      (event,session)=>{
+        if(event==='SIGNED_OUT'){
+          showLogin();
+        }
+
+        if(
+          session&&
+          (
+            event==='SIGNED_IN'||
+            event==='INITIAL_SESSION'||
+            event==='TOKEN_REFRESHED'
+          )
+        ){
+          showApp(session)
+          .catch(()=>{});
+        }
+      }
+    );
+
+    const {data,error}=
+      await sb.auth.getSession();
+
+    if(error)throw error;
+
+    if(data.session){
+      await showApp(
+        data.session
+      );
+    }else{
+      showLogin();
+      setStatus(
+        'Sẵn sàng đăng nhập',
+        true
+      );
+    }
+
+    if(accountModeTimer){
+      clearInterval(
+        accountModeTimer
+      );
+    }
+
+    accountModeTimer=
+      setInterval(
+        refreshAccountMode,
+        30000
+      );
+
+  }catch(e){
+    if(document.documentElement.classList.contains('fg-auth-return'))document.getElementById('fgWebsiteHome')?.classList.add('hidden');
+    finishOAuthLoading();
+    setStatus(
+      'Không kết nối được hệ thống tài khoản'
+    );
+    setMessage(
+      friendlyError(e),
+      'error'
+    );
+  }
+}
+function switchTab(tab){const login=tab==='login';$('loginTab').classList.toggle('active',login);$('signupTab').classList.toggle('active',!login);$('loginForm').classList.toggle('hidden',!login);$('signupForm').classList.toggle('hidden',login);setMessage()}
+$('loginTab').onclick=()=>switchTab('login');$('signupTab').onclick=()=>switchTab('signup');
+document.querySelectorAll('[data-toggle]').forEach(btn=>btn.onclick=()=>{const input=$(btn.dataset.toggle);const show=input.type==='password';input.type=show?'text':'password';btn.textContent=show?'Ẩn':'Hiện'});
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();if(!sb||busy)return;const email=$('loginEmail').value.trim(),password=$('loginPassword').value;if(!email||!password)return setMessage('Vui lòng nhập đầy đủ email và mật khẩu.','error');setBusy(true,'Đang xác thực…');setMessage();try{const {data,error}=await sb.auth.signInWithPassword({email,password});if(error)throw error;if(!data.session)throw new Error('Không tạo được phiên đăng nhập');await showApp(data.session)}catch(err){setMessage(friendlyError(err),'error')}finally{setBusy(false)}});
+$('signupForm').addEventListener('submit',async e=>{e.preventDefault();if(!sb||busy)return;const full_name=$('signupName').value.trim(),email=$('signupEmail').value.trim(),password=$('signupPassword').value;if(!full_name||!email||password.length<6)return setMessage('Hãy nhập họ tên, email và mật khẩu tối thiểu 6 ký tự.','error');busy=true;ui.signupBtn.disabled=ui.googleBtn.disabled=true;ui.signupBtn.innerHTML='<span class="spinner"></span>Đang tạo tài khoản…';setMessage();try{const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name}}});if(error)throw error;if(data.session){await showApp(data.session)}else{switchTab('login');$('loginEmail').value=email;setMessage('Đã tạo tài khoản. Hãy kiểm tra email để xác minh trước khi đăng nhập.','ok')}}catch(err){setMessage(friendlyError(err),'error')}finally{busy=false;ui.signupBtn.disabled=ui.googleBtn.disabled=false;ui.signupBtn.textContent='Tạo tài khoản'}});
+ui.googleBtn.onclick=async()=>{if(!sb||busy)return;busy=true;ui.googleBtn.disabled=ui.loginBtn.disabled=ui.signupBtn.disabled=true;setMessage();setStatus('Đang chuyển tới Google…',true);try{const redirectUrl=new URL(location.pathname,location.origin);if(RESCUE_INVITE)redirectUrl.searchParams.set('rescue_invite',RESCUE_INVITE);if(RESCUE_EMAIL)redirectUrl.searchParams.set('rescue_email',RESCUE_EMAIL);const redirectTo=redirectUrl.href;const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo,queryParams:{access_type:'offline',prompt:'select_account'}}});if(error)throw error}catch(err){busy=false;ui.googleBtn.disabled=ui.loginBtn.disabled=ui.signupBtn.disabled=false;setStatus('Sẵn sàng đăng nhập',true);setMessage(friendlyError(err),'error')}};
+$('forgotPassword').onclick=()=>{if(!sb||busy)return setMessage('Hệ thống tài khoản chưa sẵn sàng.','error');recoveryEmailValue='';recoveryToken='';openRecovery('email')};
+$('recoveryClose').onclick=closeRecovery;
+$('recoveryOverlay').addEventListener('click',e=>{if(e.target===$('recoveryOverlay'))closeRecovery()});
+document.querySelectorAll('[data-recovery-toggle]').forEach(btn=>btn.onclick=()=>{const input=$(btn.dataset.recoveryToggle);const show=input.type==='password';input.type=show?'text':'password';btn.textContent=show?'Ẩn':'Hiện'});
+$('recoveryOtp').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,6)});
+
+async function sendOtpForRecovery(isResend=false){
+  const email=(isResend?recoveryEmailValue:$('recoveryEmail').value.trim()).toLowerCase();
+  if(!email)return setRecoveryMessage('Vui lòng nhập email đã đăng ký.','error');
+  const btn=isResend?$('resendOtpBtn'):$('sendRecoveryBtn');busy=true;btn.disabled=true;if(!isResend)btn.innerHTML='<span class="spinner"></span>Đang gửi…';setRecoveryMessage();
+  try{
+    const d=await otpApi('request',{email});recoveryEmailValue=email;$('loginEmail').value=email;$('recoveryOtp').value='';setRecoveryStep('otp');startResendTimer(d.resend_seconds||60);setRecoveryMessage(d.message||'Nếu email đã đăng ký, mã OTP đã được gửi.','ok');
+  }catch(err){if(err.data?.retry_after_seconds){startResendTimer(err.data.retry_after_seconds)}setRecoveryMessage(err.message,'error')}
+  finally{busy=false;if(!isResend){btn.disabled=false;btn.textContent='Gửi mã OTP'}}
+}
+$('recoveryEmailForm').addEventListener('submit',async e=>{e.preventDefault();if(busy)return;await sendOtpForRecovery(false)});
+$('resendOtpBtn').onclick=async()=>{if(busy||$('resendOtpBtn').disabled)return;await sendOtpForRecovery(true)};
+
+$('recoveryOtpForm').addEventListener('submit',async e=>{
+  e.preventDefault();if(busy)return;const code=$('recoveryOtp').value.replace(/\D/g,'');if(code.length!==6)return setRecoveryMessage('Mã OTP phải gồm đúng 6 chữ số.','error');
+  const btn=$('verifyOtpBtn');busy=true;btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Đang xác minh…';setRecoveryMessage();
+  try{const d=await otpApi('verify',{email:recoveryEmailValue,code});recoveryToken=d.recovery_token||'';if(!recoveryToken)throw new Error('Không tạo được phiên khôi phục mật khẩu.');setRecoveryStep('reset');setRecoveryMessage('Xác minh OTP thành công. Hãy tạo mật khẩu mới.','ok')}
+  catch(err){setRecoveryMessage(err.message,'error')}
+  finally{busy=false;btn.disabled=false;btn.textContent='Xác minh OTP'}
+});
+
+$('recoveryResetForm').addEventListener('submit',async e=>{
+  e.preventDefault();if(busy)return;const p1=$('newRecoveryPassword').value,p2=$('confirmRecoveryPassword').value;if(p1.length<8)return setRecoveryMessage('Mật khẩu mới phải có ít nhất 8 ký tự.','error');if(p1!==p2)return setRecoveryMessage('Hai mật khẩu chưa khớp.','error');if(!recoveryToken)return setRecoveryMessage('Phiên xác minh không hợp lệ. Hãy yêu cầu mã OTP mới.','error');
+  const btn=$('saveRecoveryBtn');busy=true;btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Đang cập nhật…';setRecoveryMessage();
+  try{const d=await otpApi('reset',{recovery_token:recoveryToken,password:p1});recoveryToken='';$('newRecoveryPassword').value='';$('confirmRecoveryPassword').value='';closeRecovery();showLogin();setStatus('Sẵn sàng đăng nhập',true);setMessage(d.message||'Đổi mật khẩu thành công. Hãy đăng nhập bằng mật khẩu mới.','ok')}
+  catch(err){if(err.data?.error==='recovery_expired'){recoveryToken='';setRecoveryStep('email')}setRecoveryMessage(err.message,'error')}
+  finally{busy=false;btn.disabled=false;btn.textContent='Đổi mật khẩu'}
+});
+window.addEventListener('message',e=>{if(e.origin!==location.origin)return;if(e.data==='floodguard:signed-out'||e.data==='floodguard:need-login')showLogin();if(e.data==='floodguard:account-updated')refreshAccountMode()});
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+
+<script id="fg-website-home-script">
+(()=>{
+  const home=document.getElementById('fgWebsiteHome');
+  if(!home)return;
+  function enterApp(){window.FGViewingHomepage=false;home.classList.add('hidden');document.documentElement.style.scrollBehavior='';try{history.replaceState(null,'',location.pathname+'#app')}catch(_){}}
+  window.FGOpenFloodGuard=enterApp;
+  document.querySelectorAll('[data-fg-home-login],[data-fg-home-app]').forEach(b=>b.addEventListener('click',enterApp));
+  home.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const id=a.getAttribute('href');if(!id||id==='#')return;const t=home.querySelector(id);if(t){e.preventDefault();t.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});}}));
+  const q=new URLSearchParams(location.search);
+  if(q.get('home')==='1'){window.FGViewingHomepage=true;home.classList.remove('hidden')}
+  if(q.get('login')==='1'||q.get('app')==='1'||q.get('rescue_invite')||q.get('rescue_email')||location.hash==='#app'||location.hash==='#login')enterApp();
+})();
+</script>
 <script src="./site-navigation-v2.js?v=2"></script>
 <script src="./site-content.js?v=2" defer></script></body>
 </html>

@@ -1,0 +1,88 @@
+const CACHE='floodguard-mobile-v1';
+const CORE=['/device-entry.js','./floodguard-logo.png','./brand-logo.css','./weather-screen.css','./weather-screen.js','./mobile-panels-v2.css','./mobile-panels-v2.js','./mobile-navigation.css','./language.css','./language-catalog.js','./language.js',"./admin-public-config.js","./features/routing/destination-flow.js","./features/routing/destination-flow.css","./features/routing/compact-map-ui.css","./features/routing/compact-map-ui.js","./features/ui/workspace-style-1.css","./features/ui/fg3-style.css","./features/ui/workspace-style-2.css","./features/data/rain-import-style.css","./features/ui/fg-routing-honesty-style.css","./features/routing/traffic-evidence.js","./features/data/rain-observations.js","./features/ui/fg42-polish.css","./features/ui/fg43-premium-ui.css","./features/ui/fg44-aurora-ui.css","./features/ui/fg45-neoglass-ui.css","./features/ui/fg46-zen-product-ui.css","./features/stations/fg47-ev-photos.css","./features/routing/fg50-route-mode-fix.css","./features/ui/fg51-product-upgrade.css","./features/routing/fg57-hide-mode-description.css","./features/routing/fg60-hide-vehicle-descriptions.css","./features/routing/fg62-decision-support.css","./features/analysis/fg70-max-style.css","./features/routing/fg80-upgrade-style.css","./features/routing/fg82-route-suggest-layout-fix.css","./features/routing/fg90-style.css","./features/analysis/fg3-result-jump-style.css","./features/ui/fg12-ultimate-style.css","./features/ui/fg132-command-interaction-fix.css","./features/rescue/fg-prod-public.css","./features/rescue/fg23-hide-rescue-audit-notes.css","./features/weather/fg28-hide-rain-gauge-ui.css","./features/routing/fg02-unknown-risk.css","./features/data/catalogs.js","./features/map/map-init.js","./features/data/station-photos.js","./features/map/map-layers.js","./features/ui/legacy-controls.js","./features/routing/fg3-route-style.css","./features/stations/fg4-evfinder-style.css","./features/analysis/fg15-multimodel-style.css","./features/analysis/fg16-audit-style.css","./features/analysis/flood-model.js","./features/analysis/analysis-panel.js","./features/routing/fg81-resilience-style.css","./features/routing/geocoding.js","./features/routing/route-search.js","./features/stations/station-search.js","./features/ui/fg44-ui-js.js","./features/stations/photo-viewer.js","./features/ui/fg51-product-js.js","./features/analysis/decision-center.js","./features/ui/fg80-connectivity-js.js","./features/routing/fg81-route-help.js","./features/routing/active-trip.js","./features/weather/fg10-live-style.css","./features/weather/live-weather.js","./features/ui/shell-controls.js","./features/alerts/fg13-intelligence-style.css","./features/alerts/journey-alerts.js","./features/ui/fg133-smart-nav-style.css","./features/ui/navigation.js","./features/ui/fg136-gpu-dock-style.css","./features/ui/navigation-dock.js","./features/ui/fg138-premium-dock-style.css","./features/ui/navigation-icons.js","./features/analysis/fg15-sync-script.js","./features/rescue/fg16-rescue-style.css","./features/rescue/sos.js","./features/ui/service-worker.js","./features/ui/fg-mobile-production-1-style.css","./features/ui/fg-mobile-production-1-js.js","./features/ui/fg-mobile-hotfix-1-2-style.css","./features/ui/fg-mobile-map-fallback-1-2.js","./features/ui/fg-adaptive-mode-1-js.js","./features/ui/fg-smart-location-1-4-style.css","./features/account/fg18-email-alert-style.css","./features/account/fg31-auth-style.css","./features/account/fg33-visible-logout-style.css","./features/account/account.js","./features/ui/fg-minimal-clean-1-3-style.css","./features/account/oauth-return.js","./features/account/fg-oauth-loading.css","./features/account/login-style-2.css","./features/ui/fg-website-home-v1.css","./features/ui/fg-back-home-style.css","./features/account/auth-shell.js","./features/ui/fg-website-home-script.js",'./floodguard-design-system.css','./mobile-design-v67.css','./home-design-v66.css','./admin-design.css','./rescue-workspace.css','./rescue-workspace.js','./','./index.html','./app-core.html','./watchlist-email-v40.js','./site-pages.css','./site-luxe.css','./site-atelier-v47.css','./site-cinematic-v48.css','./site-editorial-v49.css','./site-hide-ev-v50.css','./site-navigation-v2.js','./problem.html','./features.html','./how-it-works.html','./alerts.html','./ev.html','./rescue.html','./about.html','./admin.html','./admin-report-photos.html','./accounts.html','./rescue-team.html','./rescue-teams.html','./sos-admin.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
+self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)));self.skipWaiting()});
+self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('floodguard-mobile-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
+function navKey(u){
+  const p=u.pathname.replace(/^\/mobile\//,'/');
+  if(p.endsWith('/app-core.html'))return './app-core.html';
+  if(p.endsWith('/admin-report-photos.html'))return './admin-report-photos.html';
+  if(p.endsWith('/admin.html'))return './admin.html';
+  if(p.endsWith('/accounts.html'))return './accounts.html';
+  if(p.endsWith('/rescue-team.html'))return './rescue-team.html';
+  if(p.endsWith('/rescue-teams.html'))return './rescue-teams.html';
+  if(p.endsWith('/sos-admin.html'))return './sos-admin.html';
+  if(p.endsWith('/problem.html'))return './problem.html';
+  if(p.endsWith('/features.html'))return './features.html';
+  if(p.endsWith('/how-it-works.html'))return './how-it-works.html';
+  if(p.endsWith('/alerts.html'))return './alerts.html';
+  if(p.endsWith('/ev.html'))return './ev.html';
+  if(p.endsWith('/rescue.html'))return './rescue.html';
+  if(p.endsWith('/about.html'))return './about.html';
+  for(const page of ['contact','faq','community','voucher','model-evaluation','data','design-system'])if(p.endsWith('/'+page+'.html'))return './'+page+'.html';
+  if(p==='/'||p.endsWith('/index.html'))return './index.html';
+  return '.'+p;
+}
+function htmlResponse(r,body){
+  const h=new Headers(r.headers);h.set('Content-Type','text/html; charset=utf-8');h.set('Cache-Control','no-store');h.delete('Content-Length');
+  return new Response(body,{status:r.status,statusText:r.statusText,headers:h});
+}
+async function injectWatchlist(r){
+  if(!r)return r;
+  const html=await r.text();
+  const tag='<script src="./watchlist-email-v40.js?v=40"></script>';
+  const body=html.includes('watchlist-email-v40.js')?html:(html.includes('</body>')?html.replace('</body>',tag+'</body>'):html+tag);
+  return htmlResponse(r,body);
+}
+async function injectHomepageTheme(r){
+  if(!r)return r;
+  const html=await r.text();
+  const atelier='<link rel="stylesheet" href="./site-atelier-v47.css?v=47">';
+  const cinematic='<link rel="stylesheet" href="./site-cinematic-v48.css?v=48">';
+  const editorial='<link rel="stylesheet" href="./site-editorial-v49.css?v=49">';
+  const hideEv='<link rel="stylesheet" href="./site-hide-ev-v50.css?v=50">';
+  let body=html;
+  if(!body.includes('site-atelier-v47.css'))body=body.includes('</head>')?body.replace('</head>',atelier+'</head>'):atelier+body;
+  if(!body.includes('site-cinematic-v48.css'))body=body.includes('</head>')?body.replace('</head>',cinematic+'</head>'):cinematic+body;
+  if(!body.includes('site-editorial-v49.css'))body=body.includes('</head>')?body.replace('</head>',editorial+'</head>'):editorial+body;
+  if(!body.includes('site-hide-ev-v50.css'))body=body.includes('</head>')?body.replace('</head>',hideEv+'</head>'):hideEv+body;
+  return htmlResponse(r,body);
+}
+function remember(e,key,r){
+  if(!r.ok)return;
+  const copy=r.clone();
+  e.waitUntil(caches.open(CACHE).then(c=>c.put(key,copy)).catch(()=>{}));
+}
+function offline(){return new Response('Không có kết nối. Hãy kết nối mạng và tải lại trang.',{status:503,headers:{'Content-Type':'text/plain; charset=utf-8'}})}
+self.addEventListener('fetch',e=>{
+  if(e.request.method!=='GET')return;
+  const u=new URL(e.request.url);
+  if(u.origin!==location.origin)return;
+  if(u.pathname.startsWith('/api/')||e.request.headers?.has('Authorization'))return;
+  if(u.pathname.endsWith('/site-editor.html')||u.pathname.includes('/editor-preview/')){e.respondWith(fetch(e.request,{cache:'no-store'}));return;}
+  if(e.request.mode==='navigate'){
+    const key=navKey(u);
+    e.respondWith((async()=>{
+      let r;
+      try{
+        r=await fetch(e.request,{cache:'no-store'});
+        if(r.status>=500){const hit=await caches.match(key);if(hit)r=hit;}
+        remember(e,key,r);
+      }catch{r=await caches.match(key);}
+      if(!r)return offline();
+      if(!r.ok)return r;
+      if(key==='./app-core.html')return injectWatchlist(r);
+      if(key==='./index.html')return injectHomepageTheme(r);
+      return r;
+    })());return;
+  }
+  // Refresh scripts, styles and catalogs; never cache arbitrary/API responses.
+  if(!/\.(?:js|css|json|webmanifest|png|jpg|jpeg|svg|woff2?)$/i.test(u.pathname))return;
+  const key=u.origin+u.pathname;
+  e.respondWith((async()=>{
+    try{
+      const r=await fetch(e.request,{cache:'no-store'});
+      if(r.status>=500){const hit=await caches.match(key);if(hit)return hit;}
+      remember(e,key,r);return r;
+    }catch{return (await caches.match(key))||offline();}
+  })());
+});

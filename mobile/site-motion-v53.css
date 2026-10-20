@@ -1,0 +1,257 @@
+/* FloodGuard Motion System v53
+   Scroll reveals, staggered cards, parallax bands and subtle micro-interactions.
+   Designed to echo the user's reference video without sacrificing accessibility/performance. */
+:root{
+  --fg53-ease:cubic-bezier(.16,1,.3,1);
+  --fg53-spring:cubic-bezier(.22,1.35,.36,1);
+  --fg53-green:#82b440;
+  --fg53-olive:#2c3822;
+}
+
+/* thin scroll progress indicator */
+html[data-fg-mona="1"] body::before{
+  content:"";
+  position:fixed;
+  left:0;top:0;
+  width:100%;height:2px;
+  z-index:3000;
+  background:linear-gradient(90deg,#a6cf68,#82b440,#5f8f2e);
+  transform-origin:left center;
+  transform:scaleX(0);
+  pointer-events:none;
+  animation:fg53PageProgress linear both;
+  animation-timeline:scroll(root block);
+}
+@keyframes fg53PageProgress{to{transform:scaleX(1)}}
+
+/* nav becomes slightly more compact after the first scroll */
+@supports (animation-timeline:scroll()){
+  html[data-fg-mona="1"] .wh-nav,
+  html[data-fg-mona="1"] .site-nav{
+    animation:fg53NavCompact linear both;
+    animation-timeline:scroll(root block);
+    animation-range:0 180px;
+  }
+  @keyframes fg53NavCompact{
+    from{box-shadow:0 1px 0 rgba(31,42,25,.08);background:rgba(255,255,255,1)}
+    to{box-shadow:0 10px 34px rgba(47,62,38,.10);background:rgba(255,255,255,.94)}
+  }
+}
+
+/* hero content re-enters on each slide because the inner DOM is replaced */
+html[data-fg-mona="1"] .fg51-hero-copy .wh-eyebrow{
+  animation:fg53HeroIn .58s var(--fg53-ease) both;
+}
+html[data-fg-mona="1"] .fg51-hero-copy h1{
+  animation:fg53HeroIn .72s .07s var(--fg53-ease) both;
+}
+html[data-fg-mona="1"] .fg51-hero-copy p{
+  animation:fg53HeroIn .72s .14s var(--fg53-ease) both;
+}
+html[data-fg-mona="1"] .fg51-hero-copy .wh-hero-actions{
+  animation:fg53HeroIn .72s .21s var(--fg53-ease) both;
+}
+@keyframes fg53HeroIn{
+  from{opacity:0;transform:translate3d(0,24px,0);filter:blur(3px)}
+  to{opacity:1;transform:none;filter:none}
+}
+
+/* richer Ken-Burns movement while keeping the existing crossfade */
+html[data-fg-mona="1"] .fg51-slide{
+  transform:scale(1.065) translate3d(-.7%,0,0)!important;
+  transition:opacity 1.05s ease,transform 7.2s cubic-bezier(.18,.7,.2,1)!important;
+}
+html[data-fg-mona="1"] .fg51-slide.is-active{
+  transform:scale(1.005) translate3d(0,0,0)!important;
+}
+
+/* hero navigation controls breathe subtly */
+html[data-fg-mona="1"] .fg51-dot.is-active{
+  animation:fg53DotPulse 2.2s ease-in-out infinite;
+}
+@keyframes fg53DotPulse{50%{transform:scale(1.45);box-shadow:0 0 0 5px rgba(130,180,64,.16)}}
+html[data-fg-mona="1"] .fg51-next{
+  transition:transform .28s var(--fg53-spring),background .22s ease!important;
+}
+html[data-fg-mona="1"] .fg51-next:hover{transform:translateX(3px) scale(1.06)!important}
+
+/* enhanced fallback for the JS IntersectionObserver reveal already used by FloodGuard */
+html[data-fg-mona="1"] .fg52-reveal{
+  opacity:0;
+  transform:translate3d(0,30px,0) scale(.985);
+  filter:blur(2px);
+  transition:
+    opacity .75s var(--fg53-ease),
+    transform .82s var(--fg53-ease),
+    filter .72s ease!important;
+}
+html[data-fg-mona="1"] .fg52-reveal.fg52-visible{
+  opacity:1;
+  transform:none;
+  filter:none;
+}
+html[data-fg-mona="1"] .wh-copy.fg52-reveal{transform:translate3d(-46px,0,0)}
+html[data-fg-mona="1"] .wh-panel.fg52-reveal,
+html[data-fg-mona="1"] .wh-sos.fg52-reveal{transform:translate3d(46px,0,0)}
+html[data-fg-mona="1"] .wh-copy.fg52-reveal.fg52-visible,
+html[data-fg-mona="1"] .wh-panel.fg52-reveal.fg52-visible,
+html[data-fg-mona="1"] .wh-sos.fg52-reveal.fg52-visible{transform:none}
+
+/* stagger the card grid like the reference site's travel service cards */
+html[data-fg-mona="1"] .wh-card.fg52-reveal:nth-child(1),
+html[data-fg-mona="1"] .info-card.fg52-reveal:nth-child(1){transition-delay:0ms!important}
+html[data-fg-mona="1"] .wh-card.fg52-reveal:nth-child(2),
+html[data-fg-mona="1"] .info-card.fg52-reveal:nth-child(2){transition-delay:70ms!important}
+html[data-fg-mona="1"] .wh-card.fg52-reveal:nth-child(3),
+html[data-fg-mona="1"] .info-card.fg52-reveal:nth-child(3){transition-delay:140ms!important}
+html[data-fg-mona="1"] .wh-card.fg52-reveal:nth-child(4),
+html[data-fg-mona="1"] .info-card.fg52-reveal:nth-child(4){transition-delay:210ms!important}
+html[data-fg-mona="1"] .wh-card.fg52-reveal:nth-child(5),
+html[data-fg-mona="1"] .info-card.fg52-reveal:nth-child(5){transition-delay:280ms!important}
+html[data-fg-mona="1"] .wh-card.fg52-reveal:nth-child(6),
+html[data-fg-mona="1"] .info-card.fg52-reveal:nth-child(6){transition-delay:350ms!important}
+
+/* pure CSS view-driven section heading reveal where supported */
+@supports (animation-timeline:view()){
+  html[data-fg-mona="1"] .wh-section-head,
+  html[data-fg-mona="1"] .page-section>.shell>h2,
+  html[data-fg-mona="1"] .page-section .section-head{
+    animation:fg53SectionTitle linear both;
+    animation-timeline:view(block);
+    animation-range:entry 0% cover 32%;
+  }
+  @keyframes fg53SectionTitle{
+    from{opacity:0;transform:translateY(32px);filter:blur(3px)}
+    to{opacity:1;transform:none;filter:none}
+  }
+
+  /* subtle background parallax on the large image bands */
+  html[data-fg-mona="1"] #how,
+  html[data-fg-mona="1"] .wh-sos,
+  html[data-fg-mona="1"] .page-hero{
+    animation:fg53BgParallax linear both;
+    animation-timeline:view(block);
+    animation-range:entry -20% exit 120%;
+  }
+  @keyframes fg53BgParallax{
+    from{background-position:center 38%}
+    to{background-position:center 63%}
+  }
+}
+
+/* step cards pop in with a softer spring */
+html[data-fg-mona="1"] .wh-step.fg52-reveal{
+  transform:translateY(30px) scale(.94);
+  transition-duration:.76s!important;
+  transition-timing-function:var(--fg53-spring)!important;
+}
+html[data-fg-mona="1"] .wh-step.fg52-reveal.fg52-visible{transform:none}
+html[data-fg-mona="1"] .wh-step:nth-child(2){transition-delay:80ms!important}
+html[data-fg-mona="1"] .wh-step:nth-child(3){transition-delay:160ms!important}
+html[data-fg-mona="1"] .wh-step:nth-child(4){transition-delay:240ms!important}
+
+/* card and icon micro-interactions */
+html[data-fg-mona="1"] .wh-card,
+html[data-fg-mona="1"] .info-card,
+html[data-fg-mona="1"] .problem-stat,
+html[data-fg-mona="1"] .cause-card,
+html[data-fg-mona="1"] .impact-box,
+html[data-fg-mona="1"] .station-card,
+html[data-fg-mona="1"] .principle-card,
+html[data-fg-mona="1"] .source-item{
+  will-change:transform;
+  transition:
+    transform .42s var(--fg53-ease),
+    box-shadow .42s var(--fg53-ease),
+    border-color .3s ease!important;
+}
+html[data-fg-mona="1"] .wh-card:hover,
+html[data-fg-mona="1"] .info-card:hover,
+html[data-fg-mona="1"] .cause-card:hover,
+html[data-fg-mona="1"] .station-card:hover{
+  transform:translateY(-7px) scale(1.012)!important;
+}
+html[data-fg-mona="1"] .wh-icon{
+  transition:transform .42s var(--fg53-spring),box-shadow .32s ease!important;
+}
+html[data-fg-mona="1"] .wh-card:hover .wh-icon{
+  transform:translateY(-3px) rotate(-5deg) scale(1.08);
+  box-shadow:0 10px 22px rgba(130,180,64,.22);
+}
+
+/* button motion + traveling highlight */
+html[data-fg-mona="1"] .wh-btn,
+html[data-fg-mona="1"] .site-btn{
+  position:relative;
+  overflow:hidden;
+  transform:translateZ(0);
+  transition:transform .28s var(--fg53-spring),box-shadow .3s ease,background .25s ease!important;
+}
+html[data-fg-mona="1"] .wh-btn::before,
+html[data-fg-mona="1"] .site-btn::before{
+  content:"";
+  position:absolute;
+  top:-50%;bottom:-50%;left:-55%;width:32%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.38),transparent);
+  transform:skewX(-20deg);
+  transition:left .65s var(--fg53-ease);
+  pointer-events:none;
+}
+html[data-fg-mona="1"] .wh-btn:hover::before,
+html[data-fg-mona="1"] .site-btn:hover::before{left:125%}
+html[data-fg-mona="1"] .wh-btn:hover,
+html[data-fg-mona="1"] .site-btn:hover{transform:translateY(-2px)!important}
+html[data-fg-mona="1"] .wh-btn:active,
+html[data-fg-mona="1"] .site-btn:active{transform:translateY(0) scale(.98)!important}
+
+/* image/visual blocks reveal with a gentle mask */
+@supports (animation-timeline:view()){
+  html[data-fg-mona="1"] .media-photo,
+  html[data-fg-mona="1"] .visual-media,
+  html[data-fg-mona="1"] .page-visual{
+    animation:fg53ImageReveal linear both;
+    animation-timeline:view(block);
+    animation-range:entry 2% cover 38%;
+  }
+  @keyframes fg53ImageReveal{
+    from{opacity:.15;clip-path:inset(0 20% 0 20%);transform:scale(1.055)}
+    to{opacity:1;clip-path:inset(0);transform:scale(1)}
+  }
+}
+
+/* links in the footer/nav glide rather than jump */
+html[data-fg-mona="1"] .wh-links a,
+html[data-fg-mona="1"] .site-links a,
+html[data-fg-mona="1"] .footer-links a,
+html[data-fg-mona="1"] .wh-foot-links a{
+  transition:color .25s ease,transform .25s var(--fg53-ease)!important;
+}
+html[data-fg-mona="1"] .footer-links a:hover,
+html[data-fg-mona="1"] .wh-foot-links a:hover{transform:translateX(4px)}
+
+/* mobile: keep motion restrained and avoid expensive blur-heavy transforms */
+@media(max-width:720px){
+  html[data-fg-mona="1"] .fg52-reveal{transform:translateY(22px) scale(.99);filter:none}
+  html[data-fg-mona="1"] .wh-copy.fg52-reveal,
+  html[data-fg-mona="1"] .wh-panel.fg52-reveal,
+  html[data-fg-mona="1"] .wh-sos.fg52-reveal{transform:translateY(22px)}
+  html[data-fg-mona="1"] .wh-card:hover,
+  html[data-fg-mona="1"] .info-card:hover,
+  html[data-fg-mona="1"] .cause-card:hover,
+  html[data-fg-mona="1"] .station-card:hover{transform:none!important}
+  html[data-fg-mona="1"] .fg51-slide{transition-duration:.85s,5.4s!important}
+}
+
+/* accessibility: motion can be fully disabled */
+@media(prefers-reduced-motion:reduce){
+  html[data-fg-mona="1"] body::before{display:none!important}
+  html[data-fg-mona="1"] *,
+  html[data-fg-mona="1"] *::before,
+  html[data-fg-mona="1"] *::after{
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.001ms!important;
+    scroll-behavior:auto!important;
+  }
+  html[data-fg-mona="1"] .fg52-reveal{opacity:1!important;transform:none!important;filter:none!important}
+}

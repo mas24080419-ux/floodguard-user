@@ -1,0 +1,174 @@
+/* FloodGuard Performance Motion v55 (served via v54 loader)
+   Fixes visible jank by removing scroll-linked/clip-path work and limiting animation to compositor-friendly opacity/transform. */
+:root{
+  --fg55-ease:cubic-bezier(.22,.72,.18,1);
+  --fg55-out:cubic-bezier(.16,1,.3,1);
+}
+
+/* IMPORTANT: neutralize the expensive motion inherited from v53. */
+html[data-fg-mona="1"]{scroll-behavior:auto!important}
+html[data-fg-mona="1"] body::before{display:none!important;animation:none!important}
+html[data-fg-mona="1"] .wh-nav,
+html[data-fg-mona="1"] .site-nav{animation:none!important}
+
+/* Disable cross-document View Transition snapshots. They can hitch on large pages/maps. */
+::view-transition-old(root),
+::view-transition-new(root){animation:none!important}
+
+/* Disable all scroll-timeline / clip-path reveals inherited from v53/v54. */
+html[data-fg-mona="1"] .wh-section-head,
+html[data-fg-mona="1"] .page-section>.shell>h2,
+html[data-fg-mona="1"] .page-section .section-head,
+html[data-fg-mona="1"] .media-photo,
+html[data-fg-mona="1"] .visual-media,
+html[data-fg-mona="1"] .page-visual,
+html[data-fg-mona="1"] #how,
+html[data-fg-mona="1"] .wh-sos,
+html[data-fg-mona="1"] .page-hero{
+  animation:none!important;
+  animation-timeline:auto!important;
+  clip-path:none!important;
+}
+
+/* Hero: one lightweight crossfade + very small scale drift. */
+html[data-fg-mona="1"] .fg51-hero-media{
+  contain:layout paint;
+  overflow:hidden;
+  isolation:isolate;
+}
+html[data-fg-mona="1"] .fg51-slide{
+  opacity:0!important;
+  transform:translateZ(0) scale(1.018)!important;
+  transition:opacity .82s ease-in-out,transform 7.8s linear!important;
+  will-change:opacity;
+  backface-visibility:hidden;
+}
+html[data-fg-mona="1"] .fg51-slide.is-active{
+  opacity:1!important;
+  transform:translateZ(0) scale(1)!important;
+}
+html[data-fg-mona="1"] .fg51-hero-copy{
+  transition:opacity .28s ease,transform .42s var(--fg55-out)!important;
+  transform:translate3d(0,0,0)!important;
+  will-change:auto!important;
+}
+html[data-fg-mona="1"] .fg51-hero-copy.is-changing{
+  opacity:0!important;
+  transform:translate3d(0,8px,0)!important;
+}
+html[data-fg-mona="1"] .fg51-hero-copy .wh-eyebrow,
+html[data-fg-mona="1"] .fg51-hero-copy h1,
+html[data-fg-mona="1"] .fg51-hero-copy p,
+html[data-fg-mona="1"] .fg51-hero-copy .wh-hero-actions{
+  animation:fg55CopyIn .48s var(--fg55-out) both!important;
+}
+html[data-fg-mona="1"] .fg51-hero-copy h1{animation-delay:.025s!important}
+html[data-fg-mona="1"] .fg51-hero-copy p{animation-delay:.05s!important}
+html[data-fg-mona="1"] .fg51-hero-copy .wh-hero-actions{animation-delay:.075s!important}
+@keyframes fg55CopyIn{
+  from{opacity:0;transform:translate3d(0,9px,0)}
+  to{opacity:1;transform:translate3d(0,0,0)}
+}
+
+/* IntersectionObserver reveals only: no blur, clip-path, scale, or scroll timeline. */
+html[data-fg-mona="1"] .fg52-reveal{
+  opacity:0!important;
+  transform:translate3d(0,12px,0)!important;
+  filter:none!important;
+  clip-path:none!important;
+  transition:opacity .54s ease-out,transform .62s var(--fg55-out)!important;
+  will-change:auto!important;
+}
+html[data-fg-mona="1"] .fg52-reveal.fg52-visible{
+  opacity:1!important;
+  transform:translate3d(0,0,0)!important;
+}
+html[data-fg-mona="1"] .wh-copy.fg52-reveal,
+html[data-fg-mona="1"] .wh-panel.fg52-reveal,
+html[data-fg-mona="1"] .wh-sos.fg52-reveal{
+  transform:translate3d(0,12px,0)!important;
+}
+html[data-fg-mona="1"] .wh-copy.fg52-reveal.fg52-visible,
+html[data-fg-mona="1"] .wh-panel.fg52-reveal.fg52-visible,
+html[data-fg-mona="1"] .wh-sos.fg52-reveal.fg52-visible{
+  transform:translate3d(0,0,0)!important;
+}
+
+/* Very short stagger so scrolling never waits for a cascade. */
+html[data-fg-mona="1"] .wh-card.fg52-reveal:nth-child(1),html[data-fg-mona="1"] .info-card.fg52-reveal:nth-child(1){transition-delay:0ms!important}
+html[data-fg-mona="1"] .wh-card.fg52-reveal:nth-child(2),html[data-fg-mona="1"] .info-card.fg52-reveal:nth-child(2){transition-delay:25ms!important}
+html[data-fg-mona="1"] .wh-card.fg52-reveal:nth-child(3),html[data-fg-mona="1"] .info-card.fg52-reveal:nth-child(3){transition-delay:50ms!important}
+html[data-fg-mona="1"] .wh-card.fg52-reveal:nth-child(4),html[data-fg-mona="1"] .info-card.fg52-reveal:nth-child(4){transition-delay:75ms!important}
+html[data-fg-mona="1"] .wh-card.fg52-reveal:nth-child(n+5),html[data-fg-mona="1"] .info-card.fg52-reveal:nth-child(n+5){transition-delay:90ms!important}
+html[data-fg-mona="1"] .wh-step:nth-child(2){transition-delay:30ms!important}
+html[data-fg-mona="1"] .wh-step:nth-child(3){transition-delay:60ms!important}
+html[data-fg-mona="1"] .wh-step:nth-child(4){transition-delay:90ms!important}
+
+/* Controls and cards: cheap transforms only. */
+html[data-fg-mona="1"] .fg51-dot{
+  transition:transform .2s ease,background-color .2s ease!important;
+}
+html[data-fg-mona="1"] .fg51-dot.is-active{
+  animation:none!important;
+  transform:scale(1.18)!important;
+  box-shadow:none!important;
+}
+html[data-fg-mona="1"] .fg51-next,
+html[data-fg-mona="1"] .wh-btn,
+html[data-fg-mona="1"] .site-btn{
+  transition:transform .2s var(--fg55-out),background-color .2s ease,border-color .2s ease,box-shadow .2s ease!important;
+}
+html[data-fg-mona="1"] .fg51-next:hover{transform:translateX(1px)!important}
+html[data-fg-mona="1"] .wh-btn:hover,
+html[data-fg-mona="1"] .site-btn:hover{transform:translateY(-1px)!important}
+html[data-fg-mona="1"] .wh-btn::before,
+html[data-fg-mona="1"] .site-btn::before{display:none!important}
+
+html[data-fg-mona="1"] .wh-card,
+html[data-fg-mona="1"] .info-card,
+html[data-fg-mona="1"] .cause-card,
+html[data-fg-mona="1"] .station-card{
+  transition:transform .22s var(--fg55-out),box-shadow .25s ease!important;
+  will-change:auto!important;
+}
+html[data-fg-mona="1"] .wh-card:hover,
+html[data-fg-mona="1"] .info-card:hover,
+html[data-fg-mona="1"] .cause-card:hover,
+html[data-fg-mona="1"] .station-card:hover{transform:translateY(-2px)!important}
+html[data-fg-mona="1"] .wh-card:hover .wh-icon{transform:none!important;box-shadow:none!important}
+
+/* Mobile/tablet: opacity-only slide crossfade, no hero zoom, minimal reveals. */
+@media(max-width:1024px){
+  html[data-fg-mona="1"] .fg51-slide,
+  html[data-fg-mona="1"] .fg51-slide.is-active{
+    transform:translateZ(0)!important;
+    transition:opacity .62s ease-in-out!important;
+  }
+  html[data-fg-mona="1"] .fg52-reveal{
+    transform:translate3d(0,8px,0)!important;
+    transition:opacity .42s ease-out,transform .48s var(--fg55-out)!important;
+  }
+  html[data-fg-mona="1"] .fg52-reveal.fg52-visible{transform:none!important}
+  html[data-fg-mona="1"] .wh-card:hover,
+  html[data-fg-mona="1"] .info-card:hover,
+  html[data-fg-mona="1"] .cause-card:hover,
+  html[data-fg-mona="1"] .station-card:hover{transform:none!important}
+}
+
+@media(max-width:720px){
+  html[data-fg-mona="1"] .fg51-hero-copy .wh-eyebrow,
+  html[data-fg-mona="1"] .fg51-hero-copy h1,
+  html[data-fg-mona="1"] .fg51-hero-copy p,
+  html[data-fg-mona="1"] .fg51-hero-copy .wh-hero-actions{
+    animation-duration:.36s!important;
+  }
+  html[data-fg-mona="1"] .fg52-reveal{transition-delay:0ms!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  html[data-fg-mona="1"] *,html[data-fg-mona="1"] *::before,html[data-fg-mona="1"] *::after{
+    animation:none!important;transition:none!important;scroll-behavior:auto!important;
+  }
+  html[data-fg-mona="1"] .fg52-reveal{opacity:1!important;transform:none!important}
+  html[data-fg-mona="1"] .fg51-slide{transform:none!important}
+}

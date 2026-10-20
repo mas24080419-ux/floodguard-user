@@ -1,0 +1,297 @@
+/* FloodGuard background motion v59
+   Tuned from the user's IMG_9761 reference: slow Ken-Burns motion behind the copy,
+   a quicker soft crossfade between photos, and copy entering from the left. */
+:root{--fg59-fade:900ms;--fg59-hold:7600ms;--fg59-ease:cubic-bezier(.22,.61,.36,1)}
+
+/* Keep photo animation entirely on compositor-friendly opacity + transform. */
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide{
+  opacity:0!important;
+  transition:opacity var(--fg59-fade) cubic-bezier(.42,0,.58,1)!important;
+  will-change:opacity!important;
+  transform:translateZ(0)!important;
+}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide.is-active{opacity:1!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide img{
+  width:100%!important;height:100%!important;object-fit:cover!important;
+  backface-visibility:hidden!important;-webkit-backface-visibility:hidden!important;
+  will-change:transform!important;
+  transition:transform var(--fg59-hold) cubic-bezier(.16,.72,.25,1)!important;
+}
+/* Each slide drifts in a different direction so the background feels alive. */
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide:nth-child(1) img{transform:translate3d(-1.7%,.45%,0) scale(1.075)!important;transform-origin:52% 48%!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide:nth-child(1).is-active img{transform:translate3d(1.15%,-.35%,0) scale(1.018)!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide:nth-child(2) img{transform:translate3d(1.65%,-.35%,0) scale(1.078)!important;transform-origin:48% 51%!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide:nth-child(2).is-active img{transform:translate3d(-1.05%,.30%,0) scale(1.019)!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide:nth-child(3) img{transform:translate3d(-.25%,1.15%,0) scale(1.080)!important;transform-origin:51% 48%!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide:nth-child(3).is-active img{transform:translate3d(.45%,-.90%,0) scale(1.020)!important}
+
+/* The reference lets the new photo appear first; copy follows from the left. */
+html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy{transition:opacity .26s ease,transform .34s var(--fg59-ease)!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy.is-changing{opacity:0!important;transform:translate3d(-22px,0,0)!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy .wh-eyebrow,
+html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy h1,
+html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy p,
+html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy .wh-hero-actions{animation:fg59CopyIn .62s var(--fg59-ease) both!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy h1{animation-delay:.04s!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy p{animation-delay:.10s!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy .wh-hero-actions{animation-delay:.16s!important}
+@keyframes fg59CopyIn{from{opacity:0;transform:translate3d(-46px,0,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+
+/* A very subtle brightness lift during the active frame mimics the cinematic depth of the sample. */
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide img{filter:saturate(.88) contrast(1.025) brightness(.84)!important}
+html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide.is-active img{filter:saturate(.92) contrast(1.02) brightness(.91)!important}
+
+@media(max-width:1024px){
+ :root{--fg59-fade:820ms;--fg59-hold:7200ms}
+ html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide:nth-child(n) img{transform:translate3d(-.8%,.35%,0) scale(1.045)!important}
+ html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide:nth-child(n).is-active img{transform:translate3d(.65%,-.25%,0) scale(1.012)!important}
+}
+@media(max-width:720px){
+ :root{--fg59-fade:720ms;--fg59-hold:6800ms}
+ html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide:nth-child(n) img{transform:translate3d(-.5%,.2%,0) scale(1.025)!important}
+ html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide:nth-child(n).is-active img{transform:translate3d(.35%,-.15%,0) scale(1.006)!important}
+ html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy.is-changing{transform:translate3d(-14px,0,0)!important}
+ @keyframes fg59CopyIn{from{opacity:0;transform:translate3d(-28px,0,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+}
+@media(prefers-reduced-motion:reduce){
+ html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide,
+ html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .fg51-slide img,
+ html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy,
+ html[data-fg-mona="1"] body #fgWebsiteHome .fg51-hero-copy *{transition:none!important;animation:none!important;transform:none!important}
+}
+
+/* Account/login background action v60.
+   Three photo layers crossfade continuously behind the existing auth controls, with a slow Ken-Burns drift.
+   This is inspired by the motion language of the Mona Tour account experience; FloodGuard assets and logic remain independent. */
+html[data-fg-mona="1"] .auth{
+  isolation:isolate!important;
+  background:#1f2a19!important;
+}
+html[data-fg-mona="1"] .auth::before,
+html[data-fg-mona="1"] .auth::after,
+html[data-fg-mona="1"] .auth .scene::before{
+  content:""!important;
+  position:fixed!important;
+  inset:-3%!important;
+  pointer-events:none!important;
+  opacity:0;
+  background-size:cover!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
+  will-change:opacity,transform;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  animation:fg60AuthFade 18s linear infinite,fg60AuthDrift 18s ease-in-out infinite alternate;
+}
+html[data-fg-mona="1"] .auth::before{
+  z-index:0!important;
+  --fg60-from-x:-.55%;--fg60-from-y:.2%;--fg60-to-x:.45%;--fg60-to-y:-.25%;
+  background-image:url("https://commons.wikimedia.org/wiki/Special:FilePath/Street_flood_in_Saigon_(10728572006).jpg?width=1800")!important;
+  animation-delay:0s,0s!important;
+}
+html[data-fg-mona="1"] .auth::after{
+  z-index:0!important;
+  --fg60-from-x:.55%;--fg60-from-y:-.2%;--fg60-to-x:-.4%;--fg60-to-y:.25%;
+  background-image:url("https://commons.wikimedia.org/wiki/Special:FilePath/Street_flood_in_Saigon_(10728890034).jpg?width=1800")!important;
+  animation-delay:-12s,-12s!important;
+}
+html[data-fg-mona="1"] .auth .scene{
+  position:fixed!important;
+  inset:0!important;
+  z-index:1!important;
+  overflow:hidden!important;
+  pointer-events:none!important;
+}
+html[data-fg-mona="1"] .auth .scene>*{display:none!important}
+html[data-fg-mona="1"] .auth .scene::before{
+  z-index:0!important;
+  --fg60-from-x:-.25%;--fg60-from-y:.5%;--fg60-to-x:.3%;--fg60-to-y:-.45%;
+  background-image:url("https://commons.wikimedia.org/wiki/Special:FilePath/Street_flood_in_Saigon_(10729260963).jpg?width=1800")!important;
+  animation-delay:-6s,-6s!important;
+}
+html[data-fg-mona="1"] .auth .scene::after{
+  content:""!important;
+  position:fixed!important;
+  inset:0!important;
+  z-index:2!important;
+  pointer-events:none!important;
+  background:linear-gradient(90deg,rgba(16,24,13,.52) 0%,rgba(16,24,13,.22) 48%,rgba(16,24,13,.43) 100%),linear-gradient(0deg,rgba(10,16,8,.31),rgba(10,16,8,.07) 52%,rgba(10,16,8,.20));
+}
+@keyframes fg60AuthFade{
+  0%,26%{opacity:1}
+  34%,92%{opacity:0}
+  100%{opacity:1}
+}
+@keyframes fg60AuthDrift{
+  0%{transform:translate3d(var(--fg60-from-x),var(--fg60-from-y),0) scale(1.055)}
+  100%{transform:translate3d(var(--fg60-to-x),var(--fg60-to-y),0) scale(1.018)}
+}
+html[data-fg-mona="1"] .auth-layout,
+html[data-fg-mona="1"] .auth .brand-copy{z-index:5!important}
+html[data-fg-mona="1"] .auth .card{
+  background:rgba(255,255,255,.95)!important;
+  border:1px solid rgba(255,255,255,.78)!important;
+  border-radius:8px!important;
+  box-shadow:0 28px 70px rgba(12,24,9,.25)!important;
+  backdrop-filter:blur(10px)!important;
+  -webkit-backdrop-filter:blur(10px)!important;
+}
+html[data-fg-mona="1"] .auth .primary{
+  background:#82b440!important;
+  box-shadow:0 10px 24px rgba(92,139,39,.25)!important;
+}
+html[data-fg-mona="1"] .auth .primary:hover{background:#6f9f34!important}
+html[data-fg-mona="1"] .auth .field input:focus{
+  border-color:#82b440!important;
+  box-shadow:0 0 0 4px rgba(130,180,64,.12)!important;
+}
+html[data-fg-mona="1"] .auth .mark,
+html[data-fg-mona="1"] .auth .hero-mark{background:linear-gradient(135deg,#91c653,#6f9f34)!important}
+html[data-fg-mona="1"] .auth .brand-copy{color:#fff!important;text-shadow:0 4px 26px rgba(5,12,4,.25)!important}
+html[data-fg-mona="1"] .auth .brand-copy h1{color:#fff!important}
+html[data-fg-mona="1"] .auth .brand-copy p{color:rgba(255,255,255,.84)!important}
+@media(max-width:720px){
+ html[data-fg-mona="1"] .auth::before,
+ html[data-fg-mona="1"] .auth::after,
+ html[data-fg-mona="1"] .auth .scene::before{inset:-2%!important}
+ html[data-fg-mona="1"] .auth .card{border-radius:6px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ html[data-fg-mona="1"] .auth::before{opacity:1!important;animation:none!important;transform:none!important}
+ html[data-fg-mona="1"] .auth::after,
+ html[data-fg-mona="1"] .auth .scene::before{display:none!important}
+}
+
+/* Laptop/desktop proportion pass v61 — tuned from the user's 1728px laptop screenshot. */
+@media(min-width:1100px) and (max-width:1800px){
+  html[data-fg-mona="1"] .fg52-topbar{min-height:30px!important}
+  html[data-fg-mona="1"] .fg52-topbar-inner{
+    min-height:30px!important;
+    font-size:11px!important;
+    line-height:1!important;
+    padding-top:0!important;
+    padding-bottom:0!important;
+  }
+  html[data-fg-mona="1"] #fgWebsiteHome .wh-nav-in,
+  html[data-fg-mona="1"] .site-nav-in{
+    min-height:74px!important;
+    height:74px!important;
+  }
+  html[data-fg-mona="1"] #fgWebsiteHome .wh-logo,
+  html[data-fg-mona="1"] .site-logo{
+    width:46px!important;
+    height:46px!important;
+    font-size:12px!important;
+  }
+  html[data-fg-mona="1"] #fgWebsiteHome .wh-brand,
+  html[data-fg-mona="1"] .site-brand{
+    font-size:20px!important;
+    line-height:1.1!important;
+    gap:12px!important;
+  }
+  html[data-fg-mona="1"] #fgWebsiteHome .wh-links,
+  html[data-fg-mona="1"] .site-links{gap:30px!important}
+  html[data-fg-mona="1"] #fgWebsiteHome .wh-links a,
+  html[data-fg-mona="1"] .site-links a{
+    font-size:13.5px!important;
+    font-weight:680!important;
+    letter-spacing:0!important;
+  }
+  html[data-fg-mona="1"] #fgWebsiteHome .wh-nav .wh-btn.primary,
+  html[data-fg-mona="1"] .site-nav .site-btn.primary{
+    width:auto!important;
+    min-width:150px!important;
+    min-height:44px!important;
+    padding:0 20px!important;
+    border-radius:4px!important;
+    font-size:12px!important;
+  }
+
+  html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero{
+    min-height:560px!important;
+    height:clamp(560px,64vh,640px)!important;
+    padding-left:max(42px,calc((100vw - 1320px)/2))!important;
+    padding-right:max(42px,calc((100vw - 1320px)/2))!important;
+  }
+  html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero>.fg51-hero-copy{
+    width:min(760px,64vw)!important;
+    max-width:760px!important;
+    padding:24px 0 48px!important;
+  }
+  html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero h1{
+    font-size:clamp(54px,3.75vw,66px)!important;
+    line-height:1.02!important;
+    letter-spacing:-.045em!important;
+    max-width:760px!important;
+    margin:14px 0 18px!important;
+    text-wrap:balance!important;
+  }
+  html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero p{
+    max-width:650px!important;
+    font-size:15px!important;
+    line-height:1.62!important;
+    margin-bottom:0!important;
+  }
+  html[data-fg-mona="1"] body #fgWebsiteHome .wh-eyebrow{
+    font-size:10px!important;
+    letter-spacing:.14em!important;
+  }
+  html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero-actions{
+    display:flex!important;
+    align-items:center!important;
+    gap:12px!important;
+    margin-top:26px!important;
+    width:auto!important;
+    max-width:none!important;
+  }
+  html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .wh-btn{
+    width:auto!important;
+    min-width:158px!important;
+    min-height:46px!important;
+    padding:0 20px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    font-size:11.5px!important;
+  }
+  html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero .wh-btn.primary{
+    min-width:178px!important;
+  }
+  html[data-fg-mona="1"] body #fgWebsiteHome .fg51-controls{
+    right:max(34px,calc((100vw - 1320px)/2))!important;
+    bottom:30px!important;
+    top:auto!important;
+    transform:none!important;
+  }
+  html[data-fg-mona="1"] body #fgWebsiteHome .fg51-credit{
+    left:auto!important;
+    right:max(34px,calc((100vw - 1320px)/2))!important;
+    bottom:82px!important;
+    max-width:250px!important;
+    text-align:right!important;
+    font-size:9px!important;
+    line-height:1.45!important;
+  }
+  html[data-fg-mona="1"] body #fgWebsiteHome .fg57-quickbar-wrap{
+    width:min(1180px,calc(100% - 72px))!important;
+    margin:-34px auto 0!important;
+  }
+  html[data-fg-mona="1"] body #fgWebsiteHome .fg57-quickitem{
+    min-height:82px!important;
+    padding:17px 22px!important;
+  }
+  html[data-fg-mona="1"] body #fgWebsiteHome .fg57-quickitem b{font-size:13.5px!important}
+  html[data-fg-mona="1"] body #fgWebsiteHome .fg57-quickitem span{font-size:10.5px!important}
+}
+
+@media(min-width:1100px) and (max-height:820px){
+  html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero{
+    min-height:520px!important;
+    height:560px!important;
+  }
+  html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero h1{
+    font-size:clamp(50px,3.45vw,60px)!important;
+  }
+  html[data-fg-mona="1"] body #fgWebsiteHome .wh-hero>.fg51-hero-copy{padding-bottom:34px!important}
+  html[data-fg-mona="1"] body #fgWebsiteHome .fg57-quickbar-wrap{margin-top:-28px!important}
+}

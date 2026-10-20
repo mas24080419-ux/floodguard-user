@@ -1,0 +1,117 @@
+/* FloodGuard Hero Crossfade v56
+   Smooth background image transitions using real image layers.
+   Only compositor-friendly opacity + transform are animated. */
+
+:root{
+  --fg56-crossfade: 1400ms;
+  --fg56-zoom: 8200ms;
+  --fg56-ease: cubic-bezier(.4,0,.2,1);
+  --fg56-out: cubic-bezier(.16,1,.3,1);
+}
+
+html[data-fg-mona="1"] .fg51-hero-media{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  isolation:isolate;
+  background:#1d2a19;
+  contain:layout paint;
+  transform:translateZ(0);
+}
+
+html[data-fg-mona="1"] .fg51-slide{
+  position:absolute;
+  inset:-1px;
+  opacity:0!important;
+  z-index:0;
+  transform:none!important;
+  transition:opacity var(--fg56-crossfade) var(--fg56-ease)!important;
+  pointer-events:none;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  will-change:opacity;
+}
+
+html[data-fg-mona="1"] .fg51-slide.is-active{
+  opacity:1!important;
+  z-index:1;
+}
+
+html[data-fg-mona="1"] .fg51-slide img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+  display:block;
+  user-select:none;
+  pointer-events:none;
+  transform:translate3d(0,0,0) scale(1.035);
+  transform-origin:center center;
+  transition:transform var(--fg56-zoom) cubic-bezier(.18,.68,.22,1);
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+html[data-fg-mona="1"] .fg51-slide.is-active img{
+  transform:translate3d(0,0,0) scale(1.002);
+}
+
+/* Soft overlay keeps text legible while still showing the photo. */
+html[data-fg-mona="1"] .fg51-hero-media::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:3;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(16,27,14,.52) 0%,rgba(16,27,14,.26) 50%,rgba(16,27,14,.12) 100%),
+    linear-gradient(0deg,rgba(16,27,14,.18),rgba(16,27,14,.04) 50%);
+}
+
+/* Copy follows the background fade without disappearing for too long. */
+html[data-fg-mona="1"] .fg51-hero-copy{
+  transition:opacity .38s ease,transform .52s var(--fg56-out)!important;
+}
+html[data-fg-mona="1"] .fg51-hero-copy.is-changing{
+  opacity:.06!important;
+  transform:translate3d(0,8px,0)!important;
+}
+
+/* Prevent older hero rules from animating the slide container itself. */
+html[data-fg-mona="1"] .fg51-slide,
+html[data-fg-mona="1"] .fg51-slide.is-active{
+  animation:none!important;
+}
+
+@media(max-width:1024px){
+  :root{--fg56-crossfade:1100ms;--fg56-zoom:7600ms}
+  html[data-fg-mona="1"] .fg51-slide img,
+  html[data-fg-mona="1"] .fg51-slide.is-active img{
+    transform:translate3d(0,0,0) scale(1.01);
+    transition:transform var(--fg56-zoom) linear;
+  }
+}
+
+@media(max-width:720px){
+  :root{--fg56-crossfade:900ms}
+  html[data-fg-mona="1"] .fg51-slide img,
+  html[data-fg-mona="1"] .fg51-slide.is-active img{
+    transform:translateZ(0);
+    transition:none!important;
+  }
+  html[data-fg-mona="1"] .fg51-hero-copy.is-changing{
+    transform:translate3d(0,5px,0)!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  html[data-fg-mona="1"] .fg51-slide,
+  html[data-fg-mona="1"] .fg51-slide img,
+  html[data-fg-mona="1"] .fg51-hero-copy{
+    transition:none!important;
+    animation:none!important;
+    transform:none!important;
+  }
+}

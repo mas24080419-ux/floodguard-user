@@ -1,9 +1,11 @@
-# Mobile UI release — 2026-10-20
+# Mobile-only release — 2026-10-20
 
-Sync the current Android local user interface into the existing FloodGuard static site: extracted feature bundle, compact routing and suggestions, analysis, weather, mobile navigation, language and community presentation. Include the approved SOS/person/wave logo in the homepage, login, favicon and web app manifest.
+User explicitly authorized GitHub push / Render deploy, with desktop UI unchanged.
 
-Preserve existing web-only admin pages, MIKE+ scenario data, navigation entry and scenario bridge. No backend deployment, database/environment changes, auth bypass or production test submissions.
+The prepared Android user interface and approved SOS logo are isolated in /mobile/. device-entry.js selects phones using mobile UA or coarse-pointer small screens. Desktop entry pages retain original HTML plus the selector; all pre-existing desktop CSS/JS/data/icons/pages remain unchanged. Direct mobile URLs on desktop return to the canonical desktop route. Admin/scenario routes are excluded from automatic routing.
 
-Validation before publish: 30 targeted Node tests; UI suite at six viewport sizes; homepage/login/logo guest fixture checks at 320/411/1440; local HTML and service-worker asset existence; JavaScript syntax and diff checks. Browser fixture screenshots are not real API acceptance evidence. Android-specific native/bridge functions remain native-only.
+Desktop and mobile service workers have separate cache names and cleanup prefixes. The root worker bypasses /mobile/ requests. Mobile OAuth returns to the existing canonical path and entry selection preserves query/hash. No backend/environment/database changes or authentication bypass.
 
-Cache name: floodguard-user-v91-mobile-logo. The site still requires valid login for protected app functions. Deployment must be verified against the resulting Render commit and live asset bytes.
+Validation: selector/cache unit tests; fixed-time screenshot comparison (maximum 1/255 channel tolerance for gradient rounding) with the previous deployed desktop source at 1024 and 1440 for homepage/login/route/analysis/weather; mobile entry/login/logo at 320/411 and login query at 915; asset completeness and normalized source comparison. Screenshots use isolated API fixtures; they are not production data acceptance evidence. See local web-mobile-only-evidence and web-desktop-parity.txt.
+
+The previous broad UI commit was never pushed/deployed. This final tree restores desktop and adds only mobile runtime, entry selection and cache isolation. Native Android code is unchanged.

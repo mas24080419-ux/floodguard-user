@@ -1,0 +1,555 @@
+<!doctype html>
+<html data-fg-design="1" lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<script src="/device-entry.js"></script>
+<meta name="theme-color" content="#0b1f33">
+<meta name="description" content="FloodGuard HCMC - cảnh báo ngập, hỗ trợ lộ trình EV và cứu hộ khẩn cấp.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icon-192.png">
+
+<title>FloodGuard 2.9 Email Alerts | FloodGuard HCMC | Flood Risk & Emergency EV Rescue</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css'"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/MarkerCluster.css'"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css'"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./features/ui/workspace-style-1.css">
+<link id="fg3-style" rel="stylesheet" href="./features/ui/fg3-style.css">
+<link rel="stylesheet" href="./features/ui/workspace-style-2.css">
+
+<link id="rain-import-style" rel="stylesheet" href="./features/data/rain-import-style.css">
+
+<link id="fg-routing-honesty-style" rel="stylesheet" href="./features/ui/fg-routing-honesty-style.css">
+<script id="fg-routing-honesty" src="./features/routing/traffic-evidence.js"></script>
+<script id="rain-import-data" src="./features/data/rain-observations.js"></script>
+
+
+<link id="fg42-polish" rel="stylesheet" href="./features/ui/fg42-polish.css">
+
+<link id="fg43-premium-ui" rel="stylesheet" href="./features/ui/fg43-premium-ui.css">
+
+
+<link id="fg44-aurora-ui" rel="stylesheet" href="./features/ui/fg44-aurora-ui.css">
+
+<link id="fg45-neoglass-ui" rel="stylesheet" href="./features/ui/fg45-neoglass-ui.css">
+
+
+<link id="fg46-zen-product-ui" rel="stylesheet" href="./features/ui/fg46-zen-product-ui.css">
+
+<link id="fg47-ev-photos" rel="stylesheet" href="./features/stations/fg47-ev-photos.css">
+
+<link id="fg50-route-mode-fix" rel="stylesheet" href="./features/routing/fg50-route-mode-fix.css">
+
+<link id="fg51-product-upgrade" rel="stylesheet" href="./features/ui/fg51-product-upgrade.css">
+
+<link id="fg57-hide-mode-description" rel="stylesheet" href="./features/routing/fg57-hide-mode-description.css">
+
+<link id="fg60-hide-vehicle-descriptions" rel="stylesheet" href="./features/routing/fg60-hide-vehicle-descriptions.css">
+
+<link id="fg62-decision-support" rel="stylesheet" href="./features/routing/fg62-decision-support.css">
+
+
+<link id="fg70-max-style" rel="stylesheet" href="./features/analysis/fg70-max-style.css">
+
+<link id="fg80-upgrade-style" rel="stylesheet" href="./features/routing/fg80-upgrade-style.css">
+
+<link id="fg82-route-suggest-layout-fix" rel="stylesheet" href="./features/routing/fg82-route-suggest-layout-fix.css">
+
+<link id="fg90-style" rel="stylesheet" href="./features/routing/fg90-style.css">
+
+<link id="fg3-result-jump-style" rel="stylesheet" href="./features/analysis/fg3-result-jump-style.css">
+
+<link id="fg12-ultimate-style" rel="stylesheet" href="./features/ui/fg12-ultimate-style.css">
+
+<link id="fg132-command-interaction-fix" rel="stylesheet" href="./features/ui/fg132-command-interaction-fix.css">
+
+<link id="fg-prod-public" rel="stylesheet" href="./features/rescue/fg-prod-public.css">
+
+<link id="fg23-hide-rescue-audit-notes" rel="stylesheet" href="./features/rescue/fg23-hide-rescue-audit-notes.css">
+
+<link id="fg28-hide-rain-gauge-ui" rel="stylesheet" href="./features/weather/fg28-hide-rain-gauge-ui.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="./floodguard-typography-v1.css?v=1">
+<link rel="stylesheet" href="./community.css?v=5">
+<script src="./report-photo.js?v=2" defer></script>
+<script src="./report-validation.js?v=3" defer></script>
+<script src="./community.js?v=5" defer></script>
+<link rel="stylesheet" href="./route-motion.css?v=1">
+<script src="./route-motion.js?v=1" defer></script>
+<link rel="stylesheet" href="./floodguard-design-system.css?v=73">
+<link id="fg02-unknown-risk" rel="stylesheet" href="./features/routing/fg02-unknown-risk.css">
+<script src="./behavior-analytics.js" defer></script>
+<script src="./journey-ui.js" defer></script>
+<link rel="stylesheet" href="./language.css"><script src="./language-catalog.js" defer></script><script src="./language.js" defer></script><link rel="icon" type="image/png" href="./floodguard-logo.png">
+<link rel="stylesheet" href="./brand-logo.css">
+</head>
+<body>
+<div id="map"></div>
+<div class="topbar"><div class="brand"><div class="logo">FG</div><div><h1>FloodGuard HCMC</h1><p>Dự báo ngập từ dữ liệu lịch sử · rủi ro trạm sạc EV · phương án trạm thay thế</p><div class="status-pill"><span class="status-dot"></span>Dữ liệu lịch sử · không phải thời gian thực</div></div></div><div class="toolbar"><button class="btn" id="commandBtn">▦ Trung tâm điều hành</button><button class="btn" id="forecastBtn" aria-expanded="false">☔ Kịch bản & tiếp cận EV</button><button class="btn" id="menuBtn" aria-expanded="false">☰ Lớp dữ liệu</button><button class="btn" id="homeBtn">⌂ Đặt lại</button><button class="btn" id="baseBtn">🗺 Bản đồ</button></div></div>
+
+
+<div class="command-panel" id="commandPanel" aria-hidden="true">
+  <div class="cc-shell">
+    <aside class="cc-side">
+      <div class="cc-brand"><div class="cc-logo">FG</div><h2>FloodGuard HCMC 3.7</h2><p>Hệ thống dự báo ngập theo kịch bản lượng mưa và sàng lọc rủi ro trạm sạc EV tại TP.HCM dựa trên dữ liệu lịch sử có nguồn.</p></div>
+      <div class="cc-nav">
+        <button class="active" data-cc="ccOverview">▦ Tổng quan</button>
+        <button data-cc="ccStreet">⌖ Phân tích tuyến đường</button>
+        <button data-cc="ccImpact">◎ Đối tượng sử dụng</button>
+        <button data-cc="ccMethod">✓ Phương pháp & toàn vẹn dữ liệu</button>
+      </div>
+      <div class="cc-side-note"><b>Lưu ý:</b> dự án sử dụng dữ liệu lịch sử đã được kiểm tra nguồn. Hệ thống không khẳng định tình trạng ngập, đóng đường hay khả dụng của trạm sạc theo thời gian thực.</div>
+    </aside>
+    <main class="cc-main">
+      <div class="cc-top"><div><div class="cc-title" id="ccTitle">Tổng quan hỗ trợ quyết định</div><div class="cc-sub">Bảng điều khiển tích hợp A1 → A4 · ưu tiên dữ liệu đã kiểm chứng · không tự tạo dữ liệu để lấp chỗ trống</div></div><button class="cc-close" id="commandClose">×</button></div>
+      <div class="cc-content">
+        <section class="cc-pane active" id="ccOverview">
+          <div class="cc-kpis">
+            <div class="cc-kpi"><div class="n" id="ccEvN">—</div><div class="l">bản ghi trạm/cổng sạc EV</div></div>
+            <div class="cc-kpi"><div class="n" id="ccStreetN">—</div><div class="l">tuyến đường có nguồn bằng chứng</div></div>
+            <div class="cc-kpi"><div class="n" id="ccQuantN">—</div><div class="l">tuyến có dữ liệu định lượng mưa–độ ngập</div></div>
+            <div class="cc-kpi"><div class="n" id="ccReadyN">—</div><div class="l">tuyến đủ mẫu lịch sử để phân tích kịch bản</div></div>
+            <div class="cc-kpi"><div class="n" id="ccPairsN">—</div><div class="l">cặp ứng viên trạm EV–tuyến đường</div></div>
+            <div class="cc-kpi"><div class="n" id="ccRecN">—</div><div class="l">tuyến trong danh mục ngập/bối cảnh chính thức 2026</div></div>
+          </div>
+          <div class="cc-grid">
+            <div class="cc-card">
+              <div class="cc-card-title">Mức độ bao phủ bằng chứng lịch sử</div><div class="cc-card-sub">Chỉ số này phản ánh độ đầy đủ của dữ liệu có nguồn, không phải xác suất ngập hiện tại.</div>
+              <div class="cc-row"><span>Tuyến đủ dữ liệu phân tích (≥2 sự kiện định lượng)</span><b id="ccReadyText">—</b></div><div class="cc-meter"><span id="ccReadyBar" style="width:0%"></span></div>
+              <div class="cc-row"><span>Tuyến có dữ liệu định lượng hạn chế (1 sự kiện)</span><b id="ccLimitedText">—</b></div>
+              <div class="cc-row"><span>Tuyến chỉ có bằng chứng từng xảy ra ngập</span><b id="ccOccText">—</b></div>
+              <div class="cc-legend"><span class="cc-tag good">Định lượng</span><span class="cc-tag info">Có nguồn</span><span class="cc-tag warn">Bối cảnh lịch sử</span><span class="cc-tag risk">Không thời gian thực</span></div>
+            </div>
+            <div class="cc-card">
+              <div class="cc-card-title">Tổng quan mạng lưới EV</div><div class="cc-card-sub">Được tính trực tiếp từ bộ dữ liệu 552 bản ghi trạm sạc đã cung cấp.</div>
+              <div class="cc-row"><span>Tổng số cổng sạc được ghi nhận</span><b id="ccPorts">—</b></div>
+              <div class="cc-row"><span>Số cổng sạc nhanh được ghi nhận</span><b id="ccFastPorts">—</b></div>
+              <div class="cc-row"><span>Trạm có liên kết ứng viên với tuyến đường</span><b id="ccCandStations">—</b></div>
+              <div class="cc-row"><span>Trạm có mức ưu tiên sàng lọc cao</span><b id="ccHighStations">—</b></div>
+              <div class="cc-actions"><button class="cc-primary" id="ccOpenForecast">Mở phân tích kịch bản</button><button class="cc-secondary" id="ccFocusEV">Hiển thị mạng lưới EV</button></div>
+            </div>
+            <div class="cc-card wide">
+              <div class="cc-card-title">Các tuyến có bằng chứng định lượng lịch sử mạnh nhất</div><div class="cc-card-sub">Sắp xếp theo số sự kiện định lượng độc lập Tuyến đường × Ngày. Độ ngập/lượng mưa lớn nhất là giá trị quan sát trong bộ dữ liệu hiện tại, không phải dự báo.</div>
+              <div class="cc-table-wrap"><table class="cc-table"><thead><tr><th>Tuyến đường</th><th>Sự kiện</th><th>Độ ngập lớn nhất</th><th>Lượng mưa lớn nhất</th><th>Khoảng thời gian</th><th>Ứng viên EV</th><th>Thao tác</th></tr></thead><tbody id="ccTopStreetTable"></tbody></table></div>
+            </div>
+          </div>
+        </section>
+        <section class="cc-pane" id="ccStreet">
+          <div class="cc-form"><div><label>Tuyến đường</label><select class="cc-select" id="ccStreetSelect"></select></div><div><label>Kịch bản lượng mưa (mm)</label><input class="cc-input" id="ccRainInput" type="number" min="0" max="600" step="1" value="100"></div><button class="cc-primary" id="ccAnalyzeStreet">Dự báo ngập & rủi ro EV</button></div>
+          <div class="quick-scenarios"><span class="cc-tag">Kịch bản lượng mưa nhanh:</span><button class="qs-btn" data-rain="50">50 mm</button><button class="qs-btn" data-rain="100">100 mm</button><button class="qs-btn" data-rain="150">150 mm</button><button class="qs-btn" data-rain="200">200 mm</button></div>
+          <div class="cc-grid" style="margin-top:10px">
+            <div class="cc-card"><div class="cc-card-title">Hồ sơ bằng chứng của tuyến</div><div id="ccStreetProfile"></div></div>
+            <div class="cc-card"><div class="cc-card-title">Khoảng giá trị định lượng quan sát</div><div id="ccStreetRanges"></div></div>
+            <div class="cc-card wide"><div class="cc-card-title">Dòng thời gian sự kiện lịch sử</div><div class="cc-table-wrap"><table class="cc-table"><thead><tr><th>Ngày</th><th>Lượng mưa</th><th>Độ ngập</th><th>Triều</th><th>Nguyên nhân</th><th>Bằng chứng</th></tr></thead><tbody id="ccTimeline"></tbody></table></div></div>
+          </div>
+        </section>
+        <section class="cc-pane" id="ccImpact">
+          <div class="cc-card wide"><div class="cc-card-title">FloodGuard hỗ trợ giải quyết những vấn đề gì?</div><div class="cc-card-sub">Website hỗ trợ ra quyết định dựa trên thông tin ngập và khả năng tiếp cận; hệ thống không trực tiếp ngăn ngừa ngập lụt.</div>
+            <div class="cc-impact-grid">
+              <div class="cc-impact"><div class="ico">👥</div><h4>Người dân & người tham gia giao thông</h4><p>Tìm các tuyến có bằng chứng ngập, xem mức độ nghiêm trọng trong lịch sử và so sánh kịch bản lượng mưa với các sự kiện trước khi quyết định di chuyển.</p></div>
+              <div class="cc-impact"><div class="ico">🚚</div><h4>Doanh nghiệp & hậu cần</h4><p>Nhận diện tín hiệu rủi ro tiếp cận đường có thể làm gián đoạn giao hàng, việc đi lại của nhân viên hoặc chuỗi cung ứng, từ đó ưu tiên các tuyến cần kiểm tra.</p></div>
+              <div class="cc-impact"><div class="ico">⚡</div><h4>Người dùng EV & đơn vị vận hành</h4><p>Sàng lọc các trạm sạc liên quan đến tuyến có bằng chứng ngập và gợi ý trạm thay thế gần đó, nhưng không khẳng định sai về tình trạng ngừng hoạt động theo thời gian thực.</p></div>
+              <div class="cc-impact"><div class="ico">🏙️</div><h4>Nhà quản lý đô thị</h4><p>Tích hợp dữ liệu ngập, lượng mưa, thủy triều, bằng chứng tuyến đường và hạ tầng EV trong một góc nhìn không gian có thể kiểm chứng để hỗ trợ ưu tiên và nghiên cứu.</p></div>
+            </div>
+          </div>
+          <div class="cc-card wide" style="margin-top:10px"><div class="cc-card-title">Chuỗi hỗ trợ quyết định</div><div class="cc-card-sub">Quy trình minh bạch từ dữ liệu môi trường đến sàng lọc khả năng di chuyển và hạ tầng.</div><div class="cc-flow"><div class="cc-step">Lượng mưa đầu vào</div><div class="cc-arrow">→</div><div class="cc-step">Dự báo ngập từ lịch sử</div><div class="cc-arrow">→</div><div class="cc-step">Trạm sạc rủi ro cao</div></div><div class="cc-flow" style="margin-top:6px"><div class="cc-step">Trạm sạc bị ảnh hưởng theo kịch bản</div><div class="cc-arrow">→</div><div class="cc-step">Đánh giá mức rủi ro EV</div><div class="cc-arrow">→</div><div class="cc-step">Trạm sạc thay thế gần nhất</div></div></div>
+        </section>
+        <section class="cc-pane" id="ccMethod">
+          <div class="cc-grid">
+            <div class="cc-card"><div class="cc-card-title">Quá trình phát triển A1 → A4</div><div class="cc-row"><span>A1</span><b>Xác định vấn đề & phạm vi</b></div><div class="cc-row"><span>A2</span><b>Đặc trưng dữ liệu, khóa chính & nguồn gốc</b></div><div class="cc-row"><span>A3</span><b>Làm sạch, xác thực & chuyển đổi dữ liệu</b></div><div class="cc-row"><span>A4</span><b>Chuẩn bị, trực quan hóa & hỗ trợ quyết định</b></div></div>
+            <div class="cc-card"><div class="cc-card-title">Quy tắc toàn vẹn dữ liệu</div><div class="cc-source">✓ Không điền lượng mưa hoặc độ ngập bị thiếu bằng giá trị tự tạo.<br>✓ Sử dụng một sự kiện độc lập Tuyến đường × Ngày để giảm việc tính trọng số trùng lặp.<br>✓ Tọa độ tuyến là điểm đại diện trên bản đồ, trừ khi có nguồn xác định chính xác cảm biến/vị trí.<br>✓ Ghép ứng viên EV chỉ là bằng chứng sàng lọc, không phải khẳng định khả năng tiếp cận theo thời gian thực.</div></div>
+            <div class="cc-card wide"><div class="cc-card-title">Giới hạn diễn giải</div><div class="cc-source"><b>Dự báo tương đồng lịch sử ≠ dự báo thời gian thực.</b> Công cụ so sánh lượng mưa đầu vào với các quan sát mưa–độ ngập thực trong lịch sử để ước lượng mức ngập tham chiếu. Rủi ro trạm sạc được sàng lọc từ tín hiệu ngập của tuyến và mức ưu tiên ghép trạm–tuyến trong dữ liệu. Trạm thay thế được chọn theo khoảng cách; trạng thái hoạt động thực tế và điều kiện tiếp cận tại thời điểm sử dụng vẫn cần được kiểm tra.</div></div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+
+
+<div class="forecast-panel" id="forecastPanel" aria-hidden="true">
+ <div class="fc-inner">
+  <div class="fc-head"><div><div class="fc-kicker">Dự báo theo dữ liệu lịch sử + sàng lọc rủi ro trạm sạc EV</div><h2>Dự báo ngập & trạm sạc EV rủi ro</h2><p>Chọn tuyến đường và nhập lượng mưa. Ứng dụng đối chiếu với các sự kiện mưa–ngập lịch sử có thật để ước lượng độ ngập tham chiếu, sau đó xác định các trạm sạc có rủi ro cao theo kịch bản và gợi ý các trạm thay thế gần nhất.</p></div><button class="fc-close" id="forecastClose">×</button></div>
+  <div class="fc-scroll">
+   <div class="fc-controls">
+    <div class="fc-field"><label>Tuyến đường</label><select id="fcStreet"><optgroup label="Đủ dữ liệu phân tích: ≥2 dữ liệu định lượng"><option value="Dương Văn Cam">Dương Văn Cam — 7 dữ liệu định lượng</option><option value="Hiệp Bình">Hiệp Bình — 2 dữ liệu định lượng</option><option value="Hồ Văn Tư">Hồ Văn Tư — 7 dữ liệu định lượng</option><option value="Kha Vạn Cân">Kha Vạn Cân — 7 dữ liệu định lượng</option><option value="Lã Xuân Oai">Lã Xuân Oai — 3 dữ liệu định lượng</option><option value="Lê Thị Hoa">Lê Thị Hoa — 2 dữ liệu định lượng</option><option value="Lê Văn Việt">Lê Văn Việt — 4 dữ liệu định lượng</option><option value="Nguyễn Văn Hưởng">Nguyễn Văn Hưởng — 5 dữ liệu định lượng</option><option value="Quốc Hương">Quốc Hương — 17 dữ liệu định lượng</option><option value="Quốc lộ 13">Quốc lộ 13 — 5 dữ liệu định lượng</option><option value="Quốc lộ 1A">Quốc lộ 1A — 5 dữ liệu định lượng</option><option value="Thảo Điền">Thảo Điền — 6 dữ liệu định lượng</option><option value="Trần Ngọc Diện">Trần Ngọc Diện — 2 dữ liệu định lượng</option><option value="Tô Ngọc Vân">Tô Ngọc Vân — 3 dữ liệu định lượng</option><option value="Tỉnh lộ 43">Tỉnh lộ 43 — 7 dữ liệu định lượng</option><option value="Võ Văn Ngân">Võ Văn Ngân — 2 dữ liệu định lượng</option><option value="Xa lộ Hà Nội">Xa lộ Hà Nội — 3 dữ liệu định lượng</option><option value="Đặng Thị Rành">Đặng Thị Rành — 7 dữ liệu định lượng</option><option value="Đỗ Xuân Hợp">Đỗ Xuân Hợp — 4 dữ liệu định lượng</option></optgroup><optgroup label="Dữ liệu định lượng hạn chế: 1 bản ghi"><option value="D5">D5 — 1 dữ liệu định lượng</option><option value="Lương Đình Của">Lương Đình Của — 1 dữ liệu định lượng</option><option value="Nguyễn Duy Trinh">Nguyễn Duy Trinh — 1 dữ liệu định lượng</option><option value="Nguyễn Gia Trí">Nguyễn Gia Trí — 1 dữ liệu định lượng</option><option value="Nguyễn Hữu Cảnh">Nguyễn Hữu Cảnh — 1 dữ liệu định lượng</option><option value="Phạm Văn Đồng">Phạm Văn Đồng — 1 dữ liệu định lượng</option><option value="Trần Não">Trần Não — 1 dữ liệu định lượng</option><option value="Ung Văn Khiêm">Ung Văn Khiêm — 1 dữ liệu định lượng</option><option value="Đinh Bộ Lĩnh">Đinh Bộ Lĩnh — 1 dữ liệu định lượng</option></optgroup><optgroup label="Chỉ có bằng chứng từng ngập: chưa đủ mô hình mưa–độ ngập"><option value="An Dương Vương">An Dương Vương — 1 dòng bằng chứng</option><option value="Ba Tháng Hai">Ba Tháng Hai — 2 dòng bằng chứng</option><option value="Bà Triệu">Bà Triệu — 1 dòng bằng chứng</option><option value="Bình Quới">Bình Quới — 1 dòng bằng chứng</option><option value="Bùi Đình Túy">Bùi Đình Túy — 1 dòng bằng chứng</option><option value="Bạch Đằng">Bạch Đằng — 2 dòng bằng chứng</option><option value="Calmette">Calmette — 1 dòng bằng chứng</option><option value="Cách Mạng Tháng 8">Cách Mạng Tháng 8 — 1 dòng bằng chứng</option><option value="Cống Quỳnh">Cống Quỳnh — 1 dòng bằng chứng</option><option value="Hồ Học Lãm">Hồ Học Lãm — 1 dòng bằng chứng</option><option value="Hồ Văn Cống - Quốc lộ 13">Hồ Văn Cống - Quốc lộ 13 — 1 dòng bằng chứng</option><option value="Lê Lai">Lê Lai — 1 dòng bằng chứng</option><option value="Lê Văn Lương">Lê Văn Lương — 1 dòng bằng chứng</option><option value="Lê Văn Ninh">Lê Văn Ninh — 1 dòng bằng chứng</option><option value="Lê Văn Thọ">Lê Văn Thọ — 3 dòng bằng chứng</option><option value="Lê Đức Thọ">Lê Đức Thọ — 3 dòng bằng chứng</option><option value="Nguyễn Biểu">Nguyễn Biểu — 1 dòng bằng chứng</option><option value="Nguyễn Cư Trinh">Nguyễn Cư Trinh — 1 dòng bằng chứng</option><option value="Nguyễn Văn Cừ">Nguyễn Văn Cừ — 1 dòng bằng chứng</option><option value="Nguyễn Văn Khối">Nguyễn Văn Khối — 4 dòng bằng chứng</option><option value="Nguyễn Văn Quá">Nguyễn Văn Quá — 3 dòng bằng chứng</option><option value="Phan Anh">Phan Anh — 1 dòng bằng chứng</option><option value="Phan Huy Ích">Phan Huy Ích — 2 dòng bằng chứng</option><option value="Phan Văn Hớn">Phan Văn Hớn — 3 dòng bằng chứng</option><option value="Phạm Hữu Lầu">Phạm Hữu Lầu — 1 dòng bằng chứng</option><option value="Phạm Ngũ Lão">Phạm Ngũ Lão — 1 dòng bằng chứng</option><option value="Phạm Văn Chiêu">Phạm Văn Chiêu — 6 dòng bằng chứng</option><option value="Quốc lộ 1K">Quốc lộ 1K — 1 dòng bằng chứng</option><option value="Quốc lộ 50">Quốc lộ 50 — 1 dòng bằng chứng</option><option value="Rạch Bưng Cải">Rạch Bưng Cải — 1 dòng bằng chứng</option><option value="Song hành Quốc lộ 22">Song hành Quốc lộ 22 — 3 dòng bằng chứng</option><option value="Suối Bình Thắng">Suối Bình Thắng — 1 dòng bằng chứng</option><option value="Thi Sách">Thi Sách — 1 dòng bằng chứng</option><option value="Thích Quảng Đức">Thích Quảng Đức — 1 dòng bằng chứng</option><option value="Trường Sơn">Trường Sơn — 1 dòng bằng chứng</option><option value="Trần Hưng Đạo">Trần Hưng Đạo — 1 dòng bằng chứng</option><option value="Tâm Tâm Xã">Tâm Tâm Xã — 1 dòng bằng chứng</option><option value="Tân Cảng">Tân Cảng — 1 dòng bằng chứng</option><option value="Tân Hòa Đông">Tân Hòa Đông — 1 dòng bằng chứng</option><option value="Tô Ký">Tô Ký — 1 dòng bằng chứng</option><option value="Võ Nguyên Giáp - chân cầu Cỏ May">Võ Nguyên Giáp - chân cầu Cỏ May — 1 dòng bằng chứng</option><option value="Võ Nguyên Giáp - Ẹo Ông Từ">Võ Nguyên Giáp - Ẹo Ông Từ — 1 dòng bằng chứng</option><option value="Võ Văn Kiệt – Hồ Học Lãm">Võ Văn Kiệt – Hồ Học Lãm — 1 dòng bằng chứng</option><option value="Vĩnh Hội">Vĩnh Hội — 1 dòng bằng chứng</option><option value="Điện Biên Phủ">Điện Biên Phủ — 1 dòng bằng chứng</option><option value="Đường 30/4">Đường 30/4 — 1 dòng bằng chứng</option><option value="Đại lộ Bình Dương">Đại lộ Bình Dương — 1 dòng bằng chứng</option><option value="Đặng Thúc Vịnh">Đặng Thúc Vịnh — 1 dòng bằng chứng</option></optgroup></select></div>
+    <div class="fc-field"><label>Lượng mưa đầu vào (mm)</label><input id="fcRain" type="number" min="0" max="600" step="1" inputmode="decimal" value="100"></div>
+    <button class="fc-run" id="fcRun">Dự báo & tìm trạm thay thế</button>
+   </div>
+   <div class="quick-scenarios"><span class="cc-tag">Kịch bản lượng mưa nhanh</span><button class="qs-btn fc-preset" data-rain="50">50 mm</button><button class="qs-btn fc-preset" data-rain="100">100 mm</button><button class="qs-btn fc-preset" data-rain="150">150 mm</button><button class="qs-btn fc-preset" data-rain="200">200 mm</button></div>
+   <div class="fc-tabs"><button class="fc-tab active" data-pane="floodPane">Dự báo ngập</button><button class="fc-tab" data-pane="evPane">Tác động EV & phương án thay thế</button><button class="fc-tab" data-pane="auditPane">Kiểm tra dữ liệu</button></div>
+   <div class="fc-pane active" id="floodPane">
+    <div class="fc-grid">
+     <div class="fc-card"><div class="fc-label">Chất lượng bằng chứng</div><div class="fc-big" id="fcQuality">—</div><div class="fc-note" id="fcQualityNote">—</div></div>
+     <div class="fc-card"><div class="fc-label">Tín hiệu ngập lịch sử</div><div class="fc-big" id="fcSignal">—</div><div class="fc-note" id="fcSignalNote">—</div></div>
+     <div class="fc-card"><div class="fc-label">Ước lượng độ ngập theo tương đồng lịch sử</div><div class="fc-big" id="fcDepth">—</div><div class="fc-note" id="fcDepthNote">Suy ra từ các sự kiện thực gần nhất; chỉ có ý nghĩa trong điều kiện xảy ra ngập.</div></div>
+     <div class="fc-card"><div class="fc-label">Trạm sạc rủi ro cao theo kịch bản</div><div class="fc-big" id="fcHighRiskEV">—</div><div class="fc-note" id="fcHighRiskEVNote">Được xác định từ tín hiệu ngập lịch sử của tuyến và mức ưu tiên ghép trạm–tuyến.</div></div>
+     <div class="fc-card wide"><div class="fc-kpis"><div class="fc-kpi"><b id="fcN">—</b><span>sự kiện định lượng theo tuyến</span></div><div class="fc-kpi"><b id="fcRainRange">—</b><span>khoảng lượng mưa lịch sử</span></div><div class="fc-kpi"><b id="fcDepthRange">—</b><span>khoảng độ ngập lịch sử</span></div><div class="fc-kpi"><b id="fcDirect">—</b><span>sự kiện mưa trực tiếp/lân cận</span></div></div></div>
+     <div class="fc-card wide"><div class="fc-label">Lượng mưa lịch sử so với độ ngập quan sát/đại diện sự kiện</div><div class="fc-chart" id="fcChart"></div></div>
+     <div class="fc-card wide"><div class="fc-label" style="margin-bottom:6px">Các sự kiện lịch sử tương đồng nhất & nguồn dữ liệu</div><div class="fc-table-wrap"><table class="fc-table"><thead><tr><th>Ngày</th><th>Mưa</th><th>Cơ sở lượng mưa</th><th>Độ ngập</th><th>Nguyên nhân</th><th>Nguồn</th></tr></thead><tbody id="fcHistory"></tbody></table></div></div>
+    </div>
+    <div class="fc-method"><b>Phương pháp phân tích.</b> Mỗi Tuyến đường × Ngày được tạo thành một bản ghi để tránh một trận mưa bị tính trọng số nhiều lần. Nếu cùng tuyến/ngày có nhiều độ ngập định lượng ở các đoạn khác nhau, ứng dụng sử dụng trung vị làm <i>giá trị đại diện sự kiện</i> và vẫn giữ khoảng min–max từ nguồn. Lượng mưa chỉ được coi là mưa trực tiếp tại tuyến khi nguồn chứng minh. Nhãn A/B/C thể hiện nguồn gốc không gian của dữ liệu mưa, không thể hiện mức chắc chắn xảy ra ngập.</div>
+   </div>
+   <div class="fc-pane" id="evPane">
+    <div class="fc-callout">Rủi ro EV là một <b>kết quả sàng lọc theo kịch bản</b>. Các ghép nối trạm–tuyến đến từ bộ dữ liệu 552 trạm đã cung cấp. Mức “CAO” được tính từ tín hiệu ngập lịch sử của tuyến dưới lượng mưa đầu vào kết hợp với mức ưu tiên ghép trạm–tuyến; đây chưa phải trạng thái vận hành thời gian thực của trạm.</div>
+    <div class="fc-grid" style="margin-top:9px">
+     <div class="fc-card"><div class="fc-label">Trạm ứng viên liên kết với tuyến đã chọn</div><div class="fc-big" id="evAffectedN">0</div><div class="fc-note" id="evAffectedNote">—</div></div>
+     <div class="fc-card"><div class="fc-label">Mức tác động sàng lọc cao nhất</div><div class="fc-big" id="evMaxImpact">—</div><div class="fc-note" id="evAccessStatus">Khả năng tiếp cận chưa được xác minh.</div></div>
+     <div class="fc-card wide"><div class="fc-label" style="margin-bottom:6px">Ứng viên có thể bị ảnh hưởng / có rủi ro tiếp cận</div><div class="fc-table-wrap"><table class="fc-table"><thead><tr><th>Trạm</th><th>Liên kết với tuyến</th><th>Rủi ro theo kịch bản</th><th>Diễn giải</th><th>Bằng chứng</th></tr></thead><tbody id="evAffectedTable"></tbody></table></div></div>
+     <div class="fc-card wide"><div class="fc-label" style="margin-bottom:6px">Các trạm sạc thay thế gần đó</div><div class="fc-note" style="margin-bottom:7px">Trạm thay thế được chọn theo khoảng cách đường thẳng từ trạm rủi ro và loại trừ các trạm đã liên kết với tuyến đang phân tích. Trạng thái hoạt động thời gian thực của trạm thay thế chưa được xác minh.</div><div id="evAlternatives" class="alt-list"></div><div class="fc-actions"><button class="fc-smallbtn" id="focusImpactBtn">Tập trung bản đồ vào khu vực ảnh hưởng</button><button class="fc-smallbtn" id="clearImpactBtn">Xóa lớp tác động</button></div></div>
+    </div>
+   </div>
+   <div class="fc-pane" id="auditPane">
+    <div class="fc-grid">
+      <div class="fc-card"><div class="fc-label">Mức bao phủ dữ liệu định lượng</div><div class="fc-big">28 tuyến</div><div class="fc-note">Các cặp lượng mưa định lượng + độ ngập định lượng được giữ đúng theo nguồn ở Cấp 1 và gộp thành các sự kiện Tuyến đường × Ngày độc lập.</div></div>
+      <div class="fc-card"><div class="fc-label">Danh mục bằng chứng tuyến đường mở rộng</div><div class="fc-big">76 tuyến/nhãn</div><div class="fc-note">Bao gồm các tuyến chỉ có bằng chứng từng ngập và danh mục tuyến/đoạn đường ngập do mưa chính thức năm 2026.</div></div>
+      <div class="fc-card wide"><div class="fc-label">Bối cảnh chính thức hiện có (2026)</div><div class="fc-note">Sở Xây dựng TP.HCM ghi nhận 26 tuyến/đoạn đường ngập do mưa, độ ngập trung bình 10–30 cm và thời gian thoát nước điển hình khoảng 30 phút. Đây là bằng chứng về tính lặp lại/bối cảnh và <b>không được chuyển thành các cặp huấn luyện mưa–độ ngập riêng cho từng tuyến</b>. <a class="fc-link" target="_blank" rel="noopener" href="https://ttbc-hcm.gov.vn/thong-tin-cac-van-de-kinh-te-xa-hoi-tp-hcm-den-ngay-25-6-1021649.html">Nguồn Trung tâm Báo chí TP.HCM ↗</a></div></div>
+      <div class="fc-card wide"><div class="fc-label">Giới hạn toàn vẹn dữ liệu</div><div class="fc-note">Không tự tạo giá trị lượng mưa/độ ngập bị thiếu. Lượng mưa sự kiện/trạm vẫn được gắn đúng phạm vi của nguồn. Tọa độ tuyến đại diện không phải vị trí cảm biến đo độ ngập. Trạm EV thay thế chỉ là ứng viên theo khoảng cách, không đảm bảo an toàn/khả dụng. Khi ra quyết định di chuyển thực tế, cần dùng dữ liệu trực tiếp về đường, ngập và trạng thái sạc.</div></div>
+    </div>
+   </div>
+  </div>
+ </div>
+</div>
+
+<div class="menu-panel" id="menuPanel" aria-hidden="true">
+  <div class="menu-head"><div><div class="menu-title">Lớp dữ liệu & bằng chứng</div><div class="menu-sub">Khám phá các lớp dữ liệu ngập, lượng mưa và trạm sạc EV đã được kiểm chứng trong dự án A1–A4.</div></div><button class="menu-close" id="menuClose" aria-label="Close menu">×</button></div>
+  <div class="row"><div class="label"><span class="dot" style="background:#22a06b"></span>Danh mục EV — chưa có ghép ứng viên</div><label class="switch"><input id="evBaseT" type="checkbox" checked><span class="slider"></span></label></div>
+  <div class="row"><div class="label"><span class="dot" style="background:#3b82f6"></span>Ưu tiên ứng viên THẤP</div><label class="switch"><input id="evLowT" type="checkbox" checked><span class="slider"></span></label></div>
+  <div class="row"><div class="label"><span class="dot" style="background:#f59e0b"></span>Ưu tiên ứng viên TRUNG BÌNH</div><label class="switch"><input id="evMedT" type="checkbox" checked><span class="slider"></span></label></div>
+  <div class="row"><div class="label"><span class="dot" style="background:#ef4444"></span>Ưu tiên ứng viên CAO</div><label class="switch"><input id="evHighT" type="checkbox" checked><span class="slider"></span></label></div>
+  <div class="row"><div class="label"><span class="tri"></span>Trạm mưa tự động · Bảng 3.42</div><label class="switch"><input id="rainAutoT" type="checkbox" checked><span class="slider"></span></label></div>
+  <div class="row"><div class="label"><span class="tri2"></span>Trạm mưa khu vực · Bảng 3.8</div><label class="switch"><input id="rainRegT" type="checkbox"><span class="slider"></span></label></div>
+  <div class="row"><div class="label"><span class="ring"></span>Điểm đại diện tuyến ngập chính</div><label class="switch"><input id="coreT" type="checkbox" checked><span class="slider"></span></label></div>
+  <div class="row"><div class="label"><span class="dot" style="background:#fb7185"></span>Các điểm đại diện ngập/tuyến khác</div><label class="switch"><input id="streetT" type="checkbox" checked><span class="slider"></span></label></div>
+  <details class="menu-about">
+    <summary>ⓘ Giới thiệu / Cách diễn giải</summary>
+    <div class="menu-about-body">
+      <p><b>Điểm đại diện:</b> tọa độ điểm ngập/tuyến đường là điểm tham chiếu trên bản đồ, không phải vị trí chính xác của cảm biến đo độ ngập.</p>
+      <p><b>Chỉ để sàng lọc:</b> mức ưu tiên ứng viên EV dựa trên ghép nối với tên tuyến. Màu của ứng viên thể hiện <b>mức ưu tiên kiểm tra</b>, không phải xác suất ngập đo được.</p>
+    </div>
+  </details>
+
+  <details class="menu-about">
+    <summary>↳ Quy trình dự án A1 → A4</summary>
+    <div class="menu-about-body">
+      <p><b>A1 — Vấn đề & phạm vi:</b> ngập đô thị tại TP.HCM, gián đoạn giao thông và khả năng tiếp cận trạm sạc EV.</p>
+      <p><b>A2 — Cấu trúc dữ liệu:</b> bản ghi tuyến/sự kiện, lượng mưa, bối cảnh thủy triều, nguồn dữ liệu và bộ 552 bản ghi trạm sạc EV đã cung cấp.</p>
+      <p><b>A3 — Làm sạch & chuyển đổi:</b> xác thực nguồn, xử lý dữ liệu thiếu, chuẩn hóa sự kiện, so sánh mưa–ngập và triều–ngập.</p>
+      <p><b>A4 — Chuẩn bị & hỗ trợ quyết định:</b> bản đồ có xét nguồn, tương đồng lịch sử mưa–độ ngập, sàng lọc tác động đến EV và tìm trạm sạc thay thế.</p>
+      <p><b>Toàn vẹn dữ liệu:</b> không tự tạo lượng mưa/độ ngập bị thiếu. Kết quả sàng lọc không được trình bày như tình trạng đóng đường hoặc trạm sạc ngừng hoạt động theo thời gian thực.</p>
+    </div>
+  </details>
+  <details class="menu-about">
+    <summary>✓ Nguồn & toàn vẹn dữ liệu</summary>
+    <div class="menu-about-body">
+      <p><b>Kiểm tra nguồn:</b> điểm EV lấy từ bộ 552 bản ghi Gogara đã cung cấp. Lớp mưa chính sử dụng tọa độ trạm tự động chính thức trong Bảng 3.42. Lớp mưa thứ hai là bộ trạm riêng trong Bảng 3.8.</p>
+      <p><b>Giới hạn toàn vẹn:</b> tọa độ ngập/tuyến là điểm đại diện trên bản đồ, không phải vị trí chính xác của cảm biến độ ngập. Mức ưu tiên ứng viên là mức sàng lọc trong workbook dựa trên bằng chứng tên tuyến; <b>không phải xác suất trạm bị ngập đã đo</b>, kết luận mất khả năng tiếp cận hoặc quyết định di dời.</p>
+      <p><b>Quy tắc xác minh:</b> không gắn nhãn trạm bị ngập, không thể tiếp cận, đóng cửa hoặc cần di dời nếu chưa có bằng chứng về tuyến tiếp cận, đoạn đường ngập và trạng thái hoạt động tại thời điểm sự kiện.</p>
+    </div>
+  </details>
+</div>
+<div class="sidebar" id="sidebar">
+  <div class="card">
+    <div class="section">Bộ dữ liệu dự án đã kiểm chứng</div>
+    <div class="kpis">
+      <div class="kpi"><b>552</b><span>bản ghi EV</span></div>
+      <div class="kpi"><b>10</b><span>trạm mưa tự động</span></div>
+      <div class="kpi"><b>20</b><span>điểm ngập</span></div>
+      <div class="kpi"><b>77</b><span>ứng viên</span></div>
+    </div>
+  </div>
+  <div class="card"><div class="search-wrap"><input id="search" placeholder="Tìm trạm sạc, tuyến đường hoặc trạm mưa..."></div><div class="results" id="results"></div></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script id="fg81-leaflet-cdn-fallback">if(!window.L){document.write('<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"><\/script>')}</script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script id="fg81-cluster-cdn-fallback">if(window.L&&!L.markerClusterGroup){document.write('<script src="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"><\/script>')}</script>
+<script src="./features/data/catalogs.js"></script>
+<script src="./features/map/map-init.js"></script>
+<script src="./features/data/station-photos.js"></script>
+<script src="./features/map/map-layers.js"></script>
+
+<script src="./features/ui/legacy-controls.js"></script>
+
+
+
+<link id="fg3-route-style" rel="stylesheet" href="./features/routing/fg3-route-style.css">
+
+
+<link id="fg4-evfinder-style" rel="stylesheet" href="./features/stations/fg4-evfinder-style.css">
+
+<div class="fg3" id="fg3App">
+  <header class="fg3-header">
+    <div class="fg3-brand"><div class="fg3-logo">FG</div><div><h1>FloodGuard HCMC <span class="fg12-version">2.9</span> <span class="fg3-live" id="fg10HeaderBadge"><i></i>Historical + Live Weather</span></h1><p>Điều hướng theo nguy cơ ngập · thời tiết live · trạm sạc EV</p></div></div>
+    <nav class="fg3-nav">
+      <button class="fg3-btn" id="fg3OverviewBtn">▦ Tổng quan</button>
+      <button class="fg3-btn hide-mobile" id="fg3MapBtn">⌖ Bản đồ</button>
+      <button class="fg3-btn" id="fg3RouteBtn">🛣 Lộ trình</button><button class="fg3-btn" id="fg70DecisionBtn">◈ Trung tâm</button>
+      <button class="fg3-btn" id="fg3StationBtn">🌧 Trạm đo</button>
+      <button class="fg3-btn primary" id="fg3AnalyzeBtn">☔ Phân tích</button>
+      <button class="fg3-btn" id="fg3EVBtn">⚡ Trạm sạc</button>
+    </nav>
+  </header>
+  <div class="fg3-kpis">
+    <div class="fg3-kpi"><span>Tuyến có bằng chứng</span><b id="fg3StreetN">—</b></div>
+    <div class="fg3-kpi blue"><span>Có dữ liệu định lượng</span><b id="fg3QuantN">—</b></div>
+    <div class="fg3-kpi purple"><span>Trạm sạc EV</span><b id="fg3EvN">—</b></div>
+    <div class="fg3-kpi amber"><span>Kịch bản mưa</span><b id="fg3RainKpi">100 mm</b></div>
+  </div>
+  <aside class="fg3-side"><button class="fg44-collapse" id="fg44Collapse" title="Thu gọn / mở rộng bảng thông tin">‹</button>
+    <div class="fg3-eyebrow">Tìm tuyến đường</div>
+    <div class="fg3-search"><input id="fg3Search" placeholder="Nhập tên đường..."></div><div class="fg3-results" id="fg3Results"></div>
+    <section class="fg3-road">
+      <div class="fg3-road-head"><div><div class="fg3-eyebrow">Tuyến đang chọn</div><h2 id="fg3RoadName">Quốc Hương</h2></div><span class="fg3-tier tier-good" id="fg3Tier">Đủ dữ liệu</span></div>
+      <div class="fg3-statgrid"><div class="fg3-stat"><span>Dữ liệu định lượng</span><b id="fg3EventN">—</b></div><div class="fg3-stat"><span>Độ ngập lịch sử</span><b id="fg3DepthRange">—</b></div><div class="fg3-stat"><span>Lượng mưa lịch sử</span><b id="fg3RainRange">—</b></div><div class="fg3-stat"><span>EV liên quan</span><b id="fg3EvLinked">—</b></div></div>
+      <div class="fg3-note" id="fg3RoadNote">Chọn một tuyến để xem tóm tắt dữ liệu đã kiểm chứng.</div>
+      <div class="fg3-mini-title">Kịch bản lượng mưa nhanh</div><div class="fg3-presets" id="fg3Presets"><button class="fg3-chip" data-rain="50">50</button><button class="fg3-chip active" data-rain="100">100</button><button class="fg3-chip" data-rain="150">150</button><button class="fg3-chip" data-rain="200">200</button></div>
+      <div class="fg3-actions"><button class="fg3-btn" id="fg3FocusBtn">⌖ Xem trên bản đồ</button><button class="fg3-btn primary" id="fg3QuickAnalyze">Phân tích →</button></div>
+    </section>
+  </aside>
+  <div class="fg3-float"><button class="fg3-btn" id="fg3LayerBtn">☰ Lớp</button><button class="fg3-btn" id="fg3BaseBtn">🗺 Vệ tinh</button><button class="fg3-btn" id="fg3ResetBtn">⌂</button></div>
+  <div class="fg3-pop" id="fg3Layers"><div class="fg3-eyebrow">Lớp bản đồ</div><label class="fg3-layerrow"><span>⚡ Trạm sạc EV</span><input type="checkbox" data-layer="ev" checked></label><label class="fg3-layerrow"><span>🔵 Trạm mưa</span><input type="checkbox" data-layer="rain" checked></label><label class="fg3-layerrow"><span>● Tuyến ngập chính</span><input type="checkbox" data-layer="core" checked></label><label class="fg3-layerrow"><span>● Tuyến ngập khác</span><input type="checkbox" data-layer="street" checked></label></div>
+  <section class="fg3-overview" id="fg3Overview"><h2>FloodGuard HCMC giải quyết vấn đề gì?</h2><p>Biến dữ liệu A1–A4 thành công cụ quyết định: dữ liệu Excel cuối được kiểm toán trước khi train, khử lặp theo Tuyến × Ngày, chạy nhiều model có validation chống leakage, rồi đánh giá rủi ro và trạm sạc thay thế.</p><div class="fg3-overgrid"><div class="fg3-ocard"><b>🌧️ Dự báo theo lượng mưa</b><p>Nhập lượng mưa cho tuyến đường và đối chiếu với các sự kiện ngập lịch sử đã có nguồn.</p></div><div class="fg3-ocard"><b>⚡ Trạm sạc rủi ro cao</b><p>Xác định các trạm sạc liên kết với tuyến có tín hiệu ngập mạnh trong kịch bản lượng mưa đang chọn.</p></div><div class="fg3-ocard"><b>🛡 Đường ít nguy cơ ngập</b><p>So sánh nhiều lộ trình theo thời gian và mức phơi nhiễm với các tuyến có bằng chứng ngập lịch sử.</p></div><div class="fg3-ocard"><b>📊 Nghiên cứu & quản lý</b><p>Kết nối lượng mưa, độ ngập, thủy triều, tuyến đường, EV và nguồn tham chiếu trong cùng một hệ thống.</p></div></div><div class="fg3-flow"><span>Lượng mưa</span><i>→</i><span>Dự báo ngập</span><i>→</i><span>Trạm EV rủi ro cao</span><i>→</i><span>Đánh giá ảnh hưởng</span><i>→</i><span>Trạm thay thế</span></div><div class="fg3-alert" style="margin-top:12px"><b>Giới hạn quan trọng:</b> Đây là hệ thống dựa trên dữ liệu lịch sử và kịch bản, không phải bản đồ ngập thời gian thực. Không có dữ liệu nào được tự tạo để lấp chỗ trống.</div><div class="fg3-import-note"><b>Đã tích hợp Rainfall Master:</b> quan sát mưa duy nhất, liên kết Tuyến × Sự kiện × Mưa, dữ liệu theo mốc giờ, tọa độ trạm mưa và metadata IMERG/CMORPH/MSWEP/ERA5 được dùng để tăng khả năng kiểm chứng và trực quan hóa.</div></section>
+
+  <section class="fg3-stationpanel" id="fg3StationPanel">
+    <div class="fg3-station-head"><div><div class="fg3-eyebrow">Mạng lưới quan trắc lượng mưa</div><h2>🌧 Vị trí trạm đo mưa</h2><p>Xem vị trí các trạm đo đã có tọa độ trong dữ liệu. Chọn một trạm để bản đồ tự zoom đến vị trí, hoặc so sánh trạm gần nhất với tuyến đường đang phân tích.</p></div><button class="fg3-station-close" id="fg3StationClose">×</button></div>
+    <div class="fg3-station-stats"><div class="fg3-station-stat blue"><b id="fg3StationMasterN">8</b><span>trạm từ Rainfall Master Excel</span></div><div class="fg3-station-stat cyan"><b id="fg3StationAutoN">10</b><span>trạm mưa tự động chính thức</span></div><div class="fg3-station-stat"><b id="fg3StationRegN">10</b><span>trạm mưa khu vực chính thức</span></div></div>
+    <div class="fg3-station-nearest" id="fg3NearestStationSummary"><div class="kicker">Trạm gần tuyến đang chọn</div><b>Đang tính…</b></div>
+    <div class="fg90-context-tabs" id="fg90StationContext" aria-label="Phạm vi so sánh trạm đo"><button type="button" class="active" data-station-context="start">Điểm đi</button><button type="button" data-station-context="end">Điểm đến</button><button type="button" data-station-context="route">Dọc lộ trình</button></div>
+    <div class="fg3-station-tools"><div class="fg3-station-tabs"><button class="fg3-station-tab active" data-station-filter="master">Rainfall Master</button><button class="fg3-station-tab" data-station-filter="auto">Tự động</button><button class="fg3-station-tab" data-station-filter="reg">Khu vực</button><button class="fg3-station-tab" data-station-filter="all">Tất cả</button></div><button class="fg3-station-allbtn" id="fg3ShowAllStations">Hiển thị tất cả trên bản đồ</button></div>
+    <div class="fg3-station-list" id="fg3StationList"></div>
+    <div class="fg3-station-note"><b>Lưu ý:</b> tọa độ ở đây là vị trí trạm đo mưa/điểm quan trắc theo nguồn công bố. Không được hiểu là vị trí cảm biến đo độ ngập trên từng tuyến đường. Khoảng cách tới tuyến chỉ là khoảng cách đường thẳng từ điểm tham chiếu của tuyến.</div>
+  </section>
+
+
+
+<section class="fg4-evpanel" id="fg4EvPanel">
+  <div class="fg4-evhead"><div><div class="fg3-eyebrow" style="margin:0;color:#c7d2fe">Tìm trạm sạc theo vị trí</div><h2>⚡ Trạm sạc EV</h2></div><button class="fg4-evclose" id="fg4EvClose">×</button></div>
+  <div class="fg4-evscroll">
+    <div class="fg4-evsearchbox">
+      <label class="fg4-evlabel">Vị trí hiện tại</label>
+      <div class="fg4-evlocrow"><input class="fg4-evinput" autocomplete="off" id="fg4EvLocation" placeholder="Ví dụ: Thảo Điền, Quận 1, HSB..."><button class="fg4-evlocbtn primary" id="fg4EvSearch">Tìm trạm</button><div class="fg4-evsuggest" id="fg4EvSuggest"></div></div>
+      <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><button class="fg4-evlocbtn" style="height:31px" id="fg4UseMyLocation">⌖ Dùng vị trí của tôi</button><button class="fg4-evlocbtn" style="height:31px" id="fg4UseMapCenter">◎ Dùng tâm bản đồ</button><button class="fg4-evlocbtn" style="height:31px" id="fg4ShowAllEV">Xem toàn bộ 552 trạm</button></div>
+      <div class="fg90-ev-context" id="fg90EvContext"><span>Theo hành trình:</span><button type="button" data-ev-context="start">Điểm đi</button><button type="button" class="active" data-ev-context="end">Điểm đến</button><button type="button" data-ev-context="route">Dọc lộ trình</button></div>
+      <div class="fg4-evstatus" id="fg4EvStatus" style="display:none"></div>
+      <div class="fg4-evstreetbox">
+        <div class="fg4-evrainhead"><b>🛣 Tuyến đường cần đánh giá rủi ro EV</b><span>Nhập giống phần Lộ trình</span></div>
+        <div class="fg-street-inputrow"><input autocomplete="off" class="fg4-evinput fg-street-input" id="fg4EvRiskStreet" placeholder="Ví dụ: Quốc Hương, Thảo Điền..."><button type="button" class="fg4-evlocbtn primary" id="fg4EvRiskStreetApply">Áp dụng</button></div>
+        <div class="fg-street-suggest" id="fg4EvRiskStreetSuggest"></div>
+        <div class="fg4-evrainhint" id="fg4EvRiskStreetState">Chưa khóa theo tuyến cụ thể · hệ thống đang đánh giá theo toàn bộ liên kết trạm–tuyến trong dữ liệu.</div>
+      </div>
+      <div class="fg4-evrainbox">
+        <div class="fg4-evrainhead"><b>🌧 Lượng mưa để đánh giá rủi ro trạm sạc</b><span>Nhập kịch bản mưa (mm)</span></div>
+        <div class="fg4-evrainrow"><input class="fg4-evraininput" id="fg4EvRain" type="number" min="0" step="0.1" value="100" inputmode="decimal" aria-label="Lượng mưa kịch bản tính bằng mm"><button class="fg4-evlocbtn primary" id="fg4EvRainApply" type="button">Đánh giá</button></div>
+        <div class="fg4-evrainpresets" id="fg4EvRainPresets"><button type="button" class="fg4-evrainchip" data-ev-rain="50">50 mm</button><button type="button" class="fg4-evrainchip active" data-ev-rain="100">100 mm</button><button type="button" class="fg4-evrainchip" data-ev-rain="150">150 mm</button><button type="button" class="fg4-evrainchip" data-ev-rain="200">200 mm</button></div>
+        <div class="fg4-evrainhint"><b>Audited Ensemble EV Risk:</b> hệ thống dùng dữ liệu Excel 06_Du_lieu_Cuoi đã kiểm toán, khử lặp Tuyến × Ngày, trọng số chất lượng nguồn và nhiều model phù hợp dữ liệu nhỏ. Model Mưa + Triều chỉ là bối cảnh vì dữ liệu hiện có chỉ bao phủ 2 ngày sự kiện độc lập. Kết quả không phải trạng thái ngập/vận hành thời gian thực.</div><div class="fg15-evengine" id="fg15EvEngine">🧪 Audited Ensemble · Excel 2020–2026 · event-deduplicated</div>
+      </div>
+      <div class="fg4-evfilters">
+        <div class="fg4-evfield"><label>Bán kính tìm kiếm</label><select class="fg4-evselect" id="fg4EvRadius"><option value="1">1 km</option><option value="3">3 km</option><option value="5">5 km</option><option value="10" selected>10 km</option><option value="20">20 km</option><option value="50">50 km</option><option value="999">Không giới hạn</option></select></div>
+        <div class="fg4-evfield"><label>Sắp xếp</label><select class="fg4-evselect" id="fg4EvSort"><option value="best">Khuyến nghị theo rủi ro</option><option value="risk">Rủi ro thấp trước</option><option value="near">Gần nhất</option><option value="power">Công suất cao</option><option value="ports">Nhiều cổng</option></select></div>
+      </div>
+      <div class="fg4-evchecks"><label class="fg4-evcheck"><input type="checkbox" id="fg4FastOnly"> Chỉ trạm có cổng ≥60 kW</label><label class="fg4-evcheck"><input type="checkbox" id="fg4PreferNoFlood"> Ưu tiên trạm chưa có liên kết tuyến ngập</label></div>
+    </div>
+    <div class="fg4-evsummary risk-summary"><div class="fg4-evmetric"><b id="fg4EvFound">—</b><span>trạm đang xét</span></div><div class="fg4-evmetric high"><b id="fg4EvHigh">—</b><span>nguy cơ cao</span></div><div class="fg4-evmetric low"><b id="fg4EvLow">—</b><span>nguy cơ thấp</span></div><div class="fg4-evmetric rec"><b id="fg4EvRecommend">—</b><span>khuyến nghị hàng đầu</span></div><div class="fg4-evmetric"><b id="fg4EvNearest">—</b><span>trạm gần nhất</span></div><div class="fg4-evmetric"><b id="fg4EvTotal">552</b><span>tổng danh mục</span></div></div>
+    <div class="fg4-evtoolbar"><div><h3>Danh sách trạm sạc</h3><span id="fg4EvListCaption">Hiển thị dữ liệu trong danh mục EV đã cung cấp.</span></div></div>
+    <div class="fg4-evlist" id="fg4EvList"></div>
+    <button class="fg4-evmore" id="fg4EvMore" style="display:none">Xem thêm trạm</button>
+    <div class="fg4-evnote"><b>Cách xếp “khuyến nghị theo rủi ro”:</b> hệ thống ưu tiên trạm có mức sàng lọc thấp trong kịch bản lượng mưa đã nhập, sau đó mới xét khoảng cách, công suất và số cổng. Trạm không có liên kết với tuyến ngập được xem là <b>nguy cơ thấp hơn theo dữ liệu hiện có</b>, không phải “an toàn tuyệt đối”. Kết quả không xác nhận trạng thái vận hành hay ngập thời gian thực; khoảng cách hiển thị là đường thẳng.</div>
+  </div>
+</section>
+
+
+
+  <section class="fg70-panel" id="fg70Panel" aria-label="Trung tâm quyết định">
+    <div class="fg70-head"><div><div class="fg3-eyebrow" style="margin:0;color:#0f766e">Decision Support Center</div><h2>◈ Trung tâm quyết định</h2><p>So sánh hành trình, thử kịch bản mưa, xem lịch sử sự kiện và kiểm tra độ phủ dữ liệu trong cùng một nơi.</p></div><button class="fg70-close" id="fg70Close">×</button></div>
+    <div class="fg70-tabs"><button class="fg70-tab active" data-fg70-tab="trip">🛣 Hành trình</button><button class="fg70-tab" data-fg70-tab="history">⏱ Lịch sử</button><button class="fg70-tab" data-fg70-tab="data">▦ Dữ liệu</button></div>
+    <div class="fg70-body">
+      <div class="fg70-view active" id="fg70TripView">
+        <div id="fg70TripContent"></div>
+      </div>
+      <div class="fg70-view" id="fg70HistoryView">
+        <div class="fg70-section" style="margin-top:0"><div class="fg70-title"><b>⏱ Khám phá sự kiện lịch sử</b><span>FORECAST_EVENTS</span></div><div class="fg70-filterrow"><select class="fg70-select" id="fg70HistoryStreet"></select><select class="fg70-select" id="fg70HistoryYear"><option value="all">Tất cả năm</option></select></div><div class="fg70-actions" style="margin-top:8px"><button class="fg70-btn primary" id="fg70PlayHistory">▶ Phát sự kiện</button><button class="fg70-btn" id="fg70StopHistory">■ Dừng</button></div><div class="fg70-hsummary" id="fg70HistorySummary"></div><div id="fg70HistoryList"></div></div>
+      </div>
+      <div class="fg70-view" id="fg70DataView"><div id="fg70DataContent"></div></div>
+    </div>
+  </section>
+  <div class="fg70-present-badge" id="fg70PresentBadge">Presentation Mode · nhấn Esc để thoát</div>
+
+  <section class="fg3-routepanel" id="fg3RoutePanel">
+    <div class="fg3-route-head"><div><div class="fg3-eyebrow" style="margin:0">Điều hướng theo nguy cơ ngập</div><h2>🛣 Đường đi</h2></div><button class="fg3-route-close" id="fg3RouteClose">×</button></div>
+    <div class="fg3-route-scroll">
+      <div class="fg3-route-form">
+        <div style="position:relative">
+          <div class="fg3-route-connector"></div>
+          <button type="button" class="fg3-route-swap" id="fg3RouteSwap" title="Đổi điểm đi và điểm đến" aria-label="Đổi điểm đi và điểm đến">⇅</button>
+          <div class="fg3-route-field"><span class="fg3-route-dot from"></span><label>Điểm đi</label><div class="fg3-route-inputrow"><input autocomplete="off" class="fg3-route-input" id="fg3RouteFrom" value="Thảo Điền, TP.HCM" placeholder="Tìm điểm đi"><button class="fg3-route-pick" id="fg3PickFrom">⌖</button></div><div class="fg3-route-suggest" id="fg3SuggestFrom"></div></div>
+          <div class="fg3-route-field"><span class="fg3-route-dot to"></span><label>Điểm đến</label><div class="fg3-route-inputrow"><input autocomplete="off" class="fg3-route-input" id="fg3RouteTo" value="Quận 1, TP.HCM" placeholder="Tìm điểm đến"><button class="fg3-route-pick" id="fg3PickTo">⌖</button></div><div class="fg3-route-suggest" id="fg3SuggestTo"></div></div>
+        </div>
+        <div class="fg3-route-modebar" id="fg3RouteModebar" role="tablist" aria-label="Chọn phương tiện"><button type="button" class="fg3-route-mode active" data-route-mode="car" role="tab" aria-selected="true">🚗 Ô tô</button><button type="button" class="fg3-route-mode" data-route-mode="motorbike" role="tab" aria-selected="false">🛵 Xe máy</button><button type="button" class="fg3-route-mode" data-route-mode="walk" role="tab" aria-selected="false">🚶 Đi bộ</button></div>
+        <div class="fg62-pref"><span>Ưu tiên lộ trình</span><div class="fg62-prefbar" id="fg62Prefbar"><button type="button" class="fg62-prefbtn active" data-route-pref="safe">🛡 Ít nguy cơ ngập</button><button type="button" class="fg62-prefbtn" data-route-pref="fast">⚡ Nhanh nhất</button></div></div>
+        <div class="fg3-route-field"><label>Kịch bản lượng mưa (mm)</label><input class="fg3-route-input" style="padding-left:12px" id="fg3RouteRain" type="number" min="0" max="600" step="1" inputmode="decimal" value="100"><div class="fg3-route-quick"><button type="button" data-route-rain="50">50</button><button type="button" data-route-rain="100">100</button><button type="button" data-route-rain="150">150</button><button type="button" data-route-rain="200">200</button><button type="button" id="fg3UseCurrentRoad">Đi từ tuyến đang chọn</button><button type="button" id="fg80UseMyLocation">⌖ Vị trí hiện tại</button><button type="button" id="fg80ClearRoute">↺ Xóa lộ trình</button></div></div>
+        <button type="button" class="fg3-route-run" id="fg3RouteRun">Đường đi</button>
+      </div>
+      <div class="fg90-route-decision" id="fg90RouteDecision" hidden></div>
+      <div class="fg51-recent" id="fg51Recent"><div class="fg51-recent-head"><div><b>Hành trình gần đây</b><span>Được lưu trên trình duyệt của bạn</span></div><button id="fg51ClearRecent" type="button">Xóa</button></div><div class="fg51-recent-list" id="fg51RecentList"><span class="fg51-recent-empty">Chưa có hành trình nào.</span></div></div>
+      <div class="fg3-route-status" id="fg3RouteStatus" style="display:none"></div>
+      <div class="fg3-route-summary" id="fg3RouteSummary" style="display:none"><div class="fg3-route-metric"><span>Phương án</span><b id="fg3RouteCount">—</b></div><div class="fg3-route-metric"><span>Đoạn cần chú ý</span><b id="fg3RouteRiskRoads">—</b></div><div class="fg3-route-metric"><span>Kịch bản mưa</span><b id="fg3RouteRainShow">—</b></div></div>
+      <div class="fg80-route-tools" id="fg80RouteTools" hidden><button type="button" id="fg80CopyRoute">⧉ Sao chép tóm tắt</button><button type="button" id="fg80ExportRoute">⇩ GeoJSON</button></div>
+      <div class="fg3-route-legend"><span><i class="fg3-route-line" style="background:linear-gradient(90deg,#1a73e8,#7c3aed,#059669)"></i>Route đang chọn</span><span><i class="fg3-route-line" style="background:#b8c2cc"></i>Route thay thế</span><span><i class="fg3-route-line" style="background:#ef4444"></i>Nguy cơ cao</span><span><i class="fg3-route-line" style="background:#f59e0b"></i>Cần chú ý</span></div>
+      <div id="fg3RouteResults"></div>
+    </div>
+  </section>
+  <div class="fg3-route-selecthint" id="fg3RouteSelectHint">Click lên bản đồ để chọn vị trí</div>
+
+  <aside class="fg3-drawer" id="fg3Drawer"><div class="fg3-drawer-head"><div><h2>Dự báo ngập & rủi ro trạm sạc</h2></div><button class="fg3-close" id="fg3Close">×</button></div><div class="fg3-scroll">
+    <div class="fg3-step"><div class="fg3-stepnum">1</div><div class="fg3-steptxt"><b>Nhập tuyến đường cần dự báo</b><span>Gõ tên tuyến giống phần Lộ trình; hệ thống sẽ gợi ý từ dữ liệu đã kiểm chứng.</span></div></div>
+    <div class="fg3-field fg-street-picker">
+      <label>Tuyến đường</label>
+      <div class="fg-street-inputrow"><input autocomplete="off" class="fg3-input fg-street-input" id="fg3StreetInput" placeholder="Ví dụ: Quốc Hương, Thảo Điền, Dương Văn Cam..."><button type="button" class="fg-street-use" id="fg3StreetUse">Chọn</button></div>
+      <div class="fg-street-suggest" id="fg3StreetInputSuggest"></div>
+      <select class="fg3-select" id="fg3StreetSelect" hidden aria-hidden="true" tabindex="-1"></select>
+    </div>
+    <div class="fg3-step"><div class="fg3-stepnum">2</div><div class="fg3-steptxt"><b>Nhập điều kiện kịch bản</b></div></div><div class="fg15-inputgrid"><div class="fg3-field"><label>Lượng mưa dự kiến (mm)</label><input class="fg3-input" id="fg3Rain" type="number" min="0" max="600" step="1" inputmode="decimal" value="100"></div><div class="fg3-field"><label>Mực triều tham khảo (m) · tùy chọn</label><input class="fg3-input" id="fg15Tide" type="number" min="0" max="3.5" step="0.01" inputmode="decimal" placeholder="Chỉ nhập khi có nguồn"></div></div><button class="fg3-run" id="fg3Run">Đánh giá trạm sạc</button>
+    <div class="fg3-step fg3-step-result fg3-analysis-hidden" id="fg3ResultStart"><div class="fg3-stepnum">3</div><div class="fg3-steptxt"><b>Xem kết quả</b><span>Mức ngập dự báo, trạm rủi ro cao và trạm thay thế gần nhất.</span></div></div>
+    <div class="fg3-resultwrap fg3-analysis-hidden" id="fg3ResultWrap"><div class="fg3-resultgrid"><div class="fg3-resultcard"><div class="label">Mức rủi ro ngập</div><div class="big" id="fg3Risk">—</div><div class="desc" id="fg3RiskDesc">—</div></div><div class="fg3-resultcard"><div class="label">Độ ngập dự báo tham chiếu</div><div class="big" id="fg3PredDepth">—</div><div class="desc" id="fg3PredDesc">—</div></div><div class="fg3-resultcard"><div class="label">Trạm sạc rủi ro cao</div><div class="big" id="fg3ImpactEV">—</div><div class="desc" id="fg3ImpactEVDesc">Tính theo tín hiệu ngập của tuyến và mức ưu tiên ghép trạm–tuyến.</div></div></div><div class="fg15-modelbox"><div class="fg15-modelhead"><div><span>MULTI-MODEL ENGINE</span><b>So sánh mô hình dự báo độ ngập</b></div><div class="fg15-ensemble"><small>ENSEMBLE</small><strong id="fg15Ensemble">—</strong></div></div><div class="fg15-modelmeta" id="fg15ModelMeta">Chạy phân tích để xem model.</div><div class="fg15-modelgrid" id="fg15ModelGrid"></div><div class="fg15-metrics" id="fg15Metrics"></div><div class="fg15-modelnote" id="fg15ModelNote">Model theo tuyến dùng 1 sự kiện/Tuyến × Ngày và LOOCV; model toàn cục dùng Group-by-Date CV để tránh leakage giữa các tuyến trong cùng trận mưa. Ensemble chỉ dùng model đủ điều kiện và không ép chạy model thiếu dữ liệu.</div></div><div class="fg3-resultcard"><div class="label">⚠ Trạm sạc rủi ro cao theo kịch bản</div><div class="fg3-events" id="fg3RiskStations"></div></div><div class="fg3-resultcard"><div class="label">✓ Trạm sạc thay thế gần nhất</div><div class="fg3-events" id="fg3Alternatives"></div></div>
+    <div class="fg3-alert" id="fg3Integrity">Dự báo sử dụng các sự kiện lịch sử gần nhất có nguồn. Trạm “rủi ro cao” là kết quả sàng lọc theo kịch bản, không phải xác nhận trạm đang ngập hoặc ngừng hoạt động.</div>
+    <div class="fg3-resultcard"><div class="label">Mưa và độ ngập lịch sử</div><div class="fg3-chart" id="fg3Chart"></div></div>
+    <div class="fg3-resultcard"><div class="label">Sự kiện gần nhất & nguồn</div><div class="fg3-events" id="fg3Events"></div></div></div>
+    <details class="fg3-rainbox" id="fg3RainDetails">
+      <summary><span>🌧 Dữ liệu mưa bổ sung từ Excel</span><span id="fg3RainImportCount" style="font-size:7px;color:#718399;font-weight:800"></span></summary>
+      <div class="fg3-rainbody">
+        <div class="fg3-rainmetrics"><div class="fg3-rainmetric"><b id="fg3ImportLinkedN">—</b><span>liên kết mưa–tuyến trong file</span></div><div class="fg3-rainmetric"><b id="fg3ImportSubdailyN">—</b><span>mốc mưa theo giờ cùng ngày sự kiện</span></div><div class="fg3-rainmetric"><b id="fg3ImportStationN">8</b><span>trạm mưa có tọa độ</span></div></div>
+        <div class="fg3-rainsection"><h4>Quan sát mưa liên kết với tuyến đang chọn</h4><div id="fg3ImportStreetRows"></div></div>
+        <div class="fg3-rainsection"><h4 id="fg3SubdailyTitle">Mưa theo mốc giờ / khoảng thời gian</h4><div id="fg3SubdailyChart"></div></div>
+        <div class="fg3-rainsection"><h4>Trạm mưa gần tuyến</h4><div class="fg3-stationgrid" id="fg3NearestRainStations"></div></div>
+        <div class="fg3-rainsection"><h4>Dữ liệu lưới / vệ tinh dùng để đối chiếu</h4><div class="fg3-satgrid" id="fg3SatelliteProducts"></div></div>
+        <div class="fg3-import-note"><b>Nguồn import:</b> Rainfall_Master_A1_A4_24080419_Tieng_Viet(1).xlsx.<br><b>Nguyên tắc sử dụng:</b> dữ liệu Excel được nhập để tăng nguồn bằng chứng, so sánh trạm và trực quan hóa mưa. Các dòng được ghi “Không” hoặc “Có điều kiện” cho phân tích tương quan không tự động trở thành mẫu dự báo mới; nhờ đó tránh nhân đôi hoặc gán sai lượng mưa cấp vùng cho một tuyến đường.</div>
+      </div>
+    </details>
+    <button class="fg3-linkbtn" id="fg3OpenFull">Mở phân tích kỹ thuật đầy đủ</button>
+  </div></aside>
+  <div class="fg51-dock" id="fg51Dock" aria-label="Truy cập nhanh">
+    <button type="button" data-fg51-open="fg3RouteBtn"><span>🛣</span><b>Lộ trình</b><small>1</small></button>
+    <button type="button" id="fg70DockBtn"><span>◈</span><b>Quyết định</b><small>Q</small></button>
+    <button type="button" data-fg51-open="fg3AnalyzeBtn"><span>☔</span><b>Dự báo</b><small>2</small></button>
+    <button type="button" data-fg51-open="fg3EVBtn"><span>⚡</span><b>Trạm sạc</b><small>3</small></button>
+    <button type="button" data-fg51-open="fg3StationBtn"><span>🌧</span><b>Trạm đo</b><small>4</small></button>
+    <button type="button" id="fg51MapFocus"><span>⌖</span><b>Bản đồ</b><small>M</small></button>
+  </div>
+  <div class="fg51-toast" id="fg51Toast" role="status" aria-live="polite"></div>
+
+  <div class="fg70-cmdback" id="fg70CmdBack" aria-hidden="true"><div class="fg70-cmd"><div class="fg70-cmdhead"><span class="fg-cmd-search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></span><input class="fg70-cmdinput" id="fg70CmdInput" autocomplete="off" placeholder="Tìm tuyến đường, trạm sạc hoặc chức năng..."><span class="fg70-kbd">ESC</span></div><div class="fg70-cmdresults" id="fg70CmdResults"></div><div class="fg-cmd-footer"><span><kbd>↑</kbd><kbd>↓</kbd> Di chuyển <kbd>Enter</kbd> Mở kết quả</span><span><kbd>Esc</kbd> Đóng</span></div></div></div>
+
+  
+</div>
+
+
+<link id="fg15-multimodel-style" rel="stylesheet" href="./features/analysis/fg15-multimodel-style.css">
+
+<link id="fg16-audit-style" rel="stylesheet" href="./features/analysis/fg16-audit-style.css">
+<script id="fg16-audited-ensemble-core" src="./features/analysis/flood-model.js"></script>
+
+<link rel="stylesheet" href="./flood-insights.css?v=1">
+<script src="./model-insights.js?v=1"></script>
+<script id="fg3-script" src="./features/analysis/analysis-panel.js"></script>
+
+
+<link id="fg81-resilience-style" rel="stylesheet" href="./features/routing/fg81-resilience-style.css">
+<script id="fg81-network-resilience" src="./features/routing/geocoding.js"></script>
+
+<script id="fg3-route-script" src="./features/routing/route-search.js"></script>
+
+
+
+<script id="fg4-evfinder-script" src="./features/stations/station-search.js"></script>
+
+
+<script id="fg44-ui-js" src="./features/ui/fg44-ui-js.js"></script>
+
+<div class="fg47-lightbox" id="fg47Lightbox" aria-hidden="true"><div class="fg47-lightbox-inner"><button class="fg47-lightbox-close" id="fg47LightboxClose" aria-label="Đóng">×</button><img id="fg47LightboxImg" alt="Ảnh trạm sạc EV"><div class="fg47-lightbox-caption" id="fg47LightboxCaption">Ảnh trạm sạc</div></div></div>
+<script src="./features/stations/photo-viewer.js"></script>
+
+<script id="fg51-product-js" src="./features/ui/fg51-product-js.js"></script>
+
+<script id="fg70-max-js" src="./features/analysis/decision-center.js"></script>
+
+
+<script id="fg80-connectivity-js" src="./features/ui/fg80-connectivity-js.js"></script>
+<script id="fg81-route-help" src="./features/routing/fg81-route-help.js"></script>
+
+<script id="fg90-core" src="./features/routing/active-trip.js"></script>
+
+\n<link id="fg10-live-style" rel="stylesheet" href="./features/weather/fg10-live-style.css">\n\n<script id="fg10-live-js" src="./features/weather/live-weather.js"></script>\n
+
+<script id="fg12-ultimate-core" src="./features/ui/shell-controls.js"></script>
+
+<link id="fg13-intelligence-style" rel="stylesheet" href="./features/alerts/fg13-intelligence-style.css">
+
+<script id="fg13-intelligence-js" src="./features/alerts/journey-alerts.js"></script>
+
+
+<link id="fg133-smart-nav-style" rel="stylesheet" href="./features/ui/fg133-smart-nav-style.css">
+
+<script id="fg133-smart-nav-js" src="./features/ui/navigation.js"></script>
+
+
+<link id="fg136-gpu-dock-style" rel="stylesheet" href="./features/ui/fg136-gpu-dock-style.css">
+
+<script id="fg136-gpu-dock-js" src="./features/ui/navigation-dock.js"></script>
+
+
+<link id="fg138-premium-dock-style" rel="stylesheet" href="./features/ui/fg138-premium-dock-style.css">
+<script id="fg138-premium-dock-js" src="./features/ui/navigation-icons.js"></script>
+
+
+<script id="fg15-sync-script" src="./features/analysis/fg15-sync-script.js"></script>
+
+<!-- FloodGuard 15.0 Audited Ensemble: model core rebuilt from A4_QuyTrinh_Fill_LamSach_DuLieuCuoi_2020_2026(1).xlsx / sheet 06_Du_lieu_Cuoi. -->
+<link id="fg16-rescue-style" rel="stylesheet" href="./features/rescue/fg16-rescue-style.css">
+
+<script id="fg16-rescue-js" src="./features/rescue/sos.js"></script>
+
+
+<script src="./features/ui/service-worker.js"></script>
+
+<link id="fg-mobile-production-1-style" rel="stylesheet" href="./features/ui/fg-mobile-production-1-style.css">
+<script id="fg-mobile-production-1-js" src="./features/ui/fg-mobile-production-1-js.js"></script>
+
+<link id="fg-mobile-hotfix-1-2-style" rel="stylesheet" href="./features/ui/fg-mobile-hotfix-1-2-style.css">
+<script id="fg-mobile-map-fallback-1-2" src="./features/ui/fg-mobile-map-fallback-1-2.js"></script>
+<script id="fg-adaptive-mode-1-js" src="./features/ui/fg-adaptive-mode-1-js.js"></script>
+
+
+<link id="fg-smart-location-1-4-style" rel="stylesheet" href="./features/ui/fg-smart-location-1-4-style.css">
+
+<link id="fg18-email-alert-style" rel="stylesheet" href="./features/account/fg18-email-alert-style.css">
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link id="fg31-auth-style" rel="stylesheet" href="./features/account/fg31-auth-style.css">
+<link id="fg33-visible-logout-style" rel="stylesheet" href="./features/account/fg33-visible-logout-style.css">
+<script id="fg31-multi-user-auth" src="./features/account/account.js"></script>
+<script src="./site-content.js?v=2" defer></script><script src="./scenario-bridge.js?v=1" defer></script>
+</body>
+<link id="fg-minimal-clean-1-3-style" rel="stylesheet" href="./features/ui/fg-minimal-clean-1-3-style.css">
+
+</html>
+
+<link id="fg-compact-map-style" rel="stylesheet" href="./features/routing/compact-map-ui.css">
+<script id="fg-compact-map-js" src="./features/routing/compact-map-ui.js" defer></script>
+
+<link id="fg-destination-flow-style" rel="stylesheet" href="./features/routing/destination-flow.css">
+<script id="fg-destination-flow-js" src="./features/routing/destination-flow.js" defer></script>
+
+<link rel="stylesheet" href="./mobile-navigation.css">
+
+<link rel="stylesheet" href="./mobile-panels-v2.css">
+<script src="./mobile-panels-v2.js" defer></script>
+
+<link rel="stylesheet" href="./weather-screen.css">
+<script src="./weather-screen.js" defer></script>

@@ -1,0 +1,218 @@
+/* FloodGuard Photo-led Interface v51
+   Inspired by the user's reference: white navigation, immersive image hero, restrained motion.
+   Historical background photos are Wikimedia Commons CC BY 2.0 and are labelled as archival imagery. */
+
+:root{
+  --fg51-blue:#0b6dff;
+  --fg51-blue-dark:#0756cf;
+  --fg51-ink:#122033;
+  --fg51-muted:#617085;
+  --fg51-line:#e7e9ed;
+  --fg51-paper:#ffffff;
+  --fg51-soft:#f6f7f8;
+  --fg51-green:#81c73f;
+  --fg51-ease:cubic-bezier(.16,1,.3,1);
+}
+
+html[data-fg-lifestyle="1"]{background:#fff;color-scheme:light}
+html[data-fg-lifestyle="1"] body{background:#fff!important;color:var(--fg51-ink)!important}
+
+/* ---------- white navigation ---------- */
+html[data-fg-lifestyle="1"] .wh-nav,
+html[data-fg-lifestyle="1"] .site-nav{
+  position:sticky!important;
+  top:0!important;
+  z-index:1000!important;
+  background:rgba(255,255,255,.96)!important;
+  border-bottom:1px solid rgba(18,32,51,.08)!important;
+  box-shadow:none!important;
+  backdrop-filter:blur(16px) saturate(140%)!important;
+}
+html[data-fg-lifestyle="1"] .wh-nav-in,
+html[data-fg-lifestyle="1"] .site-nav-in{min-height:78px!important}
+html[data-fg-lifestyle="1"] .wh-brand,
+html[data-fg-lifestyle="1"] .site-brand{color:#183149!important;font-weight:850!important;letter-spacing:-.025em!important}
+html[data-fg-lifestyle="1"] .wh-logo,
+html[data-fg-lifestyle="1"] .site-logo{
+  width:42px!important;height:42px!important;border-radius:50%!important;
+  background:linear-gradient(145deg,#0b6dff,#53b9ff)!important;
+  color:#fff!important;box-shadow:0 8px 22px rgba(11,109,255,.22)!important;
+  font-size:12px!important;
+}
+html[data-fg-lifestyle="1"] .wh-links,
+html[data-fg-lifestyle="1"] .site-links{gap:28px!important}
+html[data-fg-lifestyle="1"] .wh-links a,
+html[data-fg-lifestyle="1"] .site-links a{
+  color:#556375!important;font-size:12px!important;font-weight:700!important;letter-spacing:.01em!important;
+}
+html[data-fg-lifestyle="1"] .wh-links a:hover,
+html[data-fg-lifestyle="1"] .site-links a:hover,
+html[data-fg-lifestyle="1"] .site-links a.active{color:#0b6dff!important}
+html[data-fg-lifestyle="1"] .wh-links a:after,
+html[data-fg-lifestyle="1"] .site-links a:after{background:#0b6dff!important;height:1px!important;bottom:-9px!important}
+html[data-fg-lifestyle="1"] .wh-btn,
+html[data-fg-lifestyle="1"] .site-btn{
+  border-radius:999px!important;padding:11px 17px!important;font-size:11px!important;font-weight:800!important;
+  box-shadow:none!important;transition:transform .24s var(--fg51-ease),background .24s ease,border-color .24s ease!important;
+}
+html[data-fg-lifestyle="1"] .wh-btn.primary,
+html[data-fg-lifestyle="1"] .site-btn.primary{
+  border-color:#0b6dff!important;background:#0b6dff!important;color:#fff!important;
+}
+html[data-fg-lifestyle="1"] .wh-btn.primary:hover,
+html[data-fg-lifestyle="1"] .site-btn.primary:hover{background:#0756cf!important;border-color:#0756cf!important;transform:translateY(-1px)!important}
+
+/* ---------- immersive homepage hero ---------- */
+html[data-fg-lifestyle="1"] #fgWebsiteHome{background:#fff!important}
+html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-hero{
+  width:100%!important;max-width:none!important;
+  min-height:calc(100svh - 78px)!important;
+  display:flex!important;align-items:center!important;
+  position:relative!important;isolation:isolate!important;overflow:hidden!important;
+  padding:clamp(70px,10vh,126px) max(6vw,24px) clamp(72px,9vh,110px)!important;
+  color:#fff!important;background:#183149!important;
+}
+html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-hero>.fg51-hero-media{
+  position:absolute!important;inset:0!important;z-index:-4!important;overflow:hidden!important;pointer-events:none!important;
+}
+html[data-fg-lifestyle="1"] .fg51-slide{
+  position:absolute;inset:-2%;opacity:0;
+  background-position:center;background-size:cover;background-repeat:no-repeat;
+  transform:scale(1.055);transition:opacity 1s ease,transform 7.2s ease;
+  filter:saturate(.88) contrast(1.03);
+}
+html[data-fg-lifestyle="1"] .fg51-slide.is-active{opacity:1;transform:scale(1.015)}
+html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-hero:before{
+  content:""!important;position:absolute!important;inset:0!important;z-index:-3!important;
+  background:linear-gradient(90deg,rgba(7,17,28,.72) 0%,rgba(7,17,28,.54) 42%,rgba(7,17,28,.18) 76%,rgba(7,17,28,.10) 100%)!important;
+}
+html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-hero:after{
+  content:""!important;position:absolute!important;inset:auto 0 0!important;height:32%!important;z-index:-2!important;
+  background:linear-gradient(transparent,rgba(5,13,22,.28))!important;
+}
+html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-hero>div:not(.fg51-hero-media):first-of-type{
+  width:min(760px,70vw)!important;max-width:760px!important;position:relative!important;z-index:2!important;
+  transform:none!important;
+}
+html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-product{display:none!important}
+html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-eyebrow{
+  display:inline-flex!important;border:0!important;border-radius:3px!important;
+  background:#f0a52b!important;color:#fff!important;padding:9px 14px!important;
+  text-transform:none!important;letter-spacing:.02em!important;font-size:12px!important;font-weight:850!important;
+  box-shadow:0 9px 24px rgba(0,0,0,.18)!important;
+}
+html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-eyebrow i{display:none!important}
+html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-hero h1{
+  color:#fff!important;font-size:clamp(46px,6.1vw,84px)!important;line-height:.99!important;
+  letter-spacing:-.052em!important;margin:26px 0 23px!important;max-width:840px!important;
+  text-shadow:0 10px 42px rgba(0,0,0,.24)!important;text-wrap:balance!important;
+}
+html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-hero h1 span{
+  background:none!important;color:#fff!important;-webkit-text-fill-color:#fff!important;text-shadow:inherit!important;
+}
+html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-hero p{
+  max-width:610px!important;color:rgba(255,255,255,.86)!important;font-size:15px!important;line-height:1.72!important;
+  text-shadow:0 3px 18px rgba(0,0,0,.25)!important;
+}
+html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-hero-actions{margin-top:30px!important}
+html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-hero .wh-btn{
+  min-height:48px!important;padding:13px 21px!important;border-radius:5px!important;
+  border:1px solid rgba(255,255,255,.36)!important;background:rgba(255,255,255,.10)!important;color:#fff!important;
+  backdrop-filter:blur(8px)!important;
+}
+html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-hero .wh-btn.primary{
+  background:var(--fg51-green)!important;border-color:var(--fg51-green)!important;color:#fff!important;
+  box-shadow:0 11px 28px rgba(62,119,22,.22)!important;
+}
+html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-trust{display:none!important}
+
+/* slide controls */
+.fg51-controls{position:absolute;right:24px;top:50%;transform:translateY(-50%);z-index:8;display:grid;gap:12px;justify-items:center}
+.fg51-dots{display:grid;gap:10px}
+.fg51-dot{width:8px;height:8px;border:0;border-radius:50%;padding:0;background:rgba(255,255,255,.55);cursor:pointer;box-shadow:0 0 0 1px rgba(0,0,0,.10)}
+.fg51-dot.is-active{background:#fff;box-shadow:0 0 0 5px rgba(255,255,255,.16)}
+.fg51-next{width:42px;height:42px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:#3b4d60;cursor:pointer;display:grid;place-items:center;font-size:17px;box-shadow:0 9px 26px rgba(0,0,0,.18)}
+.fg51-credit{position:absolute;left:max(6vw,24px);bottom:18px;z-index:5;color:rgba(255,255,255,.68);font-size:9px;letter-spacing:.01em;text-shadow:0 2px 8px rgba(0,0,0,.45)}
+.fg51-hero-copy{transition:opacity .34s ease,transform .34s var(--fg51-ease)}
+.fg51-hero-copy.is-changing{opacity:0;transform:translateY(10px)}
+
+/* ---------- content after hero: calm, editorial ---------- */
+html[data-fg-lifestyle="1"] #fgMultiPageExplore{
+  background:#fff!important;border:0!important;padding:88px 0 96px!important;
+}
+html[data-fg-lifestyle="1"] #fgMultiPageExplore .fgmp-head{max-width:720px!important}
+html[data-fg-lifestyle="1"] #fgMultiPageExplore .fgmp-head span{color:#0b6dff!important}
+html[data-fg-lifestyle="1"] #fgMultiPageExplore .fgmp-head h2{color:#16263a!important;font-size:clamp(34px,4.2vw,56px)!important;letter-spacing:-.045em!important}
+html[data-fg-lifestyle="1"] #fgMultiPageExplore .fgmp-head p{color:#6b7788!important}
+html[data-fg-lifestyle="1"] #fgMultiPageExplore .fgmp-grid{gap:18px!important}
+html[data-fg-lifestyle="1"] #fgMultiPageExplore .fgmp-card{
+  min-height:205px!important;border-radius:6px!important;background:#f7f8f9!important;border:1px solid #eceef1!important;
+  box-shadow:none!important;padding:25px!important;
+}
+html[data-fg-lifestyle="1"] #fgMultiPageExplore .fgmp-card:hover{transform:translateY(-4px)!important;background:#fff!important;box-shadow:0 20px 48px rgba(29,45,65,.09)!important}
+html[data-fg-lifestyle="1"] #fgMultiPageExplore .fgmp-icon{border-radius:50%!important;background:#eaf3ff!important;color:#0b6dff!important}
+html[data-fg-lifestyle="1"] #fgMultiPageExplore .fgmp-card em{color:#0b6dff!important}
+html[data-fg-lifestyle="1"] .wh-footer,
+html[data-fg-lifestyle="1"] .site-footer{background:#f5f6f7!important;border-top:1px solid #e8eaed!important}
+
+/* ---------- subpage hero: photo + white type ---------- */
+html[data-fg-lifestyle="1"] .page-hero{
+  min-height:560px!important;display:flex!important;align-items:center!important;position:relative!important;overflow:hidden!important;isolation:isolate!important;
+  background-image:linear-gradient(90deg,rgba(8,19,31,.76),rgba(8,19,31,.36)),url('https://commons.wikimedia.org/wiki/Special:FilePath/Street_flood_in_Saigon_(10728572006).jpg?width=1800')!important;
+  background-size:cover!important;background-position:center 52%!important;color:#fff!important;
+}
+html[data-fg-lifestyle="1"] .page-hero:after{content:"Ảnh tư liệu TP.HCM · Wikimedia Commons · CC BY 2.0";position:absolute;left:max(4vw,22px);bottom:16px;color:rgba(255,255,255,.65);font-size:9px;z-index:3}
+html[data-fg-lifestyle="1"] .page-hero .hero-grid{grid-template-columns:minmax(0,1.1fr) minmax(280px,.7fr)!important;align-items:center!important}
+html[data-fg-lifestyle="1"] .page-hero h1{color:#fff!important;font-size:clamp(44px,5.5vw,76px)!important;line-height:1!important;letter-spacing:-.05em!important;text-shadow:0 10px 38px rgba(0,0,0,.25)!important}
+html[data-fg-lifestyle="1"] .page-hero h1 span{background:none!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
+html[data-fg-lifestyle="1"] .page-hero p{color:rgba(255,255,255,.84)!important}
+html[data-fg-lifestyle="1"] .page-hero .eyebrow,
+html[data-fg-lifestyle="1"] .page-hero .back-link{color:#fff!important}
+html[data-fg-lifestyle="1"] .page-hero .eyebrow{background:#f0a52b!important;border:0!important;border-radius:3px!important;padding:8px 12px!important;display:inline-flex!important;width:auto!important}
+html[data-fg-lifestyle="1"] .page-hero .eyebrow i{display:none!important}
+html[data-fg-lifestyle="1"] .page-hero .visual,
+html[data-fg-lifestyle="1"] .page-hero .visual-card{background:rgba(12,25,40,.36)!important;border:1px solid rgba(255,255,255,.18)!important;color:#fff!important;box-shadow:none!important;backdrop-filter:blur(12px)!important}
+html[data-fg-lifestyle="1"] .page-hero .visual-card p,
+html[data-fg-lifestyle="1"] .page-hero .metric small{color:rgba(255,255,255,.72)!important}
+html[data-fg-lifestyle="1"] .page-hero .metric{background:rgba(255,255,255,.08)!important;border-color:rgba(255,255,255,.12)!important}
+
+/* ---------- login screen to match new visual language ---------- */
+html[data-fg-lifestyle="1"] .auth{
+  background-image:linear-gradient(90deg,rgba(5,17,31,.78),rgba(6,19,34,.44)),url('https://commons.wikimedia.org/wiki/Special:FilePath/Street_flood_in_Saigon_(10728890034).jpg?width=1800')!important;
+  background-size:cover!important;background-position:center!important;
+}
+html[data-fg-lifestyle="1"] .auth:before{background:linear-gradient(90deg,rgba(6,18,31,.36),transparent 54%)!important}
+html[data-fg-lifestyle="1"] .auth:after{display:none!important}
+html[data-fg-lifestyle="1"] .auth .scene{opacity:.16!important}
+html[data-fg-lifestyle="1"] .auth .card{border-radius:10px!important;background:rgba(255,255,255,.96)!important;box-shadow:0 28px 80px rgba(0,0,0,.28)!important}
+html[data-fg-lifestyle="1"] .auth .primary{background:#0b6dff!important;border-radius:6px!important;box-shadow:none!important}
+html[data-fg-lifestyle="1"] .auth .google{border-radius:6px!important}
+html[data-fg-lifestyle="1"] .auth .field input{border-radius:6px!important;background:#fff!important}
+
+/* ---------- mobile ---------- */
+@media(max-width:980px){
+  html[data-fg-lifestyle="1"] .wh-nav-in,html[data-fg-lifestyle="1"] .site-nav-in{min-height:68px!important}
+  html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-hero{min-height:calc(100svh - 68px)!important;padding:70px 28px 76px!important}
+  html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-hero>div:not(.fg51-hero-media):first-of-type{width:min(780px,86vw)!important}
+  html[data-fg-lifestyle="1"] .page-hero .hero-grid{grid-template-columns:1fr!important}
+  html[data-fg-lifestyle="1"] .page-hero .visual{margin-top:24px!important}
+}
+@media(max-width:640px){
+  html[data-fg-lifestyle="1"] .wh-logo,html[data-fg-lifestyle="1"] .site-logo{width:36px!important;height:36px!important}
+  html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-hero{padding:56px 20px 82px!important;min-height:calc(100svh - 62px)!important}
+  html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-hero>div:not(.fg51-hero-media):first-of-type{width:100%!important}
+  html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-hero h1{font-size:clamp(41px,13.5vw,62px)!important;line-height:1!important;margin:22px 0 18px!important}
+  html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-hero p{font-size:14px!important;max-width:92%!important}
+  html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-hero-actions{display:grid!important;grid-template-columns:1fr!important;max-width:270px!important}
+  html[data-fg-lifestyle="1"] #fgWebsiteHome .wh-hero .wh-btn{width:100%!important}
+  .fg51-controls{right:14px;top:auto;bottom:24px;transform:none;display:flex;align-items:center}
+  .fg51-dots{display:flex}.fg51-next{width:38px;height:38px}.fg51-credit{left:20px;bottom:18px;max-width:58%;font-size:8px}
+  html[data-fg-lifestyle="1"] #fgMultiPageExplore{padding:62px 0!important}
+  html[data-fg-lifestyle="1"] .page-hero{min-height:520px!important}
+  html[data-fg-lifestyle="1"] .page-hero h1{font-size:clamp(40px,12vw,58px)!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .fg51-slide,.fg51-hero-copy,.fg51-dot,.fg51-next{transition:none!important;animation:none!important}
+  .fg51-slide{transform:none!important}
+}
