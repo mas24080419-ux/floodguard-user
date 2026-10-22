@@ -1,0 +1,34 @@
+name: RBF dashboard verification
+on:
+  pull_request:
+    branches: [main]
+    paths: ['scenario*', 'scenario-data/**', 'rbf-*', 'mobile/scenario*', 'tests/*rbf*', 'tests/scenario*', '.github/workflows/rbf-dashboard.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install test tools
+        run: |
+          npm install --no-save playwright@1.55.0 jsdom@26
+          npx playwright install --with-deps chromium
+      - name: Model, coordinate and DOM checks
+        run: node --test tests/scenario.test.cjs tests/scenario.dom.test.cjs
+      - name: Serve website and run browser checks
+        run: |
+          python3 -m http.server 4173 >/tmp/floodguard-rbf-http.log 2>&1 &
+          for i in {1..20}; do curl -fsS http://127.0.0.1:4173/scenario.html >/dev/null && break; sleep 1; done
+          node tests/rbf-browser.mjs
+      - name: Save browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rbf-dashboard-screenshots
+          path: test-artifacts/
