@@ -23,7 +23,7 @@ LOCAL_URL=http://127.0.0.1:4173 node tests/rbf-browser.mjs
 DOM/browser cần jsdom, Playwright và Chromium. CI `RBF dashboard verification` kiểm tra tự động. Fixture Python nén được tạo từ mô hình gốc; đối chiếu 540.903 cặp (491.730 hữu hạn, 49.173 từ chối), sai lệch tuyệt đối tối đa 5,55e−13 cm. Kiểm tra toàn bộ tâm ô, mã đường, ngưỡng cảnh báo, lỗi mạng, giao diện desktop/mobile, xuất CSV và handoff bản đồ Leaflet.
 
 ## Nguồn và giấy phép
-MIKE+: https://doi.org/10.5281/zenodo.11353524, CC BY 4.0; metadata tác giả gốc cần được giữ cùng trích dẫn của báo cáo. Hình học và bản đồ đường: © OpenStreetMap contributors, ODbL; https://www.openstreetmap.org/copyright. Hệ tọa độ lưới EPSG:32648, PixelIsArea. Ô RBF dùng ID 0…49172 của bộ toàn ô, không trộn ID mẫu Random Forest 846 ô cũ.
+MIKE+: https://doi.org/10.5281/zenodo.11353524, CC BY 4.0; tác giả Dang, Quang Thanh, “Integrated Machine Learning model in Early Urban Flooding Warning System – Data”. Hệ số RBF là bản dẫn xuất dùng trong FloodGuard. Hình học và bản đồ đường: © OpenStreetMap contributors, ODbL; https://www.openstreetmap.org/copyright. Hệ tọa độ lưới EPSG:32648, PixelIsArea. Ô RBF dùng ID 0…49172 của bộ toàn ô, không trộn ID mẫu Random Forest 846 ô cũ.
 
 ## Triển khai
 Dữ liệu đóng băng nằm ở root `scenario-data/rbf-v2`; mobile dùng chung nguồn này. Các file JS/CSS HTML của dashboard được đồng bộ root/mobile. Giữ nguyên đăng nhập và cơ chế định tuyến của website. Không tạo thêm backend hoặc dịch vụ trả phí.
