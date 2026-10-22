@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kho dữ liệu bổ sung · FloodGuard</title>
-<link rel="stylesheet" href="./data-import.css?v=1">
+<html data-fg-design="1" lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kho dữ liệu bổ sung · FloodGuard</title>
+<link rel="stylesheet" href="./floodguard-design-system.css?v=73"><link rel="stylesheet" href="./data-import.css?v=1">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
 <script defer src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" integrity="sha384-EnyY0/GSHQGSxSgMwaIPzSESbqoOLSexfnSMN2AP+39Ckmn92stwABZynq1JyzdT" crossorigin="anonymous"></script>
 <script defer src="./import-validation.js?v=1"></script><script defer src="./csv-utils.js?v=1"></script><script defer src="./data-import.js?v=1"></script></head>
@@ -17,3 +17,4 @@
 <section id="batchesSection" hidden><div class="section-head"><h2>Các lần nhập</h2><button id="refreshBatches" class="secondary">Làm mới</button></div><p>Xem và đối chiếu toàn bộ dữ liệu trước khi công bố. Công bố chỉ mở các dòng thực tế cho người dùng; không cập nhật mô hình.</p><div id="batches"></div><div id="reviewPanel" hidden><h3 id="reviewTitle"></h3><div id="reviewTable" class="table-wrap"></div><label>Ghi chú đối chiếu / lý do duyệt<textarea id="reviewNote" minlength="10" maxlength="1000" rows="3" placeholder="Đã đối chiếu nguồn, thời điểm và đơn vị đo…"></textarea></label><div class="controls"><button id="publish">Công bố dữ liệu thực tế</button><button id="archive" class="secondary">Ẩn lô dữ liệu</button><button id="export" class="secondary">Tải CSV toàn bộ lô</button></div></div></section>
 <section><div class="section-head"><h2>Dữ liệu thực tế đã công bố</h2><button id="refreshPublic" class="secondary">Làm mới</button></div><p id="publicState" role="status">Đang tải…</p><div id="publicTable" class="table-wrap"></div><button id="more" class="secondary" hidden>Tải thêm</button></section>
 <footer>Luôn giữ riêng nguồn thực tế, mô phỏng và phiên bản dữ liệu dùng để huấn luyện.</footer></main></body></html>
+
