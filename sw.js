@@ -1,4 +1,4 @@
-const CACHE='floodguard-user-desktop-v92';
+const CACHE='floodguard-user-desktop-v93-rbf';
 const CORE=['./device-entry.js','./floodguard-design-system.css','./mobile-design-v67.css','./home-design-v66.css','./admin-design.css','./rescue-workspace.css','./rescue-workspace.js','./','./index.html','./app-core.html','./watchlist-email-v40.js','./site-pages.css','./site-luxe.css','./site-atelier-v47.css','./site-cinematic-v48.css','./site-editorial-v49.css','./site-hide-ev-v50.css','./site-navigation-v2.js','./problem.html','./features.html','./how-it-works.html','./alerts.html','./ev.html','./rescue.html','./about.html','./admin.html','./admin-report-photos.html','./accounts.html','./rescue-team.html','./rescue-teams.html','./sos-admin.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)));self.skipWaiting()});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('floodguard-user-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
@@ -87,3 +87,4 @@ self.addEventListener('fetch',e=>{
     }catch{return (await caches.match(key))||offline();}
   })());
 });
+

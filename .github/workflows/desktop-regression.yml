@@ -97,6 +97,8 @@ jobs:
       - name: Install DOM test dependencies
         run: npm ci --prefix editor-tools
       - name: Run logic and DOM regression tests
+        env:
+          NODE_PATH: editor-tools/node_modules
         run: node --test *.test.cjs tests/*.test.cjs
       - name: Start local static server
         run: |
@@ -128,10 +130,11 @@ jobs:
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/site-hide-ev-v50.css -o /tmp/hide.css
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/ev.html -o /tmp/ev.html
           curl -fLsS --max-time 30 https://floodguard-user.onrender.com/app-core.html -o /tmp/app.html
-          grep -q 'floodguard-user-v74-reliability' /tmp/sw.js
+          grep -q 'floodguard-user-desktop-v93-rbf' /tmp/sw.js
           grep -q 'site-hide-ev-v50.css' /tmp/sw.js
           grep -q 'site-hide-ev-v50.css' /tmp/site-pages.css
           grep -q 'ev.html' /tmp/hide.css
           grep -q "location.replace('./features.html')" /tmp/ev.html
           grep -Eqi 'Trạm sạc|EV' /tmp/app.html
           echo 'PRODUCTION_PUBLIC_EV_HIDDEN_V50_OK'
+
