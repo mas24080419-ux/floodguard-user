@@ -27,3 +27,5 @@ MIKE+: https://doi.org/10.5281/zenodo.11353524, CC BY 4.0; tác giả Dang, Quan
 
 ## Triển khai
 Dữ liệu đóng băng nằm ở root `scenario-data/rbf-v2`; mobile dùng chung nguồn này. Các file JS/CSS HTML của dashboard được đồng bộ root/mobile. Giữ nguyên đăng nhập và cơ chế định tuyến của website. Không tạo thêm backend hoặc dịch vụ trả phí.
+
+Bản vá bản đồ nền: tự chuyển từ OSM sang Esri khi tải lỗi hoặc treo; nếu các nguồn raster đều lỗi, vẽ mạng đường OSM từ danh mục cục bộ. Có lựa chọn nền và tải lại thủ công. Chuyển nền không sửa hệ số hoặc kết quả ngập. Kiểm thử có chặn riêng OSM và chặn toàn bộ nguồn ảnh nền.

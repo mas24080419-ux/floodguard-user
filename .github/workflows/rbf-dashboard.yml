@@ -20,7 +20,7 @@ jobs:
           npm install --no-save playwright@1.55.0 jsdom@26
           npx playwright install --with-deps chromium
       - name: Model, coordinate and DOM checks
-        run: node --test tests/scenario.test.cjs tests/scenario.dom.test.cjs
+        run: node --test tests/scenario.test.cjs tests/scenario.dom.test.cjs tests/rbf-basemap.test.cjs
       - name: Serve website and run browser checks
         run: |
           python3 -m http.server 4173 >/tmp/floodguard-rbf-http.log 2>&1 &
